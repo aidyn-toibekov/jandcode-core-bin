@@ -1,0 +1,202 @@
+/*
+   проект wax
+
+   Перед подключением файла нужно установить:
+        project.name
+        project.package_root
+
+   events:
+
+    waxAfterProduct - после того как продукт собран, перед созданием zip
+        params:
+            distr_dir - каталог с собранным продуктом
+
+    waxBeforeProduct - перед сборкой продукта
+
+*/
+
+//
+include "wax-module-project"
+include "app-project"
+include "db-project"
+
+/**
+ * Имя каталога с корнем формируемого дистрибутива
+ */
+wax_distr_rootdir = wd("temp/distr")
+
+/**
+ * Имя каталога с корнем приложения (где лежит app.rt) формируемого дистрибутива
+ */
+wax_distr_appdir = wd("temp/distr/web/WEB-INF")
+
+/**
+ * Описание того, что нужно включить в дистрибутив.
+ * Список map. Атрибуты map:
+ *      from
+ *          каталог, откуда копировать
+ *      mask
+ *          Маска нужных файлов в каталоге
+ *      to
+ *          В какой каталог дистрибутива копировать. Используйте wax_distr_rootdir
+ *          и wax_distr_appdir
+ *
+ */
+wax_distr_masks = [
+        [from: repo.getFile("scripts/wax/distr"), mask: '**/*', to: wax_distr_rootdir],
+        [from: '', mask: 'app-product.rt', to: wax_distr_appdir],
+        [from: '', mask: 'db-ini.rt', to: wax_distr_appdir],
+        [from: 'data/distr', mask: '**/*', to: wax_distr_rootdir],
+]
+
+/**
+ * Скрипты, которые нужно включить в дистрибутив. Список масок относительно
+ * каталогов scripts.
+ */
+wax_scripts_masks = ["jetty.jc", "jetty/**/*",
+        "db-project-product.jc",
+        "wax-project-product.jc"
+]
+
+/**
+ * Дополнительные библиотеки, которые нужно включить в дистрибутив
+ */
+wax_distr_libs = ["jetty"]
+
+/**
+ * Имена моделей, которые нужно включить в дистрибутив
+ */
+wax_distr_models = ["default"]
+
+//
+ver = cm("Показать версию проекта") {
+    log "Project: ${project.name}"
+    log "Package: ${project.package_root}"
+    log "Version: ${project.version}"
+}
+
+//
+gen_idea = cm("Генерация файлов idea",
+        r: [value: false, help: "Генерировать также все зависимые модули"],
+) {
+    include "idea"
+    include "wax-idea"
+    idea.gen_module(project, libs + libs_dev)
+    idea.gen_project(project, libs + libs_dev + [project.name])
+
+    if (args.r) {
+        def lst = repo.getLibs(libs + libs_dev)
+        for (lib in lst) {
+            if (lib.project != null && lib.project.vars.containsKey("gen_idea")) {
+                lib.project.gen_idea()
+            }
+        }
+    }
+
+}
+
+//
+run = cm("Запуск jetty-сервера для приложения",
+        p: [value: 8080, help: "Порт. По умолчанию 8080"],
+        c: [value: "/wax", help: "Контекст. По умолчанию '/wax'"]
+) {
+    include "jetty"
+
+    def port = args.get("p")
+    def context = args.get("c")
+
+    jetty.run(port: port, context: context, war: wd("web"), libs: [project])
+}
+
+//
+product = cm("Сборка продукта") {
+    clean()
+
+    // уведомляем
+    project.fireEvent("waxBeforeProduct")
+
+    compile()
+
+    //
+    def distr = wax_distr_rootdir
+    def distrWEBINF = wax_distr_appdir
+    def product = wd("_product")
+    //
+    ut.cleandir(distr)
+    ut.cleandir(distrWEBINF + "/lib")
+    ut.cleandir(product)
+
+    //
+    for (dd in wax_distr_masks) {
+        def srcdir = wd(dd.from)
+        if (!fu.exists(srcdir)) continue
+        ant.copy(todir: dd.to, overwrite: true) {
+            fileset(dir: dd.from) {
+                include(name: dd.mask)
+            }
+        }
+    }
+
+    //scripts
+    for (r1 in repo.roots) {
+        for (s1 in wax_scripts_masks) {
+            ant.copy(todir: distrWEBINF + "/scripts") {
+                fileset(dir: r1 + "/scripts", erroronmissingdir: false) {
+                    include(name: s1)
+                }
+            }
+        }
+    }
+
+    //web
+    ant.copy(todir: distr + "/web") {
+        fileset(dir: wd("web")) {
+            include(name: "**/*")
+            exclude(name: "tst")
+            exclude(name: "tst/**/*")
+            exclude(name: "WEB-INF/_app.rt")
+            exclude(name: "WEB-INF/app.rt")
+            exclude(name: "WEB-INF/web.xml")
+        }
+    }
+
+    //
+    ant.echo(message: version, file: distr + "/VERSION")
+
+    //
+    def rlibs = repo.getLibs([project.name] + wax_distr_libs)
+    ut.copylibs(rlibs, distrWEBINF + "/lib")
+    ant.delete {
+        fileset(dir: distrWEBINF + "/lib") {
+            include(name: "*.ini")
+        }
+    }
+
+    // db
+    ut.cleandir(wd("temp/db.gen"))
+    for (modelName in wax_distr_models) {
+        db_create(g: true, e: true, m: modelName)
+    }
+
+    ant.copy(todir: distrWEBINF + "/scripts/dbscript") {
+        fileset(dir: wd("temp/db.gen")) {
+            include(name: "**/*")
+            exclude(name: "testdata")
+            exclude(name: "testdata/**/*")
+        }
+    }
+
+    // уведомляем
+    project.fireEvent("waxAfterProduct", [distr_dir: distr])
+
+    // генерим project.jc
+    ut.generate("scripts/wax/project-product.gsp", distrWEBINF, [outfile: "project.jc"])
+
+    //
+    ant.zip(destfile: product + "/${project.name}-${version}.zip") {
+        zipfileset(dir: distr, prefix: project.name) {
+            include(name: "**/*")
+        }
+    }
+
+}

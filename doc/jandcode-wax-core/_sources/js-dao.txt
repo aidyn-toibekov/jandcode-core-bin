@@ -1,0 +1,90 @@
+
+Dao в javascript
+****************
+
+
+Поддерживаемые типы данных
+==========================
+
+В dao-методах, которые могут быть доступны в javascript, в качестве параметров и
+возвращаемого значения, поддерживаются следующие типы данных:
+
+    * **string** - ``java.lang.String``
+    * **number** - ``int``, ``long``, ``double``, ``java.lang.Integer``, ``java.lang.Long``,
+      ``java.lang.Double``
+    * **boolean** - ``boolean``, ``java.lang.Boolean``
+    * **date** - ``org.joda.time.DateTime``
+    * **map** - ``java.util.Map<String, Object>``. В качестве значений могут быть использованы
+      данные типа string, number, date, map, list. Не могут быть использованы в качестве значений
+      данные типа store, databox
+    * **list** - ``java.util.List<Object>``. В качестве элементов списка могут быть использованы
+      данные типа строка, число, дата, map, list. Не могут быть использованы в качестве
+      элементов списка данные типа store, databox
+    * **datastore** - ``jandcode.dbm.data.DataStore``
+    * **databox** - ``jandcode.dbm.data.DataBox``
+    * **datatree** - ``jandcode.dbm.data.DataTreeNode``
+
+Если dao-метод ничего не возвращает (``void``), то в javascript вернется результат ``null``.
+
+Метод javascript ``Jc.dbm.Model.daoinvoke`` осуществляет преобразование результата
+dao-метода по следующей таблице:
+
+=================================== =======================================
+java тип                            javascript тип
+=================================== =======================================
+``java.lang.String``                ``string``
+``boolean``                         ``boolean``
+``java.lang.Boolean``               ``boolean``
+``int``                             ``number``
+``long``                            ``number``
+``double``                          ``number``
+``java.lang.Integer``               ``number``
+``java.lang.Long``                  ``number``
+``java.lang.Double``                ``number``
+``org.joda.time.DateTime``          ``Date``
+``java.util.Map<String, Object>``   ``Object``
+``java.util.List<Object>``          ``Array``
+``jandcode.dbm.data.DataStore``     ``Jc.dbm.Store``
+``jandcode.dbm.data.DataBox``       ``Jc.dbm.DataBox``
+``jandcode.dbm.data.DataTreeNode``  ``Jc.dbm.TreeStore``
+=================================== =======================================
+
+Параметры метода javascript ``Jc.dbm.Model.daoinvoke`` преобразуются в java-объекты
+по следующей таблице:
+
+=================================== =====================================================
+javascript тип                      java тип (в зависимости от типа параметра dao-метода)
+=================================== =====================================================
+``string``                          ``java.lang.String``,
+                                    ``int``,
+                                    ``long``,
+                                    ``double``,
+                                    ``java.lang.Integer``,
+                                    ``java.lang.Long``,
+                                    ``java.lang.Double``,
+                                    ``org.joda.time.DateTime``,
+                                    ``boolean``,
+                                    ``java.lang.Boolean``,
+``number``                          ``int``,
+                                    ``long``,
+                                    ``double``,
+                                    ``java.lang.Integer``,
+                                    ``java.lang.Long``,
+                                    ``java.lang.Double``
+``boolean``                         ``boolean``,
+                                    ``java.lang.Boolean``,
+                                    ``int``,
+                                    ``long``,
+                                    ``double``,
+                                    ``java.lang.Integer``,
+                                    ``java.lang.Long``,
+                                    ``java.lang.Double``,
+                                    ``java.lang.String``,
+``Date``                            ``org.joda.time.DateTime``
+``Object``                          ``java.util.Map<String, Object>``
+``Array``                           ``java.util.List<Object>``
+``Jc.dbm.Store``                    ``jandcode.dbm.data.DataStore``
+``Jc.dbm.DataBox``                  ``jandcode.dbm.data.DataBox``
+``Ext.data.Model``                  ``jandcode.dbm.data.DataStore``
+=================================== =====================================================
+

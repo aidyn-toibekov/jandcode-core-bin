@@ -1,0 +1,20 @@
+params = [
+        n: "Имя проекта. По умолчанию имя выходного каталога",
+        p: "Имя java-пакета. По умолчанию формируется по имени проекта",
+]
+
+replaces = {p, res ->
+    def pname = p.getValueString("n", fu.filename(outdir))
+    def Pname = su.camelCase(pname)
+    def pak = p.getValueString("p", su.unCamelCase(Pname, (char)'.'))
+    //
+    res["wax-complex"] = pname
+    res["WaxComplex"] = Pname
+    res["wax.complex"] = pak
+    res["wax/complex"] = pak.replace(".", "/")
+}
+
+postcreate = {
+    ant.mkdir(dir: wd("temp"))
+    ut.runexe(cmd: "${ut.jcbat} gen-idea -p", dir: wd("."))
+}

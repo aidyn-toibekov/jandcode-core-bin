@@ -1,0 +1,240 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Поддержка тестирования &mdash; jandcode-wax-core</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-wax-core" href="index.html" />
+    <link rel="next" title="Разное" href="misc.html" />
+    <link rel="prev" title="Темы оформления" href="theme.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li class="right" >
+          <a href="misc.html" title="Разное"
+             accesskey="N">следующий</a> |</li>
+        <li class="right" >
+          <a href="theme.html" title="Темы оформления"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-wax-core</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Поддержка тестирования<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="section" id="web">
+<h2>web тесты<a class="headerlink" href="#web" title="Ссылка на этот заголовок">¶</a></h2>
+<p>При написании приложения часто приходится проверять различные аспекты приложения
+непосредственно в браузере. Для того, что бы не замусоривать код приложения тестовым кодом,
+он вынесен отдельно.</p>
+<p>Для поддержки web-тестов необходимо подключить модуль <tt class="docutils literal"><span class="pre">jandcode.wax.tst</span></tt> после
+модуля приложения:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!-- file: app.rt --&gt;</span>
+<span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;app</span> <span class="na">appdir=</span><span class="s">&quot;#{path}&quot;</span> <span class="na">debug=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;x-include</span> <span class="na">module=</span><span class="s">&quot;jandcode.demos.wax.demo1&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;x-include</span> <span class="na">module=</span><span class="s">&quot;jandcode.wax.tst&quot;</span><span class="nt">/&gt;</span>  <span class="c">&lt;!-- модуль web-тестов --&gt;</span>
+    <span class="nt">&lt;web&gt;</span>
+        <span class="nt">&lt;resource</span> <span class="na">name=</span><span class="s">&quot;i&quot;</span> <span class="na">path=</span><span class="s">&quot;#{path}/web&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/web&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+<p>Затем в каталоге <tt class="docutils literal"><span class="pre">web</span></tt> нужно создать подкаталог <tt class="docutils literal"><span class="pre">tst</span></tt>. В этом каталоге
+будем писать тесты.</p>
+<p>Каждый тест представляет собой обычный <tt class="docutils literal"><span class="pre">gsp</span></tt> файл. Для запуска тестов нужно ввести
+uri <tt class="docutils literal"><span class="pre">tst</span></tt> (например <tt class="docutils literal"><span class="pre">http://localhost:8080/myapp/tst</span></tt>). Вы должны увидеть стартовую
+страницу с файлами <tt class="docutils literal"><span class="pre">gsp</span></tt>, расположенными в <tt class="docutils literal"><span class="pre">web/tst</span></tt>. Щелкните по нужному тесту и
+откроется страница с его результатами.</p>
+<p>По адресу <tt class="docutils literal"><span class="pre">http://localhost:8080/myapp/tst/system/devtools</span></tt> находится приложение
+с инструментами для разработчика.</p>
+<div class="section" id="id2">
+<h3>Стандартные шаблоны тестов<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h3>
+<div class="section" id="gsp">
+<h4>Простой gsp<a class="headerlink" href="#gsp" title="Ссылка на этот заголовок">¶</a></h4>
+<p>Просто gsp-файл. Содержимое любое. Например:</p>
+<div class="highlight-jsp"><div class="highlight"><pre><span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+      <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;Content-Type&quot;</span> <span class="na">content=</span><span class="s">&quot;text/html; charset=UTF-8&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        Привет тест из ${request.pathInfo} от ${new DateTime()}
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h4>Пустая страница<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h4>
+<p>Загружена вся инфраструктура (все js+css). body пустой:</p>
+<div class="highlight-jsp"><div class="highlight"><pre><span class="nt">&lt;jc:page</span> <span class="na">tml=</span><span class="s">&quot;tst&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+    Ext.onReady(function() {
+      Jc.showMsg(&quot;Hello!&quot;);
+    });
+  <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/jc:page&gt;</span>
+</pre></div>
+</div>
+<p>Возможно указывать текст для head-области html файла:</p>
+<div class="highlight-jsp"><div class="highlight"><pre><span class="nt">&lt;jc:page</span> <span class="na">tml=</span><span class="s">&quot;tst&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;jc:block</span> <span class="na">arg=</span><span class="s">&quot;header&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;style</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+          body {
+            background: #004500;
+          }
+        <span class="nt">&lt;/style&gt;</span>
+    <span class="nt">&lt;/jc:block&gt;</span>
+
+    <span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+    Ext.onReady(function() {
+      Jc.showMsg(&quot;Hello!&quot;);
+    });
+  <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/jc:page&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h4>В контексте приложения<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h4>
+<p>Загружено все приложение полностью. Стартовый скрипт приложения не выполнен:</p>
+<div class="highlight-jsp"><div class="highlight"><pre><span class="nt">&lt;jc:page</span> <span class="na">tml=</span><span class="s">&quot;app&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+    Ext.onReady(function() {
+      Jc.showMsg(&quot;Hello!&quot;);
+    });
+  <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/jc:page&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="unittest">
+<h4>Выполнение unittest<a class="headerlink" href="#unittest" title="Ссылка на этот заголовок">¶</a></h4>
+<p>Загружена вся инфраструктура (все js+css). В body зарегервировано место для вывода
+резальтатов unittest:</p>
+<div class="highlight-jsp"><div class="highlight"><pre><span class="nt">&lt;jc:page</span> <span class="na">tml=</span><span class="s">&quot;unittest&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+    Ext.onReady(function() {
+      new Test.Unit.Runner({
+        //////////////////////////////////////////////////////////////////////
+        setup: function() {
+        },
+
+        teardown: function() {
+        },
+
+        test1: function() {
+          this.assertEqual(10, 10);
+        }
+        //////////////////////////////////////////////////////////////////////
+      }).runTests();
+    });
+  <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/jc:page&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Содержание</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Поддержка тестирования</a><ul>
+<li><a class="reference internal" href="#web">web тесты</a><ul>
+<li><a class="reference internal" href="#id2">Стандартные шаблоны тестов</a><ul>
+<li><a class="reference internal" href="#gsp">Простой gsp</a></li>
+<li><a class="reference internal" href="#id3">Пустая страница</a></li>
+<li><a class="reference internal" href="#id4">В контексте приложения</a></li>
+<li><a class="reference internal" href="#unittest">Выполнение unittest</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="theme.html"
+                        title="предыдущая глава">Темы оформления</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="misc.html"
+                        title="следующая глава">Разное</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tst.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li class="right" >
+          <a href="misc.html" title="Разное"
+             >следующий</a> |</li>
+        <li class="right" >
+          <a href="theme.html" title="Темы оформления"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-wax-core</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

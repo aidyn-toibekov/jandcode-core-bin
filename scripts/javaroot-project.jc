@@ -1,0 +1,81 @@
+/**
+ * Корневой проект для java-модулей по соглашениям jandcode.
+ * Такой проект состоит из модулей, каждый из которых является подкаталогом
+ * корневого проекта. Модуль обычной имеет имя как у корневого проекта + суффикс,
+ * например: проект 'jandcode', модули 'jandcode-app', 'jandcode-dbm' ...
+ *
+ * Каждый модуль должен быть java-проектом, т.е. в нем имеется подключение
+ *
+ * include 'scripts/java-project'
+ *
+ * В проекте имена модулей прописываются в массиве 'modules', например:
+ *
+ * modules = ['jandcode-app', 'jandcode-dbm']
+ *
+ * После загрузки проекта, модули указанные в массиве загружаются и ссылки
+ * на них помещаются вместо имен модулей.
+ *
+ * Сам проект не должен быть java-модулем.
+ *
+ * Проект должет иметь версию, которая прописывается всем модулям проекта, например:
+ *
+ * include 'scripts/javaroot-project'
+ * version = ut.version()
+ *
+ */
+
+project.afterLoad = {
+    project.modules = project.modules.collect {
+        load(project.wd(it), [afterLoad: {p ->
+            p.version = project.version
+        }])
+    }
+}
+
+//
+clean = cm("Очистка от временных файлов") {
+    for (m in modules) {
+        m.clean()
+    }
+    ut.cleandir(wd("temp"))
+}
+
+//
+compile = cm("Компиляция модулей") {
+    for (m in modules) {
+        m.compile()
+    }
+}
+
+gen_idea = cm("Генерация модулей для idea") {
+    include "idea"
+
+    for (m in modules) {
+        m.gen_idea()
+    }
+    idea.gen_project(project, modules)
+}
+
+ver = cm("Показать версию") {
+    log "Version: ${version}"
+}
+
+test = cm("Тестирование всех модулей") {
+    def outdir = wd("temp/testreport.html")
+    ut.cleandir(outdir)
+    repo.addClasspath("ant-junit")
+    //
+    for (m in modules) {
+        m.test()
+    }
+    log.info "Report test"
+    ant.junitreport(todir: outdir) {
+        for (m in modules) {
+            if (m.vars.PROJECT_JAVA) {
+                fileset(dir: m.dir_testreport_xml)
+            }
+        }
+        report(format: "frames", todir: outdir)
+    }
+}
+

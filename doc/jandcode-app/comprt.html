@@ -1,0 +1,139 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>jandcode.app.CompRt &mdash; jandcode-app</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-app" href="index.html" />
+    <link rel="next" title="Сервисы приложения" href="service.html" />
+    <link rel="prev" title="Создание экземпляров объектов по rt" href="objectfactory.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li class="right" >
+          <a href="service.html" title="Сервисы приложения"
+             accesskey="N">следующий</a> |</li>
+        <li class="right" >
+          <a href="objectfactory.html" title="Создание экземпляров объектов по rt"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-app</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="jandcode-app-comprt">
+<h1>jandcode.app.CompRt<a class="headerlink" href="#jandcode-app-comprt" title="Ссылка на этот заголовок">¶</a></h1>
+<p><tt class="docutils literal"><span class="pre">jandcode.app.CompRt</span></tt> - это предок для компонентов, которые инициализируются по rt.</p>
+<p>При инициализации по rt (метод <tt class="docutils literal"><span class="pre">setRt</span></tt>) для переданной rt создается клон rt (кония),
+которая запоминается в объекте и в дальнейшем может быть использована.</p>
+<p>Значения всех атрибутов переданной rt рассматриваются как значения свойств объекта и
+автоматически инициализируются.</p>
+<p>Пример:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">package</span> <span class="n">myapp</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Comp1</span> <span class="kd">extends</span> <span class="n">CompRt</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">title</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getTitle</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">title</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setTitle</span><span class="o">(</span><span class="n">String</span> <span class="n">title</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">title</span> <span class="o">=</span> <span class="n">title</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Конфигурация:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;object</span> <span class="na">name=</span><span class="s">&quot;z1&quot;</span> <span class="na">class=</span><span class="s">&quot;myapp.Comp1&quot;</span> <span class="na">title=</span><span class="s">&quot;Hello&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+<p>Создание объекта:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Rt</span> <span class="n">conf</span> <span class="o">=</span> <span class="n">getApp</span><span class="o">().</span><span class="na">getRt</span><span class="o">().</span><span class="na">getChild</span><span class="o">(</span><span class="s">&quot;object/z1&quot;</span><span class="o">);</span>
+<span class="n">Comp1</span> <span class="n">inst</span> <span class="o">=</span> <span class="o">(</span><span class="n">Comp1</span><span class="o">)</span> <span class="n">getApp</span><span class="o">().</span><span class="na">getObjectFactory</span><span class="o">().</span><span class="na">create</span><span class="o">(</span><span class="n">conf</span><span class="o">);</span>
+<span class="k">assert</span> <span class="n">inst</span><span class="o">.</span><span class="na">getTitle</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="s">&quot;Hello&quot;</span><span class="o">);</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="objectfactory.html"
+                        title="предыдущая глава">Создание экземпляров объектов по rt</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="service.html"
+                        title="следующая глава">Сервисы приложения</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/comprt.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li class="right" >
+          <a href="service.html" title="Сервисы приложения"
+             >следующий</a> |</li>
+        <li class="right" >
+          <a href="objectfactory.html" title="Создание экземпляров объектов по rt"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-app</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

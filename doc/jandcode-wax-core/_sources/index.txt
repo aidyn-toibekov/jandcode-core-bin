@@ -1,0 +1,21 @@
+
+jandcode-wax-core
+*****************
+
+Платформа для web приложений.
+
+.. toctree::
+   :maxdepth: 2
+
+   theme
+   tst
+   misc
+
+   js-dao
+
+   appjs
+   module-struct
+
+   rtdoc
+
+

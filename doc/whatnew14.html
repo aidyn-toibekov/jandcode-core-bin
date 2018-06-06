@@ -1,0 +1,1015 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Что нового в 1.4.x &mdash; jandcode-core</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-core" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li><a href="index.html">jandcode-core</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="x">
+<h1>Что нового в 1.4.x<a class="headerlink" href="#x" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="section" id="id1">
+<h2>1.4.21<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>fix: rt: при смешивании имен узлов с разными регистрами в определенных ситуациях
+возникали коллизии</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h2>1.4.20<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<ul>
+<li><p class="first">app: новый сервис <tt class="docutils literal"><span class="pre">jandcode.app.DataDirService</span></tt> для поименнованному
+доступу к каталогам данных приложения.
+Настройка:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;app&gt;</span>
+    <span class="c">&lt;!-- корневой каталог с данными приложения. Если не указать, то по умолчанию</span>
+<span class="c">         будет {каталог приложения}/datadir --&gt;</span>
+    <span class="nt">&lt;datadir</span> <span class="na">name=</span><span class="s">&quot;root&quot;</span>
+             <span class="na">path=</span><span class="s">&quot;d:/app/datadir&quot;</span><span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- какой-то конкретный каталог --&gt;</span>
+    <span class="nt">&lt;datadir</span> <span class="na">name=</span><span class="s">&quot;systemp&quot;</span>
+             <span class="na">path=</span><span class="s">&quot;d:/temp/systemp&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/app&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Можно получать доступ к каталогу по имени. Если это имя описано в конфигурации,
+то будет возвращатся указанный в конфигурации путь. Если имя не описано в конфигурации,
+то оно рассматривается как подкаталог каталога &#8220;root&#8221;:</p>
+<blockquote>
+<div><div class="highlight-java"><div class="highlight"><pre><span class="n">DataDirService</span> <span class="n">svc</span> <span class="o">=</span> <span class="n">getApp</span><span class="o">().</span><span class="na">service</span><span class="o">(</span><span class="n">DataDirService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="n">String</span> <span class="n">s</span><span class="o">;</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="na">getDataDir</span><span class="o">(</span><span class="s">&quot;systemp&quot;</span><span class="o">);</span> <span class="c1">// каталог d:/temp/systemp</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="na">getDataDir</span><span class="o">(</span><span class="s">&quot;mydir&quot;</span><span class="o">);</span>   <span class="c1">// каталог d:/app/datadir/mydir</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">svc</span><span class="o">.</span><span class="na">getDataDir</span><span class="o">();</span>          <span class="c1">// каталог d:/app/datadir (корневой)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>1.4.19<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>wax: поддержка jquery-зависимостей на уровне классов extjs</li>
+<li>wax: MUpload - выбор и upload нескольких файлов за раз</li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h2>1.4.18<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>wax: поддержка render и download произвольных данных через DbmAction.</li>
+<li>wax: SGrid: конфигурация основного toolbar</li>
+<li>wax: WaxRecDao простой dao для получения записи по id</li>
+<li>fix: wax: js: Jc.requestDownload не адаптировал url</li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h2>1.4.17<a class="headerlink" href="#id5" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>fix: auth: произвольные свойства пользователя доступны через <tt class="docutils literal"><span class="pre">jandcode.auth.IUserInfo#getAttrs</span></tt></li>
+<li><strong>ВАЖНО</strong> auth: метод <tt class="docutils literal"><span class="pre">jandcode.auth.IUserInfo#getAttr</span></tt> - <em>deprecated</em></li>
+<li>fix: wax-auth: не работала кнопка &#8220;Вход&#8221;</li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h2>1.4.16<a class="headerlink" href="#id6" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>fix: wax: WaxResolveDictDao и WaxLoadDictDao не игнорировали вычисляемые поля</li>
+<li>fix: wax: <tt class="docutils literal"><span class="pre">Jc.control.SGrid</span></tt> значения свойств по умолчанию: paginate: false,
+filterPanel: false</li>
+<li>fix: wax: <tt class="docutils literal"><span class="pre">Jc.control.SGrid</span></tt> не скрывался toolbar, если на нем нет компонентов</li>
+<li>dbm: Новые методы для <tt class="docutils literal"><span class="pre">jandcode.dbm.db.DbUtils</span></tt> (портированы из
+<tt class="docutils literal"><span class="pre">jandcode.dbm.data.UtData</span></tt>): toVariantNamed, copyRecord, copyStore, createIndex,
+uniqueValues, outTable</li>
+<li>wax: Новые методы для UiBuilder: sgrid, stree</li>
+<li>wax: Jc.control.SGrid свойство storeDbmJson для создания store по данным dbm json</li>
+</ul>
+</div>
+<div class="section" id="id7">
+<h2>1.4.15<a class="headerlink" href="#id7" title="Ссылка на этот заголовок">¶</a></h2>
+<ul>
+<li><p class="first">wax: Новые методы для <tt class="docutils literal"><span class="pre">jandcode.wax.core.utils.WaxTml</span></tt>: <tt class="docutils literal"><span class="pre">service</span></tt></p>
+</li>
+<li><p class="first">fix: web: tml файл мог быть только с расширенем gsp, теперь с любым</p>
+</li>
+<li><p class="first">web: Новая фабрика ресерсов <tt class="docutils literal"><span class="pre">ResourceFactoryGsp</span></tt>, теперь можно любой
+тип файла настроить на обработку через gsp без использования дополнительного расширения <tt class="docutils literal"><span class="pre">.gsp</span></tt></p>
+</li>
+<li><p class="first">** Внимание** fix: idea-gen шаблон теперь принимает в ресурсы <tt class="docutils literal"><span class="pre">*.h*,*.gf*</span></tt>. Возможно придется
+перегенерить проект <tt class="docutils literal"><span class="pre">jc</span> <span class="pre">gen-idea</span></tt></p>
+</li>
+<li><p class="first">wax: Jc.showFrame теперь принимает в качестве frame - <tt class="docutils literal"><span class="pre">PATH.gframe</span></tt>. Пример gframe-фрейма:</p>
+<blockquote>
+<div><div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+  <span class="nx">TH</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="s1">&#39;Jc.frame.EditRec&#39;</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">domain</span><span class="o">:</span> <span class="s2">&quot;Tab1&quot;</span><span class="p">,</span>
+    <span class="nx">daoname</span><span class="o">:</span> <span class="s2">&quot;Tab1/updater&quot;</span><span class="p">,</span>
+
+    <span class="nx">onCreateControls</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">th</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+      <span class="c1">//</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">items</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="nx">b</span><span class="p">.</span><span class="nx">input2</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
+        <span class="nx">b</span><span class="p">.</span><span class="nx">input2</span><span class="p">(</span><span class="s2">&quot;name2&quot;</span><span class="p">)</span>
+      <span class="p">];</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h2>1.4.14<a class="headerlink" href="#id8" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>fix: модуль jandcode-jboss-fixvfs не реализовывал getParent()</li>
+</ul>
+</div>
+<div class="section" id="id9">
+<h2>1.4.13<a class="headerlink" href="#id9" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>fix: oracle: recoverGenId теперь работает правильно даже в базах с левыми таблицами</li>
+</ul>
+</div>
+<div class="section" id="id10">
+<h2>1.4.12<a class="headerlink" href="#id10" title="Ссылка на этот заголовок">¶</a></h2>
+<ul>
+<li><p class="first">wax: js: новый метод модели createFromDbmJson и новая функция Jc.createFromDbmJson
+для создания store по json-данным в формате dbm</p>
+</li>
+<li><p class="first">fix: css: не нужный отступ снизу для pageheader</p>
+</li>
+<li><p class="first">wax: js: gsp-фрейм поддерживает создание одного компонента в качестве content. Пример
+(можно использовать как шаблон такого фрейма):</p>
+<blockquote>
+<div><div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+  <span class="o">&lt;%</span>
+    <span class="nx">WaxTml</span> <span class="nx">th</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WaxTml</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+    <span class="c1">// params</span>
+    <span class="nx">def</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">th</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">getValueLong</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+    <span class="nx">def</span> <span class="nx">cnt</span> <span class="o">=</span> <span class="nx">th</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">getValueLong</span><span class="p">(</span><span class="s2">&quot;cnt&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c1">//</span>
+    <span class="nx">DataRecord</span> <span class="nx">rec</span> <span class="o">=</span> <span class="nx">th</span><span class="p">.</span><span class="nx">daoinvoke</span><span class="p">(</span><span class="s2">&quot;Tab1/view&quot;</span><span class="p">,</span> <span class="s2">&quot;load&quot;</span><span class="p">,</span> <span class="nx">id</span><span class="p">)</span>
+    <span class="c1">//</span>
+    <span class="nx">def</span> <span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;Просмотр объекта&#39;</span>
+  <span class="o">%&gt;</span>
+
+  <span class="nx">TH</span><span class="p">.</span><span class="nx">content</span><span class="p">(</span><span class="s1">&#39;Jc.control.GspBox&#39;</span><span class="p">,</span> <span class="p">{</span>  <span class="c1">// обязательно Jc.control.GspBox или его потомок</span>
+    <span class="nx">onInit</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">th</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+      <span class="c1">//</span>
+      <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">th</span><span class="p">.</span><span class="nx">createBuilder</span><span class="p">();</span>
+      <span class="nx">th</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;${title}&#39;</span><span class="p">;</span>
+      <span class="nx">th</span><span class="p">.</span><span class="nx">layout</span> <span class="o">=</span> <span class="nx">b</span><span class="p">.</span><span class="nx">layout</span><span class="p">(</span><span class="s2">&quot;autobox&quot;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">store</span> <span class="o">=</span> <span class="nx">th</span><span class="p">.</span><span class="nx">store</span> <span class="o">=</span> <span class="nx">Jc</span><span class="p">.</span><span class="nx">createFromDbmJson</span><span class="p">(</span><span class="nx">$</span><span class="p">{</span><span class="nx">th</span><span class="p">.</span><span class="nx">toDbmJson</span><span class="p">(</span><span class="nx">rec</span><span class="p">)});</span>
+      <span class="c1">//</span>
+      <span class="nx">th</span><span class="p">.</span><span class="nx">items</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="nx">b</span><span class="p">.</span><span class="nx">frameheader</span><span class="p">({</span><span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;${title}&#39;</span><span class="p">,</span> <span class="nx">icon</span><span class="o">:</span> <span class="s1">&#39;docum&#39;</span><span class="p">}),</span>
+        <span class="nx">b</span><span class="p">.</span><span class="nx">databox</span><span class="p">({</span>
+          <span class="nx">items</span><span class="o">:</span> <span class="p">[</span>
+            <span class="nx">b</span><span class="p">.</span><span class="nx">datalabel2</span><span class="p">(</span><span class="s2">&quot;field1&quot;</span><span class="p">),</span>
+            <span class="nx">b</span><span class="p">.</span><span class="nx">datalabel2</span><span class="p">(</span><span class="s2">&quot;field2&quot;</span><span class="p">),</span>
+            <span class="nx">b</span><span class="p">.</span><span class="nx">datalabel2</span><span class="p">(</span><span class="s2">&quot;field3&quot;</span><span class="p">)</span>
+          <span class="p">]</span>
+        <span class="p">})</span>
+      <span class="p">];</span>
+      <span class="c1">//</span>
+      <span class="nx">th</span><span class="p">.</span><span class="nx">toolbar</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="nx">b</span><span class="p">.</span><span class="nx">action</span><span class="p">({</span><span class="nx">text</span><span class="o">:</span><span class="s1">&#39;Перегрузить&#39;</span><span class="p">,</span><span class="nx">onExec</span><span class="o">:</span><span class="kd">function</span><span class="p">(){</span>
+            <span class="nx">th</span><span class="p">.</span><span class="nx">reload</span><span class="p">({</span><span class="nx">cnt</span><span class="o">:</span><span class="nx">$</span><span class="p">{</span><span class="nx">cnt</span><span class="o">+</span><span class="mi">1</span><span class="p">}});</span>
+        <span class="p">}})</span>
+      <span class="p">];</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="id11">
+<h2>1.4.11<a class="headerlink" href="#id11" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>fix: js: <tt class="docutils literal"><span class="pre">Jc.frame.Gsp</span></tt> не поддерживал dataToControl/controlToData</li>
+<li>wax: js: свойство поля <tt class="docutils literal"><span class="pre">req</span></tt> теперь передается клиенту в структуре домена</li>
+<li>wax: Новые методы для <tt class="docutils literal"><span class="pre">jandcode.wax.core.utils.WaxTml</span></tt>: <tt class="docutils literal"><span class="pre">getParams()</span></tt>,
+<tt class="docutils literal"><span class="pre">toDbmJson()</span></tt>, <tt class="docutils literal"><span class="pre">toJson()</span></tt></li>
+<li>fix: dbm: документация на sqlfilter перенесена в модуль dbm</li>
+<li>fix: не скрывалось &#8220;Ждите&#8221; при upload</li>
+</ul>
+</div>
+<div class="section" id="id12">
+<h2>1.4.10<a class="headerlink" href="#id12" title="Ссылка на этот заголовок">¶</a></h2>
+<p><strong>ВАЖНО</strong> : В этой версии есть несовместимые изменения</p>
+<ul class="simple">
+<li><strong>Несовместимость</strong> SqlFilter перенесен в dbm. Соответсвенно изменился предок для
+элементов фильтра: <tt class="docutils literal"><span class="pre">jandcode.wax.core.utils.sqlfilter.SqlFilterItem</span></tt>
+-&gt; <tt class="docutils literal"><span class="pre">jandcode.dbm.sqlfilter.SqlFilterItem</span></tt></li>
+<li>wax: <tt class="docutils literal"><span class="pre">Jc.showFrame</span></tt> теперь может показывать gsp-фреймы. Для этого в свойстве <tt class="docutils literal"><span class="pre">frame</span></tt>
+нужно передать url, заканчивающийся на <tt class="docutils literal"><span class="pre">.html</span></tt></li>
+<li>fix: web: tst теперь отправляет файлы с двойным расширением ( <a href="#id13"><span class="problematic" id="id14">*</span></a>.js.gsp например )
+на стандартную обработку статических файлов</li>
+<li>wax: SGrid: filterFrame можно задавать как функцию</li>
+<li>Изменен SqlFilter contains. Теперь он с регистронезависимым поиском и поддержкой
+многоязыковых полей</li>
+<li>dbm: поле типа null. Всегда возвращает null. Для скрытия некоторых полей в
+результатах запроса. Например поле passwd.</li>
+<li>fix: если есть перевод, но нет языка (например en), то языковый перевод загружался в ru</li>
+</ul>
+</div>
+<div class="section" id="id15">
+<h2>1.4.9<a class="headerlink" href="#id15" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>wax: Новые компоненты (скорее прототипы компонентов) SGrid, STree, Cb_SGrid, Cb_STree
+для организации редактирования грид и деревьев с фильтрацией, пагинацией и минимальными
+телодвижениями.</li>
+</ul>
+</div>
+<div class="section" id="id16">
+<h2>1.4.8<a class="headerlink" href="#id16" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>незначительные багфиксы</li>
+</ul>
+</div>
+<div class="section" id="id17">
+<h2>1.4.6<a class="headerlink" href="#id17" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>fix: js: Для input Langstring восстановлено свойство matchFieldWidth=false</li>
+<li>jc db-info -a : печать информации для всех зарегистрированных моделей</li>
+<li>js: UIBuilder добавлен метод tabpanel для создания Ext.tab.Panel</li>
+</ul>
+</div>
+<div class="section" id="id18">
+<h2>1.4.5<a class="headerlink" href="#id18" title="Ссылка на этот заголовок">¶</a></h2>
+<p><strong>ВАЖНО</strong>: В этой версии есть несовместимые изменения</p>
+<ul>
+<li><p class="first">fix: Jc.input.Cbfrm снова имеет matchFieldWidth=true по умолчанию. Когда по умолчанию
+стоит false, плывут многие выпадающие списки</p>
+</li>
+<li><p class="first">js: Методы input, datalabel, label у UIBuilder первым параметром могут иметь store.
+На время вызова эта store становится активной для builder:</p>
+<blockquote>
+<div><div class="highlight-javascript"><div class="highlight"><pre><span class="c1">// эквивалентные вызовы</span>
+<span class="nx">b</span><span class="p">.</span><span class="nx">input</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+<span class="nx">b</span><span class="p">.</span><span class="nx">input</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,{})</span>
+<span class="nx">b</span><span class="p">.</span><span class="nx">input</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">store</span><span class="p">,</span><span class="s2">&quot;name&quot;</span><span class="p">,{})</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">js: У записи store появился метод clearValues - обнуление существующих значений в записи</p>
+</li>
+<li><p class="first">fix: dbm: Rnd при генерации текста зачем то вставлялись еще и цифры</p>
+</li>
+<li><p class="first"><strong>Несовместимость</strong> fix: verdb не загружались данные по умолчанию в базу данных при
+verdb-validate</p>
+</li>
+</ul>
+</div>
+<div class="section" id="id19">
+<h2>1.4.4<a class="headerlink" href="#id19" title="Ссылка на этот заголовок">¶</a></h2>
+<p><strong>ВАЖНО</strong>: В этой версии есть несовместимые изменения</p>
+<ul class="simple">
+<li>dbm: RandomDataLoader поддерживает генерацию данных для многоязыковых полей</li>
+<li>wax: Новый тип данных для dao-параметров - RequestMap. Этот объект получает содержимое
+<tt class="docutils literal"><span class="pre">WebRequest.getParams</span></tt> и сверху на него накладываются явные dao-параметры (запись
+или map). Используется при загрузке данных через SqlFilter в качестве параметра метода
+загрузки или создания фильтра.</li>
+<li>SqlFilterItem имеет свойство <tt class="docutils literal"><span class="pre">param</span></tt> (<tt class="docutils literal"><span class="pre">getParam()</span></tt>): именно его нужно использовать для получения
+значения параметра из параметров фильтра. Ранее использоватлось <tt class="docutils literal"><span class="pre">field</span></tt> (<tt class="docutils literal"><span class="pre">getField()</span></tt>).</li>
+<li>SqlFilter умеет создавать DataStore по результатам запроса, в дополнение к загрузке в
+существующий DataStore</li>
+<li>ISqlFilterBuilder имеет метод getTextValue для формирования текстовых значений
+в заголовках с учетом справочников</li>
+<li>SqlFilterItem может быть скрытым (hidden=true). Такой фильтр не попадает в заголовки</li>
+<li>Новый фильтр parent для использования в деревьях id-parent</li>
+<li><strong>Несовместимость</strong> Интерфейс SqlFilter подвергся окончательному рефакторингу
+и теперь стабилен</li>
+<li>wax: Новый класс <tt class="docutils literal"><span class="pre">jandcode.wax.core.model.WaxLoadSqlFilterDao</span></tt> можно использовать
+как предок для фильтрованных загрузчиков или как прототип для написания подобных классов</li>
+<li>js: TreeStore получила методы для работы со словарями и текущей записью</li>
+<li>новый класс css jc-treegrid для оформления деревьев как грид</li>
+<li>hack-fix: extjs дерево не правильно перезагружала узлы. Теперь treestore.load({node:id})
+работает как ожидается</li>
+<li>js: новый тип колонки TreeLangstring</li>
+<li><strong>Несовместимость</strong> js: перемещены классы
+Jc.grid.Grid -&gt; Jc.control.Grid,
+Jc.tree.Tree -&gt; Jc.control.Tree</li>
+</ul>
+</div>
+<div class="section" id="id20">
+<h2>1.4.3<a class="headerlink" href="#id20" title="Ссылка на этот заголовок">¶</a></h2>
+<p><strong>ВАЖНО</strong>: В этой версии есть несовместимые изменения</p>
+<ul>
+<li><p class="first">Настройка форматировщика ошибок полностью перенесена в тег <tt class="docutils literal"><span class="pre">&lt;error</span> <span class="pre">&lt;formatter</span></tt>.
+Из <tt class="docutils literal"><span class="pre">app.rt</span></tt> приложения можно удалять фрагменты вида:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;service</span> <span class="na">name=</span><span class="s">&quot;jandcode.app.ErrorService&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;errorformatter</span> <span class="na">name=</span><span class="s">&quot;log&quot;</span>
+                    <span class="na">class=</span><span class="s">&quot;jandcode.utils.error.impl.ErrorFormatterDefault&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/service&gt;</span>
+
+<span class="nt">&lt;error&gt;</span>
+    <span class="nt">&lt;formatter</span> <span class="na">name=</span><span class="s">&quot;log&quot;</span> <span class="na">showSource=</span><span class="s">&quot;true&quot;</span> <span class="na">showStack=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/error&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Настройка форматировщика ошибок для логов теперь описана в ядре с такими параметрами
+по умолчанию:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;error&gt;</span>
+    <span class="nt">&lt;formatter</span> <span class="na">name=</span><span class="s">&quot;log&quot;</span> <span class="na">showSource=</span><span class="s">&quot;true&quot;</span> <span class="na">showStack=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/error&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">fix: в версии 1.4.2 продукт собирался, но не работал</p>
+</li>
+<li><p class="first">Шаблон проекта <tt class="docutils literal"><span class="pre">wax-complex</span></tt> изменился в соответсвии с последними нововведениями</p>
+</li>
+<li><p class="first">В шаблоне проекта <tt class="docutils literal"><span class="pre">wax-complex</span></tt> настройки разделены на настройки по умолчанию,
+настройки для разработки и настройки для тестирования. Для получения деталей
+создайте проект по шаблону <tt class="docutils literal"><span class="pre">wax-complex</span></tt> и почитайте коментарии в файла корня проекта</p>
+</li>
+<li><p class="first">Файлы <tt class="docutils literal"><span class="pre">app-product.rt</span></tt> и <tt class="docutils literal"><span class="pre">db-ini.rt</span></tt> из корня проекта теперь попадают в дистрибутив
+как настройки приложения по умолчанию</p>
+</li>
+<li><p class="first">fix: Файл <tt class="docutils literal"><span class="pre">jc-app.rt</span></tt> больше не нужен для запуска <tt class="docutils literal"><span class="pre">jc</span></tt></p>
+</li>
+<li><p class="first">Изменен способ настройки файлов проекта в дистрибутиве: теперь он более очевидный.
+Подробности см. в скрипте <tt class="docutils literal"><span class="pre">scripts\wax-project.jc</span></tt>.</p>
+</li>
+<li><p class="first"><strong>Несовместимость</strong> Регистрация элементов фильтра делается в модели в теге <tt class="docutils literal"><span class="pre">&lt;sqlfilter/&gt;</span></tt>. Пример:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;model</span> <span class="na">name=</span><span class="s">&quot;sys&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;sqlfilter</span> <span class="na">name=</span><span class="s">&quot;equal&quot;</span>
+                   <span class="na">class=</span><span class="s">&quot;jandcode.wax.core.model.sqlfilter.SqlFilter_equal&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/model&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>В атрибуте <tt class="docutils literal"><span class="pre">class</span></tt> указывается класс реализатор. В случае, когда элемент фильтра для
+конкретного типа СУБД отличается, можно сделать реализацию для конкретной СУБД и
+указать ее в атрибуте <tt class="docutils literal"><span class="pre">class.DBTYPE</span></tt>. Например:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;model</span> <span class="na">name=</span><span class="s">&quot;sys&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;sqlfilter</span> <span class="na">name=</span><span class="s">&quot;equal&quot;</span>
+                   <span class="na">class=</span><span class="s">&quot;jandcode.wax.core.model.sqlfilter.SqlFilter_equal&quot;</span>
+                   <span class="na">class.oracle=</span><span class="s">&quot;jandcode.wax.core.model.sqlfilter.SqlFilter_equal_oracle&quot;</span>
+                   <span class="na">class.mysql=</span><span class="s">&quot;jandcode.wax.core.model.sqlfilter.SqlFilter_equal_mysql&quot;</span>
+                   <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/model&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="id21">
+<h2>1.4.2<a class="headerlink" href="#id21" title="Ссылка на этот заголовок">¶</a></h2>
+<p><strong>ВАЖНО</strong>: В этой версии есть несовместимые изменения</p>
+<p><strong>utils</strong></p>
+<ul class="simple">
+<li>Для EasyXmlLoader введен параметр trimSpaceEnd. Позволяет при загрузке xml обрезать
+только концевые пробелы</li>
+</ul>
+<p><strong>dbm</strong></p>
+<ul>
+<li><p class="first"><strong>Несовместимость</strong> DaoService и Dao полностью переработаны. Возможны проблемы
+с совместимостью в некоторых нетипичных случаях.</p>
+</li>
+<li><p class="first">Dao могут быть объявлены на уровне модели. Такие dao не имеют привязку к домену:</p>
+<blockquote>
+<div><div class="highlight-xml"><pre>&lt;root&gt;
+    &lt;model name="mymodel"&gt;
+        ...
+        &lt;dao name="mydao" .../&gt;
+    &lt;/model&gt;
+&lt;/root&gt;</pre>
+</div>
+</div></blockquote>
+<p>Соответсвенно пользоваться ими можно просто по имени dao:</p>
+<blockquote>
+<div><div class="highlight-java"><div class="highlight"><pre><span class="n">ut</span><span class="o">.</span><span class="na">createDao</span><span class="o">(</span><span class="s">&quot;mydao&quot;</span><span class="o">)</span>
+<span class="n">ut</span><span class="o">.</span><span class="na">daoinvoke</span><span class="o">(</span><span class="s">&quot;mydao&quot;</span><span class="o">,</span> <span class="s">&quot;method1&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Dao можно использовать просто по классу, без регистрации dao в rt. Допустимо
+использование как ссылки на класс, так и полного имени класса.
+Такие dao не имеют привязку к домену:</p>
+<blockquote>
+<div><div class="highlight-java"><div class="highlight"><pre><span class="n">ut</span><span class="o">.</span><span class="na">createDao</span><span class="o">(</span><span class="n">MyDao</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="n">ut</span><span class="o">.</span><span class="na">createDao</span><span class="o">(</span><span class="s">&quot;com.myapp.model.MyDao&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Несовместимость</strong> Из Dao убран метод <tt class="docutils literal"><span class="pre">public</span> <span class="pre">IDaoInfo</span> <span class="pre">getDaoInfo()</span></tt>. Этот механизм более не существует.</p>
+</li>
+<li><p class="first"><strong>Несовместимость</strong> Полностью удалено понятие &#8220;контекст выполнения dao&#8221;. Соответственно
+из Dao убран <tt class="docutils literal"><span class="pre">getContext()</span></tt>. Фактически <tt class="docutils literal"><span class="pre">getContext()</span></tt> являлся копией параметров
+web-запроса. Метод <tt class="docutils literal"><span class="pre">getContext()</span></tt> возвращающий параметры web-запроса добавлен
+в <tt class="docutils literal"><span class="pre">WaxDaoUtils</span></tt>. Сотвественно код <tt class="docutils literal"><span class="pre">getContext()</span></tt> в dao нужно заменить на
+<tt class="docutils literal"><span class="pre">ut.getContext()</span></tt></p>
+</li>
+<li><p class="first">RandomDataLoader: в подстановке <tt class="docutils literal"><span class="pre">text</span></tt> (метод <tt class="docutils literal"><span class="pre">jandcode.dbm.dataloader.rnd.Rnd#text</span></tt>)
+можно указывать параметр для генерации не сплошного текста, а текста с
+пробелами (имитация слов):</p>
+<div class="highlight-python"><pre>&lt;field name="name1" template="${text:rus-w10,fupper,30,50}"/&gt;</pre>
+</div>
+</li>
+<li><p class="first"><strong>Несовместимость</strong> Метод <tt class="docutils literal"><span class="pre">jandcode.dbm.dict.DictService#getDictData</span></tt> теперь устанавливает имя
+у возвращаемого store в имя словаря. Были проблемы в resolveDicts на клиенте js</p>
+</li>
+<li><p class="first">Dict теперь не требует указания поля по умолчанию. Если поле по умолчанию не указано,
+то берется первое поле не <tt class="docutils literal"><span class="pre">id</span></tt>.</p>
+</li>
+<li><p class="first">Dict теперь не требует указания домена. Если домен явно не установлен, то подразумевается
+домен с таким же именем, как и имя словаря.</p>
+</li>
+<li><p class="first"><strong>Несовместимость</strong> Многоязыковые поля требуют описания реальных полей,
+которые будут генерироватся для каждого языка:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;lang.string&quot;</span> <span class="na">parent=</span><span class="s">&quot;sys&quot;</span>
+       <span class="na">class=</span><span class="s">&quot;jandcode.dbm.field.LangStringField&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;real&quot;</span> <span class="na">parent=</span><span class="s">&quot;string&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/field&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Несовместимость</strong> LangStringField игнорирует присвоение значения. Ранее - значение писалось в поле с
+языком по умолчанию. Удалено, т.к. возникает очень много сторонних и неожиданных
+эффектов от такого применения. В частности при приеме данных от клиента после ввода
+новых данные в многоязыковое поле обнулялось значение поля с узыком по умолчанию.</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">jc</span> <span class="pre">db-info</span></tt> дополнительно показывает реальное имя класса jdbc-драйвера</p>
+</li>
+<li><p class="first">В <tt class="docutils literal"><span class="pre">TestExtDbm</span></tt> добавлены некоторые методы, используемые при тестировании:</p>
+<blockquote>
+<div><div class="highlight-java"><div class="highlight"><pre><span class="c1">// создание dao по имени, по классу</span>
+<span class="n">dbm</span><span class="o">.</span><span class="na">createDao</span><span class="o">(...)</span>
+
+<span class="c1">// загрузка тестовых или prod данных непосредственно из указанного файла</span>
+<span class="n">dbm</span><span class="o">.</span><span class="na">loadDataLoaderAll</span><span class="o">(...)</span>
+<span class="n">dbm</span><span class="o">.</span><span class="na">loadDataLoader</span><span class="o">(...)</span>
+
+<span class="c1">// синоним для getDbUtils()</span>
+<span class="n">dbm</span><span class="o">.</span><span class="na">getUt</span><span class="o">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Несовместимость</strong> fix: При наследовании домена со словарем, если в предке была явно определена структура
+домена словаря, она не наследовалась</p>
+</li>
+<li><p class="first">Домен теперь можно создать непосредственно из файла. Имя файла должно быть именем
+ресурса в пределах classpath и начинатся с <tt class="docutils literal"><span class="pre">/</span></tt>. В файле (формат rt) должен быть
+описан домен с именем <tt class="docutils literal"><span class="pre">default</span></tt>, экземпляр которого и создается.</p>
+</li>
+<li><p class="first">Введено понятие &#8220;провайдер моделей&#8221; (<tt class="docutils literal"><span class="pre">jandcode.dbm.IModelProvider</span></tt>). Теперь
+каждый поток (web-запрос) может иметь собственную модель, которая будет выглядеть
+как модель по умолчанию.</p>
+</li>
+</ul>
+<p><strong>jc</strong></p>
+<ul class="simple">
+<li>fix: localize переменная была локальной для localize-project.jc</li>
+</ul>
+<p><strong>web</strong></p>
+<ul>
+<li><p class="first"><strong>Несовместимость</strong> fix: при указании web-ресурса в виде <tt class="docutils literal"><span class="pre">package</span></tt> теперь можно
+указать атрибут <tt class="docutils literal"><span class="pre">filemark</span></tt> с именем файла лежащим в этом пакете. По умолчанию
+используется <tt class="docutils literal"><span class="pre">filemark=&quot;module.rt&quot;</span></tt>. Если в приложении не используются левые
+package в качестве web-ресурсов, то это изменение на коде не отразится.
+Сделано для того, что бы однозначно определять физический путь для web-ресурса,
+иначе при запуске тестов бывают ситуации, когда ресурс настраивается на каталог
+с тестами.</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;web&gt;</span>
+        <span class="nt">&lt;resource</span> <span class="na">name=</span><span class="s">&quot;jandcode.wax.core&quot;</span> <span class="na">package=</span><span class="s">&quot;jandcode.wax.core&quot;</span>
+             <span class="na">filemark=</span><span class="s">&quot;module.rt&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/web&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Несовместимость</strong> Убран метод <tt class="docutils literal"><span class="pre">request.render(String</span> <span class="pre">tml,</span> <span class="pre">Object</span> <span class="pre">...</span> <span class="pre">args)</span></tt>. Пользуйтесь <tt class="docutils literal"><span class="pre">UtCnv.toMap</span></tt>
+для замены этого метода.</p>
+</li>
+<li><p class="first"><strong>Несовместимость</strong> Изменился приоритет при анализе pathInfo. Ранее static-file
+был более приоритетней, чем action. Теперь наоборот. Соотвественно появилась возможность
+полностью эмулировать виртуальную файловую систему, обрабатывая запросы вида
+<tt class="docutils literal"><span class="pre">http://host/myaction/path1/file.html</span></tt></p>
+</li>
+<li><p class="first"><strong>Несовместимость</strong> <tt class="docutils literal"><span class="pre">request.getPathInfo()</span></tt> более не изменяется в соотвествии
+с выявленной action. Ранее action удаляла из него свое имя.</p>
+</li>
+<li><p class="first">web-фильтры теперь могут быть описаны в узле верхнего уровня web:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;web&gt;</span>
+        <span class="nt">&lt;filter</span> <span class="na">name=</span><span class="s">&quot;com.filter.Cls1&quot;</span>
+                <span class="na">class=</span><span class="s">&quot;com.filter.Cls1&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/web&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">web-фильтр расширен методом beforeHandleRequest(). Теперь возможно внедрятся в обработку
+запроса на самом верхнем уровне, до выполнения любых манипуляций с action.</p>
+</li>
+<li><p class="first">Добавлен механизм рендеринга <strong>любых</strong> объектов в представление для клиента
+(см. <tt class="docutils literal"><span class="pre">jandcode.web.RenderService</span></tt>, <tt class="docutils literal"><span class="pre">jandcode.web.IWebRender</span></tt>). Теперь из action
+можно возвращать любые объекты (через методы <tt class="docutils literal"><span class="pre">request.render</span></tt>) и способ
+трансформации их для клиента. Необходимо просто зарегистрировать класс-рендерер.
+Ранее из action можно было вернуть только имя шаблона.</p>
+</li>
+<li><p class="first">web-запрос тепрь имеет &#8220;виртуальный корень&#8221;. Этот механизм позволяет приложению работать
+через разные внешние url в разных контекстах.</p>
+</li>
+<li><p class="first"><strong>Несовместимость</strong> action теперь для получения pathInfo может использовать свой локальный, где
+имя action, либо глобальный оригинальный pathInfo</p>
+</li>
+<li><p class="first"><strong>Несовместимость</strong> В связи с изменением механизма рендеринга результати и за
+ненадобностью у action убран метод <tt class="docutils literal"><span class="pre">getTmlArgs()</span></tt></p>
+</li>
+</ul>
+<p><strong>wax</strong></p>
+<ul class="simple">
+<li>fix: колонка <tt class="docutils literal"><span class="pre">Icontext</span></tt> печатала null при значении null</li>
+<li>Новый тип колонок <tt class="docutils literal"><span class="pre">Langstring</span></tt>, <tt class="docutils literal"><span class="pre">Langflag</span></tt> для отображения многоязычных полей</li>
+<li>js: <tt class="docutils literal"><span class="pre">Jc.Action</span></tt> имеет обработчик <tt class="docutils literal"><span class="pre">onBeforeExec</span></tt></li>
+<li>js: Функция <tt class="docutils literal"><span class="pre">Jc.execAction</span></tt> для выполнения action по itemId</li>
+<li>js: Функция <tt class="docutils literal"><span class="pre">Jc.getComponent</span></tt> для поиска компонента по itemId</li>
+<li>Поддержка многоязычных приложений с разделением поддерживаемых языков между интерфейсом
+и моделью. В том числе текущий язык может быть разным для модели и интерфейса.</li>
+<li>Различные методы для манипулирования многоязыковыми данными в модуле <tt class="docutils literal"><span class="pre">_lang.js</span></tt></li>
+<li>fix: showWait/hideWait теперь показывается поверх все окон (ранее диалог скрывал
+сообщение)</li>
+<li><strong>Несовместимость</strong> fix: js: <tt class="docutils literal"><span class="pre">Jc.dbm.DataBinder</span></tt> некоторые методы работали некорректно в определенных
+условиях</li>
+<li><strong>Несовместимость</strong> js: <tt class="docutils literal"><span class="pre">Jc.dbm.ExtModel</span></tt> теперь поддерживает чтение/запись значений полей без их
+явного определения</li>
+<li>fix: мелкие и не очень баги в компонентах</li>
+<li>Новый тип input <tt class="docutils literal"><span class="pre">Langstring</span></tt>, <tt class="docutils literal"><span class="pre">Langmemo</span></tt> для ввода многоязычных полей</li>
+<li>js: layout jctable поддерживает явно заданные расстояния между индивидуальными
+строками и колонками</li>
+<li>Новый shower Div для разработки тем, которые показывают фреймы в теле html.
+Пока не совсем стабилен. Если не найдутся потребители, будет со временем законсервирован.</li>
+<li>Дополнительные настройки для shower Tabpanel: titleOnToolbar, showToolbar, autoHideToolbar,
+closeButtonOnToolbar</li>
+<li>shower Tabpanel закрывает текущий фрейм, если явно не указано какой закрывать</li>
+<li>Базовая тема поддерживает настройку historySupport для включения поддержки истории
+браузера в extjs</li>
+<li>Новая тема debugdiv для отладки в режиме работы shower Div</li>
+<li>Новая тема ide2. Теперь и по умолчанию. Более симпатичная и удобная на мой взгляд,
+чем ide.</li>
+<li>Для UiBuilder введен метод layout для более удобного объявления layout для контейнеров</li>
+<li><strong>Несовместимость</strong> Новая функция для показа фрейма <tt class="docutils literal"><span class="pre">Jc.showFrame</span></tt>. В дальнейшем заменит все существующие
+на текущий момент механизмы, которые пока оставлены для совместимости.</li>
+<li><strong>Несовместимость</strong> Функция onOk переданная в shower теперь принимает параметр frame</li>
+<li><strong>Несовместимость</strong> Переименованы классы
+jandcode.wax.core.model.WaxDictUpdaterDao -&gt; jandcode.wax.core.model.WaxUpdaterDictDao,
+jandcode.wax.core.model.WaxSimpleLoadDictDao -&gt; jandcode.wax.core.model.WaxLoadDictDao,
+jandcode.wax.core.model.WaxSimpleResolveDictDao -&gt; jandcode.wax.core.model.WaxResolveDictDao,</li>
+<li>Новый шаблон &lt;jc:theme/&gt; для удобной поддержки тем</li>
+<li>Поддержка передачи Store и Record из клиента в методы dao как тип Map.
+Странно что раньше этого небыло.</li>
+<li><strong>Несовместимость</strong> Полностью переработан механизм SqlFilter. Теперь все гораздо нагляднее и стабильнее.
+Плюс поддержка order by</li>
+<li><strong>Несовместимость</strong> Формат описания тем полностью изменен</li>
+<li>В описаниях тем поддерживаются css,js,gsp</li>
+<li><strong>Несовместимость</strong> Удален класс jandcode.wax.core.utils.WaxCompExt за ненадобностью</li>
+<li>Введен класс jandcode.wax.core.utils.WaxTml для использования в gsp как набора
+дополнительных утилит шаблона</li>
+</ul>
+<p><strong>misc</strong></p>
+<ul class="simple">
+<li>модуль <tt class="docutils literal"><span class="pre">jandcode-toolbox</span></tt> убран</li>
+<li>Куча всяких мелочишок, которые не имеют явных внешних проявлений</li>
+</ul>
+</div>
+<div class="section" id="id22">
+<h2>1.4.1<a class="headerlink" href="#id22" title="Ссылка на этот заголовок">¶</a></h2>
+<p><strong>ВАЖНО</strong>: В этой версии есть несовместимые изменения</p>
+<ul>
+<li><p class="first">fix: в IAfterDaoMethod передавалось неправильное имя метода</p>
+</li>
+<li><p class="first">fix: в диаграммах db-doc теперь не прыгают шрифты</p>
+</li>
+<li><p class="first">В описании диаграм для db-doc для домена в диаграмме можно указать параметр
+<tt class="docutils literal"><span class="pre">showFields=&quot;false&quot;</span></tt> (не показывать его поля, будет только прямоугольник с именем
+таблицы):</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;diagram</span> <span class="na">name=</span><span class="s">&quot;Diagram1&quot;</span> <span class="na">title=</span><span class="s">&quot;Диаграмма 1&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;domain</span> <span class="na">name=</span><span class="s">&quot;Table1&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;domain</span> <span class="na">name=</span><span class="s">&quot;Table2&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;domain</span> <span class="na">name=</span><span class="s">&quot;Table3&quot;</span> <span class="na">showFields=</span><span class="s">&quot;false&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;domain</span> <span class="na">name=</span><span class="s">&quot;Table4&quot;</span> <span class="na">showFields=</span><span class="s">&quot;false&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/diagram&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">fix: теперь можно делать несколько сервлетов JcServlet в web.xml с разными mapping
+в рамках одного web-приложения. Например так:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;web-app</span> <span class="na">xmlns=</span><span class="s">&quot;http://java.sun.com/xml/ns/javaee&quot;</span>
+         <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+         <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://java.sun.com/xml/ns/javaee</span>
+<span class="s">         http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot;</span>
+         <span class="na">version=</span><span class="s">&quot;2.5&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;servlet&gt;</span>
+        <span class="nt">&lt;servlet-name&gt;</span>servlet1<span class="nt">&lt;/servlet-name&gt;</span>
+        <span class="nt">&lt;servlet-class&gt;</span>jandcode.web.JcServlet<span class="nt">&lt;/servlet-class&gt;</span>
+        ...
+    <span class="nt">&lt;/servlet&gt;</span>
+    <span class="nt">&lt;servlet&gt;</span>
+        <span class="nt">&lt;servlet-name&gt;</span>servlet2<span class="nt">&lt;/servlet-name&gt;</span>
+        <span class="nt">&lt;servlet-class&gt;</span>jandcode.web.JcServlet<span class="nt">&lt;/servlet-class&gt;</span>
+        ...
+    <span class="nt">&lt;/servlet&gt;</span>
+    <span class="nt">&lt;servlet-mapping&gt;</span>
+        <span class="nt">&lt;servlet-name&gt;</span>servlet1<span class="nt">&lt;/servlet-name&gt;</span>
+        <span class="nt">&lt;url-pattern&gt;</span>/*<span class="nt">&lt;/url-pattern&gt;</span>
+    <span class="nt">&lt;/servlet-mapping&gt;</span>
+    <span class="nt">&lt;servlet-mapping&gt;</span>
+        <span class="nt">&lt;servlet-name&gt;</span>servlet2<span class="nt">&lt;/servlet-name&gt;</span>
+        <span class="nt">&lt;url-pattern&gt;</span>/adm/*<span class="nt">&lt;/url-pattern&gt;</span>
+    <span class="nt">&lt;/servlet-mapping&gt;</span>
+    ...
+<span class="nt">&lt;/web-app&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">jc: поддержка нескольких моделей/баз данных в проекте, в том числе и при использовании
+<tt class="docutils literal"><span class="pre">verdb</span></tt>. Имя модели указывается в параметре <tt class="docutils literal"><span class="pre">-m:MODELNAME</span></tt></p>
+</li>
+<li><p class="first"><strong>Несовместимость</strong>: структура product-дистрибутива для wax изменилась.
+Теперь скрипты (включая скрипты базы данных и verdb) лежат в <tt class="docutils literal"><span class="pre">WEB-INF</span></tt>
+(раньше лежали в корне дистрибутива)</p>
+</li>
+<li><p class="first"><strong>Несовместимость</strong>: скрипты базы данных и verdb теперь распологаются в подкаталоге
+с именем модели. К примеру, раньше было так:</p>
+<div class="highlight-python"><pre>PROJECTROOT
+    scripts
+        verdb
+            00001
+                0001-update.sql
+            00002
+                0001-update.sql</pre>
+</div>
+<p>Теперь так:</p>
+<div class="highlight-python"><pre>PROJECTROOT
+    scripts
+        default    &lt;-- это имя модели
+            verdb
+                00001
+                    0001-update.sql
+                00002
+                    0001-update.sql</pre>
+</div>
+</li>
+<li><p class="first">wax: DbmAction может быть перекрыта для установки модели контекста выполнения запроса.
+Для этого выделен метод <tt class="docutils literal"><span class="pre">DbmAction.getModel</span></tt></p>
+</li>
+<li><p class="first">fix: wax: growHeight для gsp-фреймов был незадействован</p>
+</li>
+<li><p class="first">wax: gsp-фрейм имеет дополнительный css-класс для фрейма <tt class="docutils literal"><span class="pre">jc-frame-gsp</span></tt> и для тела
+фрейма <tt class="docutils literal"><span class="pre">jc-frame-body-gsp</span></tt></p>
+</li>
+<li><p class="first">fix: в wax-гриде не выделялась запись после добавления новой записи в гриду</p>
+</li>
+</ul>
+</div>
+<div class="section" id="id23">
+<h2>1.4.0<a class="headerlink" href="#id23" title="Ссылка на этот заголовок">¶</a></h2>
+<p><strong>ВАЖНО</strong>: Эта версия не совместима с веткой 1.3.*</p>
+<ul>
+<li><p class="first">Метод <tt class="docutils literal"><span class="pre">App.getInst()</span></tt> был удален. Теперь нет глобального едиственного экземпляра
+приложения. Приложений может быть несколько. Соотвественно необходимо заменить
+<tt class="docutils literal"><span class="pre">App.getInst()</span></tt> или (для groovy-кода) <tt class="docutils literal"><span class="pre">App.inst</span></tt> на <tt class="docutils literal"><span class="pre">getApp()</span></tt>. В всех объектах,
+которые являются наследниками от <tt class="docutils literal"><span class="pre">jandcode.app.Comp</span></tt> и создавались через фабрики,
+метод <tt class="docutils literal"><span class="pre">getApp()</span></tt> имеется и возвращает правильную ссылка на <tt class="docutils literal"><span class="pre">App</span></tt>. В случае получения
+ошибки вида <em>&#8216;Экземпляр создан вне контекста приложения&#8217;</em> необходимо убедится, что
+объект создается через <tt class="docutils literal"><span class="pre">getApp().getObjectFactory().create(...)</span></tt>. Если <tt class="docutils literal"><span class="pre">App.getInst()</span></tt>
+использовался вне компонента <tt class="docutils literal"><span class="pre">jandcode.app.Comp</span></tt>, необходимо явно передать ему приложение
+или объект, реализующий интерфейс <tt class="docutils literal"><span class="pre">jandcode.app.IAppLink</span></tt>, через который он сможет
+получить доступ к приложению. Приложение можно загрузить классом <tt class="docutils literal"><span class="pre">jandcode.app.AppLoader</span></tt>.</p>
+</li>
+<li><p class="first">В связи с удалением метода <tt class="docutils literal"><span class="pre">App.getInst()</span></tt> уделен статический метод <tt class="docutils literal"><span class="pre">Model.getInst()</span></tt>.
+Теперь модель можно получить только через <tt class="docutils literal"><span class="pre">getApp().service(ModelService.class).getModel()</span></tt>.</p>
+</li>
+<li><p class="first">В связи с удалением метода <tt class="docutils literal"><span class="pre">App.getInst()</span></tt> уделен статический класс <tt class="docutils literal"><span class="pre">jandcode.ui.Ui</span></tt>,
+Теперь к его функциональности можно получить доступ через <tt class="docutils literal"><span class="pre">getApp().service(UiService.class)</span></tt>.</p>
+</li>
+<li><p class="first">В связи с удалением метода <tt class="docutils literal"><span class="pre">App.getInst()</span></tt> уделен статический класс <tt class="docutils literal"><span class="pre">jandcode.web.Web</span></tt>,
+Теперь к его функциональности можно получить доступ через <tt class="docutils literal"><span class="pre">getApp().service(WebService.class)</span></tt>.</p>
+</li>
+<li><p class="first">Из <tt class="docutils literal"><span class="pre">Rt</span></tt> механизм <tt class="docutils literal"><span class="pre">x-loaderhandler</span></tt> заменен на <tt class="docutils literal"><span class="pre">x-plugin</span></tt>. Варианты использования
+теперь стали гораздо гибче.</p>
+</li>
+<li><p class="first">Модель теперь регистрируется в узле <tt class="docutils literal"><span class="pre">dbm</span></tt> (ранее регистрировалась в сервисе <tt class="docutils literal"><span class="pre">jandcode.dbm.ModelService</span></tt>):</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;dbm&gt;</span>
+        <span class="nt">&lt;registermodel</span> <span class="na">name=</span><span class="s">&quot;default&quot;</span> <span class="na">model=</span><span class="s">&quot;myapp.model&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/dbm&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Убраны все модели по умолчанию: <tt class="docutils literal"><span class="pre">default</span></tt>, <tt class="docutils literal"><span class="pre">wax.sys</span></tt>, <tt class="docutils literal"><span class="pre">wax.default</span></tt>. В комплекте
+теперь только модель <tt class="docutils literal"><span class="pre">sys</span></tt>, которая используется как предок для моделей. Все промежуточные
+составные части моделей (например из <tt class="docutils literal"><span class="pre">jandcode.wax.verdb</span></tt>) реализованы через плагины
+загрузки Rt. Пример:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!-- модуль где-то в библиотеке объявляет плагин модели... --&gt;</span>
+<span class="nt">&lt;x-plugin</span> <span class="na">name=</span><span class="s">&quot;mylib1.model&quot;</span> <span class="na">path=</span><span class="s">&quot;model/model.rt&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;depend</span> <span class="na">name=</span><span class="s">&quot;jandcode.wax.core.model&quot;</span><span class="nt">/&gt;</span> <span class="c">&lt;!-- от этого плагина зависит объявленный --&gt;</span>
+<span class="nt">&lt;/x-plugin&gt;</span>
+
+<span class="c">&lt;!-- модуль приложения объявляет свою модель и использует плагины --&gt;</span>
+<span class="nt">&lt;model</span> <span class="na">name=</span><span class="s">&quot;myapp1.model&quot;</span> <span class="na">parent=</span><span class="s">&quot;sys&quot;</span> <span class="na">x-root=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- включаем плагин модели вместе с его зависимостями --&gt;</span>
+    <span class="nt">&lt;x-include</span> <span class="na">plugin=</span><span class="s">&quot;mylib1.model&quot;</span><span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- собственно модель приложения --&gt;</span>
+    <span class="nt">&lt;x-include</span> <span class="na">path=</span><span class="s">&quot;model/model.rt&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/model&gt;</span>
+
+<span class="c">&lt;!-- регистрируем модель --&gt;</span>
+<span class="nt">&lt;dbm&gt;</span>
+    <span class="nt">&lt;registermodel</span> <span class="na">name=</span><span class="s">&quot;default&quot;</span> <span class="na">model=</span><span class="s">&quot;myapp1.model&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/dbm&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Убран атрибут модуля <tt class="docutils literal"><span class="pre">wax=&quot;true&quot;</span></tt>. Теперь файлы из каталога
+<tt class="docutils literal"><span class="pre">model</span></tt> не подключаются автоматически в модель <tt class="docutils literal"><span class="pre">wax.default</span></tt>, их нужно подключать явно
+и можно держать в любом удобном каталоге внутри модуля.</p>
+</li>
+<li><p class="first">Убран атрибут модуля <tt class="docutils literal"><span class="pre">web=&quot;true&quot;</span></tt>. Теперь пакет модуля нужно явно назначать как
+каталог с web-ресурсами, например:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;web&gt;</span>
+        <span class="nt">&lt;resource</span> <span class="na">name=</span><span class="s">&quot;myapp1.main&quot;</span> <span class="na">package=</span><span class="s">&quot;myapp1.main&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/web&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Введен специальный тег для модели <tt class="docutils literal"><span class="pre">x-dbdata</span></tt>, который определяет откуда загружать
+данные для базы по умолчанию и тестовые данные. Теперь их можно хранить там, где удобно:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="c">&lt;!-- модуль приложения объявляет свою модель и использует плагины --&gt;</span>
+    <span class="nt">&lt;model</span> <span class="na">name=</span><span class="s">&quot;myapp1.model&quot;</span> <span class="na">parent=</span><span class="s">&quot;sys&quot;</span> <span class="na">x-root=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+        ....
+
+        <span class="c">&lt;!-- в каталоге dbdata могут быть каталоги prod (для данных по умолчанию)</span>
+<span class="c">             и test (для тестовых данных) --&gt;</span>
+        <span class="nt">&lt;x-dbdata</span> <span class="na">path=</span><span class="s">&quot;dbdata&quot;</span><span class="nt">/&gt;</span>
+
+        <span class="c">&lt;!-- можно указывать явный каталог и тип данных --&gt;</span>
+        <span class="nt">&lt;x-dbdata</span> <span class="na">path=</span><span class="s">&quot;dbdata/prod&quot;</span> <span class="na">dbtype=</span><span class="s">&quot;prod&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;x-dbdata</span> <span class="na">path=</span><span class="s">&quot;dbdata/test&quot;</span> <span class="na">dbtype=</span><span class="s">&quot;test&quot;</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;/model&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Модель <tt class="docutils literal"><span class="pre">jandcode.dbm.Model</span></tt> может быть настроена на поддержку нескольких языков
+хранения данных. Для этой поддержки в модель введен сервис <tt class="docutils literal"><span class="pre">jandcode.dbm.dblang.DblangService</span></tt></p>
+</li>
+<li><p class="first">Поддержка (пока не полная) многоязыковых полей. Тип поля: <tt class="docutils literal"><span class="pre">lang.string</span></tt> и <tt class="docutils literal"><span class="pre">lang.memo</span></tt></p>
+</li>
+<li><p class="first">При описании ddl операторов для домена (например для view) можно писать текст ddl
+оператора на gsp в контексте текущего домена. Например так:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;domain</span> <span class="na">name=</span><span class="s">&quot;V_View1&quot;</span> <span class="na">parent=</span><span class="s">&quot;wax.Table&quot;</span> <span class="na">tag.db=</span><span class="s">&quot;true&quot;</span> <span class="na">tag.dbview=</span><span class="s">&quot;true&quot;</span>
+    <span class="na">basetable=</span><span class="s">&quot;ViewBase&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;ddl</span> <span class="na">name=</span><span class="s">&quot;view&quot;</span><span class="nt">&gt;</span><span class="cp">&lt;![CDATA[</span>
+<span class="cp">        create view ${th.domain.name}</span>
+<span class="cp">        as</span>
+<span class="cp">        select id&lt;%</span>
+<span class="cp">          for (lang in th.model.getDblangService().langs) {</span>
+<span class="cp">            out(&quot;,name_&quot;)</span>
+<span class="cp">            out(lang.name)</span>
+<span class="cp">          }</span>
+<span class="cp">        %&gt;</span>
+<span class="cp">        from ${th.domain.rt.getValueString(&#39;basetable&#39;)} where level=1</span>
+<span class="cp">    ]]&gt;</span>
+    <span class="nt">&lt;/ddl&gt;</span>
+<span class="nt">&lt;/domain&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Поле может ссылатся на view, физические reference при этом не генерируются</p>
+</li>
+<li><p class="first">В шаблонах gsp, используемых для генерации утилитой jc можно выводить результат
+фрагмента шаблона из текста:</p>
+<blockquote>
+<div><div class="highlight-jsp"><div class="highlight"><pre><span class="k">&lt;%</span>
+    <span class="n">outTemplate</span><span class="o">(</span><span class="s">&quot;hello, \${project.name}!&quot;</span><span class="o">)</span>
+<span class="k">%&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">fix: jc db-doc теперь вставляет в документацию не шаблон view, а его сгенерированное
+представление</p>
+</li>
+</ul>
+</div>
+<div class="section" id="id24">
+<h2>1.3.6<a class="headerlink" href="#id24" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>jc: игнорирование команд, которые начинаются с &#8216;_&#8217;</li>
+<li>fix: шаблон проекта wax-complex теперь поддерживает запуск тестов для всех модулей</li>
+<li>sphinx-doc: поддержка расширений для sphinx</li>
+</ul>
+</div>
+<div class="section" id="id25">
+<h2>1.3.5<a class="headerlink" href="#id25" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>обновление библиотек groovy 2.0.5</li>
+<li>Новый модуль jandcode-jboss-fixvfs для поддержки запуска проекта на jboss. Этот модуль нужно просто подключить к проекту.</li>
+</ul>
+</div>
+<div class="section" id="id26">
+<h2>1.3.3<a class="headerlink" href="#id26" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>обновление библиотек ant 1.8.4, groovy 2.0.4, commons-io 2.4, commons-pool 1.6, log4j 1.2.17, joda-time 2.1</li>
+<li>новый шаблон проекта wax-complex: многомодульное wax-приложение</li>
+<li>UtilsTestCase.replaceTestName - замена &amp; на имя пакета тестового класса</li>
+<li>AppTestExt.saveAppRt - записывает rt в файл с учетом имени пакетом</li>
+</ul>
+</div>
+<div class="section" id="id27">
+<h2>1.3.2<a class="headerlink" href="#id27" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>поддержка локализации</li>
+<li>fix: <tt class="docutils literal"><span class="pre">&lt;jc:value</span> <span class="pre">type=&quot;dict&quot;</span> <span class="pre">...</span> <span class="pre">/&gt;</span></tt> теперь работает</li>
+</ul>
+</div>
+<div class="section" id="id28">
+<h2>1.3.1<a class="headerlink" href="#id28" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>рефакторинг обработчиков ошибок</li>
+<li>документация для каждого модуля теперь независимая, включая описание rt-конфигураций</li>
+<li>начальная поддержка локализации</li>
+<li>поддержка jdk7</li>
+</ul>
+<p><strong>wax</strong></p>
+<ul class="simple">
+<li>fix: компоненты input CbXXX не принимали значение по умолчанию без явно назначенного поля</li>
+</ul>
+</div>
+<div class="section" id="id29">
+<h2>1.3.0<a class="headerlink" href="#id29" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Эта версия является объединением проектов:</p>
+<ul class="simple">
+<li>Jandcode Core 1.2.5</li>
+<li>Jandcode Wax 1.0.8</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Содержание</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Что нового в 1.4.x</a><ul>
+<li><a class="reference internal" href="#id1">1.4.21</a></li>
+<li><a class="reference internal" href="#id2">1.4.20</a></li>
+<li><a class="reference internal" href="#id3">1.4.19</a></li>
+<li><a class="reference internal" href="#id4">1.4.18</a></li>
+<li><a class="reference internal" href="#id5">1.4.17</a></li>
+<li><a class="reference internal" href="#id6">1.4.16</a></li>
+<li><a class="reference internal" href="#id7">1.4.15</a></li>
+<li><a class="reference internal" href="#id8">1.4.14</a></li>
+<li><a class="reference internal" href="#id9">1.4.13</a></li>
+<li><a class="reference internal" href="#id10">1.4.12</a></li>
+<li><a class="reference internal" href="#id11">1.4.11</a></li>
+<li><a class="reference internal" href="#id12">1.4.10</a></li>
+<li><a class="reference internal" href="#id15">1.4.9</a></li>
+<li><a class="reference internal" href="#id16">1.4.8</a></li>
+<li><a class="reference internal" href="#id17">1.4.6</a></li>
+<li><a class="reference internal" href="#id18">1.4.5</a></li>
+<li><a class="reference internal" href="#id19">1.4.4</a></li>
+<li><a class="reference internal" href="#id20">1.4.3</a></li>
+<li><a class="reference internal" href="#id21">1.4.2</a></li>
+<li><a class="reference internal" href="#id22">1.4.1</a></li>
+<li><a class="reference internal" href="#id23">1.4.0</a></li>
+<li><a class="reference internal" href="#id24">1.3.6</a></li>
+<li><a class="reference internal" href="#id25">1.3.5</a></li>
+<li><a class="reference internal" href="#id26">1.3.3</a></li>
+<li><a class="reference internal" href="#id27">1.3.2</a></li>
+<li><a class="reference internal" href="#id28">1.3.1</a></li>
+<li><a class="reference internal" href="#id29">1.3.0</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/whatnew14.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li><a href="index.html">jandcode-core</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

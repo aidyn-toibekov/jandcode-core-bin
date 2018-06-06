@@ -1,0 +1,161 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Шаблоны GSP &mdash; jandcode-web</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-web" href="index.html" />
+    <link rel="next" title="Разные заметки" href="misc.html" />
+    <link rel="prev" title="WebAction" href="action.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li class="right" >
+          <a href="misc.html" title="Разные заметки"
+             accesskey="N">следующий</a> |</li>
+        <li class="right" >
+          <a href="action.html" title="WebAction"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-web</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="gsp">
+<h1>Шаблоны GSP<a class="headerlink" href="#gsp" title="Ссылка на этот заголовок">¶</a></h1>
+<p>В качестве шаблонов для генерации текста используется <tt class="xref doc docutils literal"><span class="pre">groovy-gsp</span></tt>.
+В качестве базового класса для шаблонов используется <tt class="docutils literal"><span class="pre">jandcode.web.Tml</span></tt>, у которого
+перекрывается метод <tt class="docutils literal"><span class="pre">onRender</span></tt>.</p>
+<p>Например шаблон:</p>
+<div class="highlight-jsp"><div class="highlight"><pre><span class="k">&lt;%@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&quot;org.joda.time.*; jandcode.app.*&quot;</span> <span class="k">%&gt;</span>
+App debug: ${getApp().isDebug()}
+Date: ${new DateTime()}
+</pre></div>
+</div>
+<p>будет преобразован в класс groovy:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">org.joda.time.*</span><span class="o">;</span> <span class="kn">import</span> <span class="nn">jandcode.app.*</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JCG__LongGeneratedName</span> <span class="kd">extends</span> <span class="n">jandcode</span><span class="o">.</span><span class="na">web</span><span class="o">.</span><span class="na">Tml</span> <span class="o">{</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onRender</span><span class="o">()</span> <span class="o">{</span>
+
+<span class="o">;</span><span class="n">out</span><span class="o">(</span><span class="s">&quot;App debug: &quot;</span><span class="o">);;</span><span class="n">out</span><span class="o">(</span><span class="n">getApp</span><span class="o">().</span><span class="na">isDebug</span><span class="o">());;</span><span class="n">out</span><span class="o">(</span><span class="s">&quot;\n&quot;</span><span class="o">);</span>
+<span class="o">;</span><span class="n">out</span><span class="o">(</span><span class="s">&quot;Date: &quot;</span><span class="o">);;</span><span class="n">out</span><span class="o">(</span><span class="k">new</span> <span class="n">DateTime</span><span class="o">());;</span><span class="n">out</span><span class="o">(</span><span class="s">&quot;\n&quot;</span><span class="o">);</span>
+<span class="o">;</span><span class="n">out</span><span class="o">(</span><span class="s">&quot;\n&quot;</span><span class="o">);</span>
+
+<span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<div class="section" id="id1">
+<h2>Вывод произвольного текста<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Метод <tt class="docutils literal"><span class="pre">out</span></tt> используется для вывода произвольного текста:</p>
+<div class="highlight-jsp"><div class="highlight"><pre><span class="k">&lt;%</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">i</span> <span class="n">in</span> <span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">out</span><span class="o">(</span><span class="n">i</span><span class="o">)</span>
+        <span class="n">out</span><span class="o">(</span><span class="sc">&#39;|&#39;</span><span class="o">)</span>
+    <span class="o">}</span>
+<span class="k">%&gt;</span>
+</pre></div>
+</div>
+<p>Тип параметра может быть любой, он будет преобразован в строку методом <tt class="docutils literal"><span class="pre">toString</span></tt>.</p>
+<p>Кроме метода <tt class="docutils literal"><span class="pre">out</span></tt> существует и одноименное свойство <tt class="docutils literal"><span class="pre">out</span></tt>, которое содержит ссылку
+на экземпляр текущего шаблона и поддерживает следующий метод вывода текста:</p>
+<div class="highlight-jsp"><div class="highlight"><pre><span class="k">&lt;%</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">i</span> <span class="n">in</span> <span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;|&#39;</span>
+    <span class="o">}</span>
+<span class="k">%&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Содержание</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Шаблоны GSP</a><ul>
+<li><a class="reference internal" href="#id1">Вывод произвольного текста</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="action.html"
+                        title="предыдущая глава">WebAction</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="misc.html"
+                        title="следующая глава">Разные заметки</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/gsp.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li class="right" >
+          <a href="misc.html" title="Разные заметки"
+             >следующий</a> |</li>
+        <li class="right" >
+          <a href="action.html" title="WebAction"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-web</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

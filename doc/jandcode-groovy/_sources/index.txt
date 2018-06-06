@@ -1,0 +1,12 @@
+
+jandcode-groovy
+***************
+
+Поддержка скриптов groovy в приложении.
+
+.. toctree::
+   :maxdepth: 2
+
+   service
+   gsp
+

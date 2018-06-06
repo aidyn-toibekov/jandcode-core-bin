@@ -1,0 +1,93 @@
+//////////////////////////////////////////////////////////////////////////////////
+
+create_project = cm("Создать проект по шаблону",
+        t: [value: null, help: "Имя шаблона проекта из scripts/projecttml или каталог с шаблоном"],
+        o: [value: null, help: "Имя каталога для генерации"],
+        l: [value: false, help: "Показать список доступных шаблонов в scripts/projecttml"],
+        i: [value: false, help: "Показать доступные параметры шаблона"]
+) {
+    include "projecttml"
+    //
+    def tdir = "scripts/projecttml"
+
+    //
+    def p = args
+    //
+    def showlist = p.get("l", false)
+
+    if (showlist) {
+        println "Шаблоны в каталоге ${tdir}:"
+        println "----------------------------------------"
+        def lst = repo.findFileList(tdir)
+        for (f in lst) {
+            println "  ${fu.filename(f)}"
+        }
+        println "----------------------------------------"
+        return
+    }
+
+    def tml = p.getValueString("t", null)
+    if (tml == null) error("Не указан шаблон в параметре -t")
+
+    def srcdir = wd(tml)
+    if (!fu.exists(srcdir)) {
+        srcdir = repo.findFile(tml)
+        if (srcdir == null) {
+            srcdir = repo.findFile(tdir + "/" + tml)
+            if (srcdir == null) error("Шаблон не найден")
+        }
+    }
+
+    if (p.getValueBoolean("i")) {
+        // help for template
+
+        def ptml = load(srcdir + "/" + projecttml.projecttml_script)
+
+        def z = new jandcode.utils.cli.CliHelp();
+        if ("params" in ptml.vars) {
+            for (param1 in ptml.params) {
+                z.addOption(param1.key, param1.value, true)
+            }
+        }
+        def help1 = z.toString()
+        if (help1 == "") {
+            println("Шаблон не имеет дополнительных параметров")
+        } else {
+            println("Дополнительные параметры шаблона:")
+            println(help1)
+        }
+
+        return
+    }
+
+    //
+    def outdir = p.getValueString("o", null)
+    def params = [:]
+    params.putAll(args)
+    //
+    projecttml.generate(srcdir: srcdir, outdir: outdir, params: params)
+}
+
+//
+showlibs = cm("Список доступных библиотек",
+        d: [help: "Список библиотек через ','. Будут показаны вместе с зависимостями", value: ""]
+) {
+  def deps = args.getValueString("d", "")
+  def lst
+  if (deps.length() > 0) {
+    lst = repo.getLibs(deps)
+  } else {
+    lst = repo.getLibs()
+  }
+  ut.showlibs(lst)
+}
+
+//
+showroots = cm("Список зарегистрированных root-каталогов в порядке приоритета") {
+  def lst = repo.getRoots()
+  println "-" * 80
+  for (z in lst) {
+    println z
+  }
+  println "-" * 80
+}

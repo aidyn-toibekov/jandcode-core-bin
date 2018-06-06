@@ -1,0 +1,14 @@
+syntax: glob
+?
+?.bat
+*.log
+temp
+temp.*
+Thumbs.db
+out
+*.iws
+*.iml
+*.ipr
+
+syntax: regexp
+^_

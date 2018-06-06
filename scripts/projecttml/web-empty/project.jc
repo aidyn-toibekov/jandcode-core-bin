@@ -1,0 +1,78 @@
+//
+project.name = "web-empty"
+project.version = ut.version()
+//
+include "java-project"
+include "app-project"
+//
+package_root = "jandcode.demos.web.empty"
+//
+libs = ["jandcode-web"]
+libs_dev = libs_dev + []
+//
+
+//
+run = cm("Запуск jetty-сервера для приложения",
+        p: [value: 8080, help: "Порт. По умолчанию 8080"],
+        c: [value: "/", help: "Контекст. По умолчанию '/'"]
+) {
+    include "jetty"
+
+    def port = args.get("p")
+    def context = args.get("c")
+
+    jetty.run(port: port, context: context, war: wd("web"), libs: app.libs)
+}
+
+//
+product = cm("Сборка продукта") {
+    clean()
+    compile()
+
+    //
+    def distr = wd("temp/distr")
+    def distr_lib = wd("temp/distr/web/WEB-INF/lib")
+    def product = wd("_product")
+    //
+    ut.cleandir(distr)
+    ut.cleandir(distr_lib)
+    ut.cleandir(product)
+
+    //
+    ant.copy(todir: distr + "/web") {
+        fileset(dir: wd("web"))
+    }
+
+    //
+    ant.copy(todir: distr, overwrite: true) {
+        fileset(dir: wd("data/distr"))
+    }
+
+    //
+    ant.echo(message: version, file: distr + "/VERSION")
+
+    //
+    def rlibs = repo.getLibs([project.name] + ["jandcode-jc", "jetty", "servlet-api"])
+    ut.copylibs(rlibs, distr_lib)
+    ant.delete {
+        fileset(dir: distr_lib) {
+            include(name: "*.ini")
+        }
+    }
+
+    //
+    ant.copy(todir: distr + "/scripts", file: repo.getFile("scripts/jetty.jc"))
+    ant.copy(todir: distr + "/scripts/jetty") {
+        fileset(dir: repo.getFile("scripts/jetty"))  // каталог
+    }
+    ant.copy(todir: distr + "/scripts", file: repo.getFile("scripts/app.jc"))
+
+    //
+    ant.zip(destfile: product + "/${project.name}-${version}.zip") {
+        zipfileset(dir: distr, prefix: project.name) {
+            include(name: "**/*")
+        }
+    }
+
+}
+

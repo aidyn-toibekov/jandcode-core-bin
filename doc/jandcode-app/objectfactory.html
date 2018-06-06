@@ -1,0 +1,142 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Создание экземпляров объектов по rt &mdash; jandcode-app</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-app" href="index.html" />
+    <link rel="next" title="jandcode.app.CompRt" href="comprt.html" />
+    <link rel="prev" title="Конфигурация приложения" href="config.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li class="right" >
+          <a href="comprt.html" title="jandcode.app.CompRt"
+             accesskey="N">следующий</a> |</li>
+        <li class="right" >
+          <a href="config.html" title="Конфигурация приложения"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-app</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rt">
+<h1>Создание экземпляров объектов по rt<a class="headerlink" href="#rt" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Для создания объектов по конфигурации rt используется объект <tt class="docutils literal"><span class="pre">jandcode.app.ObjectFactory</span></tt>.
+Экземпляр фабрики объектов доступен через <tt class="docutils literal"><span class="pre">App.getObjectFactory()</span></tt>.
+Некоторые объекты и сервисы, которые предоставляют собственный контекст
+объектам (например <tt class="docutils literal"><span class="pre">Model</span></tt>), имеют собственный экземпляр фабрики и объекты
+нужно создавать через нее, для обеспечения правильного контекста.</p>
+<p>В объекте rt ищется атрибут <tt class="docutils literal"><span class="pre">class</span></tt>, в котором указан класс, экземпляр которого
+нужно создать.</p>
+<p>Объект инициализируется контекстом, в котором он создан.</p>
+<p>Затем, если объект реализует интерфейс <tt class="docutils literal"><span class="pre">jandcode.utils.rt.IRtLinkSet</span></tt>, то ему
+вызывается метод <tt class="docutils literal"><span class="pre">setRt(rt)</span></tt>. Объект сам инициализирует себя по переданой rt.</p>
+<p>Пример. Допустим имеется такая конфигурация:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;simpleobject&gt;</span>
+        <span class="nt">&lt;object1</span> <span class="na">class=</span><span class="s">&quot;mypak.Object1&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;/object1&gt;</span>
+    <span class="nt">&lt;/simpleobject&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+<p>Создание объекта:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">Rt</span> <span class="n">conf</span> <span class="o">=</span> <span class="n">getApp</span><span class="o">().</span><span class="na">getRt</span><span class="o">().</span><span class="na">getChild</span><span class="o">(</span><span class="s">&quot;simpleobject/object1&quot;</span><span class="o">);</span>
+<span class="n">mypak</span><span class="o">.</span><span class="na">Object1</span> <span class="n">inst</span> <span class="o">=</span> <span class="o">(</span><span class="n">mypak</span><span class="o">.</span><span class="na">Object1</span><span class="o">)</span> <span class="n">getApp</span><span class="o">().</span><span class="na">getObjectFactory</span><span class="o">().</span><span class="na">create</span><span class="o">(</span><span class="n">conf</span><span class="o">);</span>
+</pre></div>
+</div>
+<p>В этом случае процесс инициализации будет выглядеть так:</p>
+<blockquote>
+<div><ul class="simple">
+<li>создается экземпляр объекта <tt class="docutils literal"><span class="pre">mypak.Object1</span></tt></li>
+<li>объекту устанвливается контекст создания</li>
+<li>если он реализует интерфейс <tt class="docutils literal"><span class="pre">jandcode.utils.rt.IRtLinkSet</span></tt>, то у него вызывается
+метод <tt class="docutils literal"><span class="pre">setRt</span></tt>, в качестве параметра передается <tt class="docutils literal"><span class="pre">conf</span></tt></li>
+</ul>
+</div></blockquote>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="config.html"
+                        title="предыдущая глава">Конфигурация приложения</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="comprt.html"
+                        title="следующая глава">jandcode.app.CompRt</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/objectfactory.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li class="right" >
+          <a href="comprt.html" title="jandcode.app.CompRt"
+             >следующий</a> |</li>
+        <li class="right" >
+          <a href="config.html" title="Конфигурация приложения"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-app</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

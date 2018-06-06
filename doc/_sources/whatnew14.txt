@@ -1,0 +1,886 @@
+
+Что нового в 1.4.x
+==================
+
+1.4.21
+------
+
+* fix: rt: при смешивании имен узлов с разными регистрами в определенных ситуациях
+  возникали коллизии
+
+1.4.20
+------
+
+* app: новый сервис ``jandcode.app.DataDirService`` для поименнованному
+  доступу к каталогам данных приложения.
+  Настройка:
+
+    .. code-block:: xml
+
+        <app>
+            <!-- корневой каталог с данными приложения. Если не указать, то по умолчанию
+                 будет {каталог приложения}/datadir -->
+            <datadir name="root"
+                     path="d:/app/datadir"/>
+            <!-- какой-то конкретный каталог -->
+            <datadir name="systemp"
+                     path="d:/temp/systemp"/>
+        </app>
+
+  Можно получать доступ к каталогу по имени. Если это имя описано в конфигурации,
+  то будет возвращатся указанный в конфигурации путь. Если имя не описано в конфигурации,
+  то оно рассматривается как подкаталог каталога "root":
+
+    .. code-block:: java
+
+        DataDirService svc = getApp().service(DataDirService.class);
+        String s;
+        s = svc.getDataDir("systemp"); // каталог d:/temp/systemp
+        s = svc.getDataDir("mydir");   // каталог d:/app/datadir/mydir
+        s = svc.getDataDir();          // каталог d:/app/datadir (корневой)
+
+
+1.4.19
+------
+
+* wax: поддержка jquery-зависимостей на уровне классов extjs
+* wax: MUpload - выбор и upload нескольких файлов за раз
+
+1.4.18
+------
+
+* wax: поддержка render и download произвольных данных через DbmAction.
+* wax: SGrid: конфигурация основного toolbar
+* wax: WaxRecDao простой dao для получения записи по id
+* fix: wax: js: Jc.requestDownload не адаптировал url
+
+1.4.17
+------
+
+* fix: auth: произвольные свойства пользователя доступны через ``jandcode.auth.IUserInfo#getAttrs``
+* **ВАЖНО** auth: метод ``jandcode.auth.IUserInfo#getAttr`` - *deprecated*
+* fix: wax-auth: не работала кнопка "Вход"
+
+1.4.16
+------
+
+* fix: wax: WaxResolveDictDao и WaxLoadDictDao не игнорировали вычисляемые поля
+* fix: wax: ``Jc.control.SGrid`` значения свойств по умолчанию: paginate: false,
+  filterPanel: false
+* fix: wax: ``Jc.control.SGrid`` не скрывался toolbar, если на нем нет компонентов
+* dbm: Новые методы для ``jandcode.dbm.db.DbUtils`` (портированы из
+  ``jandcode.dbm.data.UtData``): toVariantNamed, copyRecord, copyStore, createIndex,
+  uniqueValues, outTable
+* wax: Новые методы для UiBuilder: sgrid, stree
+* wax: Jc.control.SGrid свойство storeDbmJson для создания store по данным dbm json
+
+
+1.4.15
+------
+
+* wax: Новые методы для ``jandcode.wax.core.utils.WaxTml``: ``service``
+* fix: web: tml файл мог быть только с расширенем gsp, теперь с любым
+* web: Новая фабрика ресерсов ``ResourceFactoryGsp``, теперь можно любой
+  тип файла настроить на обработку через gsp без использования дополнительного расширения ``.gsp``
+* ** Внимание** fix: idea-gen шаблон теперь принимает в ресурсы ``*.h*,*.gf*``. Возможно придется
+  перегенерить проект ``jc gen-idea``
+* wax: Jc.showFrame теперь принимает в качестве frame - ``PATH.gframe``. Пример gframe-фрейма:
+
+     .. code-block:: html
+
+            <script type="text/javascript">
+              TH.create('Jc.frame.EditRec', {
+                domain: "Tab1",
+                daoname: "Tab1/updater",
+
+                onCreateControls: function(b) {
+                  var th = this;
+                  //
+                  this.items = [
+                    b.input2("name"),
+                    b.input2("name2")
+                  ];
+                }
+              });
+            </script>
+
+
+1.4.14
+------
+
+* fix: модуль jandcode-jboss-fixvfs не реализовывал getParent()
+
+1.4.13
+------
+
+* fix: oracle: recoverGenId теперь работает правильно даже в базах с левыми таблицами
+
+1.4.12
+------
+
+* wax: js: новый метод модели createFromDbmJson и новая функция Jc.createFromDbmJson
+  для создания store по json-данным в формате dbm
+* fix: css: не нужный отступ снизу для pageheader
+* wax: js: gsp-фрейм поддерживает создание одного компонента в качестве content. Пример
+  (можно использовать как шаблон такого фрейма):
+
+      .. code-block:: html
+
+            <script type="text/javascript">
+              <%
+                WaxTml th = new WaxTml(this)
+                // params
+                def id = th.params.getValueLong("id")
+                def cnt = th.params.getValueLong("cnt", 1)
+                //
+                DataRecord rec = th.daoinvoke("Tab1/view", "load", id)
+                //
+                def title = 'Просмотр объекта'
+              %>
+
+              TH.content('Jc.control.GspBox', {  // обязательно Jc.control.GspBox или его потомок
+                onInit: function() {
+                  var th = this;
+                  //
+                  var b = th.createBuilder();
+                  th.title = '${title}';
+                  th.layout = b.layout("autobox");
+                  var store = th.store = Jc.createFromDbmJson(${th.toDbmJson(rec)});
+                  //
+                  th.items = [
+                    b.frameheader({text: '${title}', icon: 'docum'}),
+                    b.databox({
+                      items: [
+                        b.datalabel2("field1"),
+                        b.datalabel2("field2"),
+                        b.datalabel2("field3")
+                      ]
+                    })
+                  ];
+                  //
+                  th.toolbar = [
+                    b.action({text:'Перегрузить',onExec:function(){
+                        th.reload({cnt:${cnt+1}});
+                    }})
+                  ];
+                }
+              });
+            </script>
+
+
+
+1.4.11
+------
+
+* fix: js: ``Jc.frame.Gsp`` не поддерживал dataToControl/controlToData
+* wax: js: свойство поля ``req`` теперь передается клиенту в структуре домена
+* wax: Новые методы для ``jandcode.wax.core.utils.WaxTml``: ``getParams()``,
+  ``toDbmJson()``, ``toJson()``
+* fix: dbm: документация на sqlfilter перенесена в модуль dbm
+* fix: не скрывалось "Ждите" при upload
+
+
+1.4.10
+------
+
+**ВАЖНО** : В этой версии есть несовместимые изменения
+
+* **Несовместимость** SqlFilter перенесен в dbm. Соответсвенно изменился предок для
+  элементов фильтра: ``jandcode.wax.core.utils.sqlfilter.SqlFilterItem``
+  -> ``jandcode.dbm.sqlfilter.SqlFilterItem``
+* wax: ``Jc.showFrame`` теперь может показывать gsp-фреймы. Для этого в свойстве ``frame``
+  нужно передать url, заканчивающийся на ``.html``
+* fix: web: tst теперь отправляет файлы с двойным расширением ( *.js.gsp например )
+  на стандартную обработку статических файлов
+* wax: SGrid: filterFrame можно задавать как функцию
+* Изменен SqlFilter contains. Теперь он с регистронезависимым поиском и поддержкой
+  многоязыковых полей
+* dbm: поле типа null. Всегда возвращает null. Для скрытия некоторых полей в
+  результатах запроса. Например поле passwd.
+* fix: если есть перевод, но нет языка (например en), то языковый перевод загружался в ru
+
+
+1.4.9
+-----
+
+* wax: Новые компоненты (скорее прототипы компонентов) SGrid, STree, Cb_SGrid, Cb_STree
+  для организации редактирования грид и деревьев с фильтрацией, пагинацией и минимальными
+  телодвижениями.
+
+1.4.8
+-----
+
+* незначительные багфиксы
+
+1.4.6
+-----
+
+* fix: js: Для input Langstring восстановлено свойство matchFieldWidth=false
+* jc db-info -a : печать информации для всех зарегистрированных моделей
+* js: UIBuilder добавлен метод tabpanel для создания Ext.tab.Panel
+
+1.4.5
+-----
+
+**ВАЖНО**: В этой версии есть несовместимые изменения
+
+* fix: Jc.input.Cbfrm снова имеет matchFieldWidth=true по умолчанию. Когда по умолчанию
+  стоит false, плывут многие выпадающие списки
+* js: Методы input, datalabel, label у UIBuilder первым параметром могут иметь store.
+  На время вызова эта store становится активной для builder:
+
+      .. code-block:: javascript
+
+            // эквивалентные вызовы
+            b.input("name")
+            b.input("name",{})
+            b.input(b.store,"name",{})
+
+* js: У записи store появился метод clearValues - обнуление существующих значений в записи
+* fix: dbm: Rnd при генерации текста зачем то вставлялись еще и цифры
+* **Несовместимость** fix: verdb не загружались данные по умолчанию в базу данных при
+  verdb-validate
+
+
+1.4.4
+-----
+
+**ВАЖНО**: В этой версии есть несовместимые изменения
+
+* dbm: RandomDataLoader поддерживает генерацию данных для многоязыковых полей
+
+* wax: Новый тип данных для dao-параметров - RequestMap. Этот объект получает содержимое
+  ``WebRequest.getParams`` и сверху на него накладываются явные dao-параметры (запись
+  или map). Используется при загрузке данных через SqlFilter в качестве параметра метода
+  загрузки или создания фильтра.
+
+* SqlFilterItem имеет свойство ``param`` (``getParam()``): именно его нужно использовать для получения
+  значения параметра из параметров фильтра. Ранее использоватлось ``field`` (``getField()``).
+
+* SqlFilter умеет создавать DataStore по результатам запроса, в дополнение к загрузке в
+  существующий DataStore
+
+* ISqlFilterBuilder имеет метод getTextValue для формирования текстовых значений
+  в заголовках с учетом справочников
+
+* SqlFilterItem может быть скрытым (hidden=true). Такой фильтр не попадает в заголовки
+
+* Новый фильтр parent для использования в деревьях id-parent
+
+* **Несовместимость** Интерфейс SqlFilter подвергся окончательному рефакторингу
+  и теперь стабилен
+
+* wax: Новый класс ``jandcode.wax.core.model.WaxLoadSqlFilterDao`` можно использовать
+  как предок для фильтрованных загрузчиков или как прототип для написания подобных классов
+
+* js: TreeStore получила методы для работы со словарями и текущей записью
+
+* новый класс css jc-treegrid для оформления деревьев как грид
+
+* hack-fix: extjs дерево не правильно перезагружала узлы. Теперь treestore.load({node:id})
+  работает как ожидается
+
+* js: новый тип колонки TreeLangstring
+
+* **Несовместимость** js: перемещены классы
+  Jc.grid.Grid -> Jc.control.Grid,
+  Jc.tree.Tree -> Jc.control.Tree
+
+
+1.4.3
+-----
+
+**ВАЖНО**: В этой версии есть несовместимые изменения
+
+* Настройка форматировщика ошибок полностью перенесена в тег ``<error <formatter``.
+  Из ``app.rt`` приложения можно удалять фрагменты вида:
+
+
+    .. code-block:: xml
+
+        <service name="jandcode.app.ErrorService">
+            <errorformatter name="log"
+                            class="jandcode.utils.error.impl.ErrorFormatterDefault"/>
+        </service>
+
+        <error>
+            <formatter name="log" showSource="true" showStack="true"/>
+        </error>
+
+* Настройка форматировщика ошибок для логов теперь описана в ядре с такими параметрами
+  по умолчанию:
+
+    .. code-block:: xml
+
+        <error>
+            <formatter name="log" showSource="true" showStack="true"/>
+        </error>
+
+* fix: в версии 1.4.2 продукт собирался, но не работал
+
+* Шаблон проекта ``wax-complex`` изменился в соответсвии с последними нововведениями
+
+* В шаблоне проекта ``wax-complex`` настройки разделены на настройки по умолчанию,
+  настройки для разработки и настройки для тестирования. Для получения деталей
+  создайте проект по шаблону ``wax-complex`` и почитайте коментарии в файла корня проекта
+
+* Файлы ``app-product.rt`` и ``db-ini.rt`` из корня проекта теперь попадают в дистрибутив
+  как настройки приложения по умолчанию
+
+* fix: Файл ``jc-app.rt`` больше не нужен для запуска ``jc``
+
+* Изменен способ настройки файлов проекта в дистрибутиве: теперь он более очевидный.
+  Подробности см. в скрипте ``scripts\wax-project.jc``.
+
+* **Несовместимость** Регистрация элементов фильтра делается в модели в теге ``<sqlfilter/>``. Пример:
+
+      .. code-block:: xml
+
+          <root>
+              <model name="sys">
+                  <sqlfilter name="equal"
+                             class="jandcode.wax.core.model.sqlfilter.SqlFilter_equal"/>
+              </model>
+          </root>
+
+  В атрибуте ``class`` указывается класс реализатор. В случае, когда элемент фильтра для
+  конкретного типа СУБД отличается, можно сделать реализацию для конкретной СУБД и
+  указать ее в атрибуте ``class.DBTYPE``. Например:
+
+      .. code-block:: xml
+
+          <root>
+              <model name="sys">
+                  <sqlfilter name="equal"
+                             class="jandcode.wax.core.model.sqlfilter.SqlFilter_equal"
+                             class.oracle="jandcode.wax.core.model.sqlfilter.SqlFilter_equal_oracle"
+                             class.mysql="jandcode.wax.core.model.sqlfilter.SqlFilter_equal_mysql"
+                             />
+              </model>
+          </root>
+
+
+1.4.2
+-----
+
+**ВАЖНО**: В этой версии есть несовместимые изменения
+
+**utils**
+
+* Для EasyXmlLoader введен параметр trimSpaceEnd. Позволяет при загрузке xml обрезать
+  только концевые пробелы
+
+**dbm**
+
+* **Несовместимость** DaoService и Dao полностью переработаны. Возможны проблемы
+  с совместимостью в некоторых нетипичных случаях.
+
+* Dao могут быть объявлены на уровне модели. Такие dao не имеют привязку к домену:
+
+    .. code-block:: xml
+
+        <root>
+            <model name="mymodel">
+                ...
+                <dao name="mydao" .../>
+            </model>
+        </root>
+
+  Соответсвенно пользоваться ими можно просто по имени dao:
+
+    .. code-block:: java
+
+        ut.createDao("mydao")
+        ut.daoinvoke("mydao", "method1")
+
+* Dao можно использовать просто по классу, без регистрации dao в rt. Допустимо
+  использование как ссылки на класс, так и полного имени класса.
+  Такие dao не имеют привязку к домену:
+
+    .. code-block:: java
+
+        ut.createDao(MyDao.class)
+        ut.createDao("com.myapp.model.MyDao")
+
+* **Несовместимость** Из Dao убран метод ``public IDaoInfo getDaoInfo()``. Этот механизм более не существует.
+
+* **Несовместимость** Полностью удалено понятие "контекст выполнения dao". Соответственно
+  из Dao убран ``getContext()``. Фактически ``getContext()`` являлся копией параметров
+  web-запроса. Метод ``getContext()`` возвращающий параметры web-запроса добавлен
+  в ``WaxDaoUtils``. Сотвественно код ``getContext()`` в dao нужно заменить на
+  ``ut.getContext()``
+
+* RandomDataLoader: в подстановке ``text`` (метод ``jandcode.dbm.dataloader.rnd.Rnd#text``)
+  можно указывать параметр для генерации не сплошного текста, а текста с
+  пробелами (имитация слов)::
+
+    <field name="name1" template="${text:rus-w10,fupper,30,50}"/>
+
+* **Несовместимость** Метод ``jandcode.dbm.dict.DictService#getDictData`` теперь устанавливает имя
+  у возвращаемого store в имя словаря. Были проблемы в resolveDicts на клиенте js
+
+* Dict теперь не требует указания поля по умолчанию. Если поле по умолчанию не указано,
+  то берется первое поле не ``id``.
+
+* Dict теперь не требует указания домена. Если домен явно не установлен, то подразумевается
+  домен с таким же именем, как и имя словаря.
+
+* **Несовместимость** Многоязыковые поля требуют описания реальных полей,
+  которые будут генерироватся для каждого языка:
+
+    .. code-block:: xml
+
+        <field name="lang.string" parent="sys"
+               class="jandcode.dbm.field.LangStringField">
+            <field name="real" parent="string"/>
+        </field>
+
+* **Несовместимость** LangStringField игнорирует присвоение значения. Ранее - значение писалось в поле с
+  языком по умолчанию. Удалено, т.к. возникает очень много сторонних и неожиданных
+  эффектов от такого применения. В частности при приеме данных от клиента после ввода
+  новых данные в многоязыковое поле обнулялось значение поля с узыком по умолчанию.
+
+* ``jc db-info`` дополнительно показывает реальное имя класса jdbc-драйвера
+
+* В ``TestExtDbm`` добавлены некоторые методы, используемые при тестировании:
+
+    .. code-block:: java
+
+        // создание dao по имени, по классу
+        dbm.createDao(...)
+
+        // загрузка тестовых или prod данных непосредственно из указанного файла
+        dbm.loadDataLoaderAll(...)
+        dbm.loadDataLoader(...)
+
+        // синоним для getDbUtils()
+        dbm.getUt()
+
+* **Несовместимость** fix: При наследовании домена со словарем, если в предке была явно определена структура
+  домена словаря, она не наследовалась
+
+* Домен теперь можно создать непосредственно из файла. Имя файла должно быть именем
+  ресурса в пределах classpath и начинатся с ``/``. В файле (формат rt) должен быть
+  описан домен с именем ``default``, экземпляр которого и создается.
+
+* Введено понятие "провайдер моделей" (``jandcode.dbm.IModelProvider``). Теперь
+  каждый поток (web-запрос) может иметь собственную модель, которая будет выглядеть
+  как модель по умолчанию.
+
+**jc**
+
+* fix: localize переменная была локальной для localize-project.jc
+
+**web**
+
+* **Несовместимость** fix: при указании web-ресурса в виде ``package`` теперь можно
+  указать атрибут ``filemark`` с именем файла лежащим в этом пакете. По умолчанию
+  используется ``filemark="module.rt"``. Если в приложении не используются левые
+  package в качестве web-ресурсов, то это изменение на коде не отразится.
+  Сделано для того, что бы однозначно определять физический путь для web-ресурса,
+  иначе при запуске тестов бывают ситуации, когда ресурс настраивается на каталог
+  с тестами.
+
+    .. code-block:: xml
+
+        <root>
+            <web>
+                <resource name="jandcode.wax.core" package="jandcode.wax.core"
+                     filemark="module.rt"/>
+            </web>
+        </root>
+
+* **Несовместимость** Убран метод ``request.render(String tml, Object ... args)``. Пользуйтесь ``UtCnv.toMap``
+  для замены этого метода.
+
+* **Несовместимость** Изменился приоритет при анализе pathInfo. Ранее static-file
+  был более приоритетней, чем action. Теперь наоборот. Соотвественно появилась возможность
+  полностью эмулировать виртуальную файловую систему, обрабатывая запросы вида
+  ``http://host/myaction/path1/file.html``
+
+* **Несовместимость** ``request.getPathInfo()`` более не изменяется в соотвествии
+  с выявленной action. Ранее action удаляла из него свое имя.
+
+* web-фильтры теперь могут быть описаны в узле верхнего уровня web:
+
+    .. code-block:: xml
+
+        <root>
+            <web>
+                <filter name="com.filter.Cls1"
+                        class="com.filter.Cls1"/>
+            </web>
+        </root>
+
+* web-фильтр расширен методом beforeHandleRequest(). Теперь возможно внедрятся в обработку
+  запроса на самом верхнем уровне, до выполнения любых манипуляций с action.
+
+* Добавлен механизм рендеринга **любых** объектов в представление для клиента
+  (см. ``jandcode.web.RenderService``, ``jandcode.web.IWebRender``). Теперь из action
+  можно возвращать любые объекты (через методы ``request.render``) и способ
+  трансформации их для клиента. Необходимо просто зарегистрировать класс-рендерер.
+  Ранее из action можно было вернуть только имя шаблона.
+
+* web-запрос тепрь имеет "виртуальный корень". Этот механизм позволяет приложению работать
+  через разные внешние url в разных контекстах.
+
+* **Несовместимость** action теперь для получения pathInfo может использовать свой локальный, где
+  имя action, либо глобальный оригинальный pathInfo
+
+* **Несовместимость** В связи с изменением механизма рендеринга результати и за
+  ненадобностью у action убран метод ``getTmlArgs()``
+
+**wax**
+
+* fix: колонка ``Icontext`` печатала null при значении null
+
+* Новый тип колонок ``Langstring``, ``Langflag`` для отображения многоязычных полей
+
+* js: ``Jc.Action`` имеет обработчик ``onBeforeExec``
+
+* js: Функция ``Jc.execAction`` для выполнения action по itemId
+
+* js: Функция ``Jc.getComponent`` для поиска компонента по itemId
+
+* Поддержка многоязычных приложений с разделением поддерживаемых языков между интерфейсом
+  и моделью. В том числе текущий язык может быть разным для модели и интерфейса.
+
+* Различные методы для манипулирования многоязыковыми данными в модуле ``_lang.js``
+
+* fix: showWait/hideWait теперь показывается поверх все окон (ранее диалог скрывал
+  сообщение)
+
+* **Несовместимость** fix: js: ``Jc.dbm.DataBinder`` некоторые методы работали некорректно в определенных
+  условиях
+
+* **Несовместимость** js: ``Jc.dbm.ExtModel`` теперь поддерживает чтение/запись значений полей без их
+  явного определения
+
+* fix: мелкие и не очень баги в компонентах
+
+* Новый тип input ``Langstring``, ``Langmemo`` для ввода многоязычных полей
+
+* js: layout jctable поддерживает явно заданные расстояния между индивидуальными
+  строками и колонками
+
+* Новый shower Div для разработки тем, которые показывают фреймы в теле html.
+  Пока не совсем стабилен. Если не найдутся потребители, будет со временем законсервирован.
+
+* Дополнительные настройки для shower Tabpanel: titleOnToolbar, showToolbar, autoHideToolbar,
+  closeButtonOnToolbar
+
+* shower Tabpanel закрывает текущий фрейм, если явно не указано какой закрывать
+
+* Базовая тема поддерживает настройку historySupport для включения поддержки истории
+  браузера в extjs
+
+* Новая тема debugdiv для отладки в режиме работы shower Div
+
+* Новая тема ide2. Теперь и по умолчанию. Более симпатичная и удобная на мой взгляд,
+  чем ide.
+
+* Для UiBuilder введен метод layout для более удобного объявления layout для контейнеров
+
+* **Несовместимость** Новая функция для показа фрейма ``Jc.showFrame``. В дальнейшем заменит все существующие
+  на текущий момент механизмы, которые пока оставлены для совместимости.
+
+* **Несовместимость** Функция onOk переданная в shower теперь принимает параметр frame
+
+* **Несовместимость** Переименованы классы
+  jandcode.wax.core.model.WaxDictUpdaterDao -> jandcode.wax.core.model.WaxUpdaterDictDao,
+  jandcode.wax.core.model.WaxSimpleLoadDictDao -> jandcode.wax.core.model.WaxLoadDictDao,
+  jandcode.wax.core.model.WaxSimpleResolveDictDao -> jandcode.wax.core.model.WaxResolveDictDao,
+
+* Новый шаблон <jc:theme/> для удобной поддержки тем
+
+* Поддержка передачи Store и Record из клиента в методы dao как тип Map.
+  Странно что раньше этого небыло.
+
+* **Несовместимость** Полностью переработан механизм SqlFilter. Теперь все гораздо нагляднее и стабильнее.
+  Плюс поддержка order by
+
+* **Несовместимость** Формат описания тем полностью изменен
+
+* В описаниях тем поддерживаются css,js,gsp
+
+* **Несовместимость** Удален класс jandcode.wax.core.utils.WaxCompExt за ненадобностью
+
+* Введен класс jandcode.wax.core.utils.WaxTml для использования в gsp как набора
+  дополнительных утилит шаблона
+
+
+**misc**
+
+* модуль ``jandcode-toolbox`` убран
+
+* Куча всяких мелочишок, которые не имеют явных внешних проявлений
+
+
+1.4.1
+-----
+
+**ВАЖНО**: В этой версии есть несовместимые изменения
+
+* fix: в IAfterDaoMethod передавалось неправильное имя метода
+* fix: в диаграммах db-doc теперь не прыгают шрифты
+* В описании диаграм для db-doc для домена в диаграмме можно указать параметр
+  ``showFields="false"`` (не показывать его поля, будет только прямоугольник с именем
+  таблицы):
+
+    .. code-block:: xml
+
+        <diagram name="Diagram1" title="Диаграмма 1">
+          <domain name="Table1"/>
+          <domain name="Table2"/>
+          <domain name="Table3" showFields="false"/>
+          <domain name="Table4" showFields="false"/>
+        </diagram>
+
+* fix: теперь можно делать несколько сервлетов JcServlet в web.xml с разными mapping
+  в рамках одного web-приложения. Например так:
+
+    .. code-block:: xml
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <web-app xmlns="http://java.sun.com/xml/ns/javaee"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+                 version="2.5">
+            <servlet>
+                <servlet-name>servlet1</servlet-name>
+                <servlet-class>jandcode.web.JcServlet</servlet-class>
+                ...
+            </servlet>
+            <servlet>
+                <servlet-name>servlet2</servlet-name>
+                <servlet-class>jandcode.web.JcServlet</servlet-class>
+                ...
+            </servlet>
+            <servlet-mapping>
+                <servlet-name>servlet1</servlet-name>
+                <url-pattern>/*</url-pattern>
+            </servlet-mapping>
+            <servlet-mapping>
+                <servlet-name>servlet2</servlet-name>
+                <url-pattern>/adm/*</url-pattern>
+            </servlet-mapping>
+            ...
+        </web-app>
+
+* jc: поддержка нескольких моделей/баз данных в проекте, в том числе и при использовании
+  ``verdb``. Имя модели указывается в параметре ``-m:MODELNAME``
+* **Несовместимость**: структура product-дистрибутива для wax изменилась.
+  Теперь скрипты (включая скрипты базы данных и verdb) лежат в ``WEB-INF``
+  (раньше лежали в корне дистрибутива)
+* **Несовместимость**: скрипты базы данных и verdb теперь распологаются в подкаталоге
+  с именем модели. К примеру, раньше было так::
+
+    PROJECTROOT
+        scripts
+            verdb
+                00001
+                    0001-update.sql
+                00002
+                    0001-update.sql
+
+  Теперь так::
+
+    PROJECTROOT
+        scripts
+            default    <-- это имя модели
+                verdb
+                    00001
+                        0001-update.sql
+                    00002
+                        0001-update.sql
+
+* wax: DbmAction может быть перекрыта для установки модели контекста выполнения запроса.
+  Для этого выделен метод ``DbmAction.getModel``
+* fix: wax: growHeight для gsp-фреймов был незадействован
+* wax: gsp-фрейм имеет дополнительный css-класс для фрейма ``jc-frame-gsp`` и для тела
+  фрейма ``jc-frame-body-gsp``
+* fix: в wax-гриде не выделялась запись после добавления новой записи в гриду
+
+1.4.0
+-----
+
+**ВАЖНО**: Эта версия не совместима с веткой 1.3.*
+
+* Метод ``App.getInst()`` был удален. Теперь нет глобального едиственного экземпляра
+  приложения. Приложений может быть несколько. Соотвественно необходимо заменить
+  ``App.getInst()`` или (для groovy-кода) ``App.inst`` на ``getApp()``. В всех объектах,
+  которые являются наследниками от ``jandcode.app.Comp`` и создавались через фабрики,
+  метод ``getApp()`` имеется и возвращает правильную ссылка на ``App``. В случае получения
+  ошибки вида *'Экземпляр создан вне контекста приложения'* необходимо убедится, что
+  объект создается через ``getApp().getObjectFactory().create(...)``. Если ``App.getInst()``
+  использовался вне компонента ``jandcode.app.Comp``, необходимо явно передать ему приложение
+  или объект, реализующий интерфейс ``jandcode.app.IAppLink``, через который он сможет
+  получить доступ к приложению. Приложение можно загрузить классом ``jandcode.app.AppLoader``.
+* В связи с удалением метода ``App.getInst()`` уделен статический метод ``Model.getInst()``.
+  Теперь модель можно получить только через ``getApp().service(ModelService.class).getModel()``.
+* В связи с удалением метода ``App.getInst()`` уделен статический класс ``jandcode.ui.Ui``,
+  Теперь к его функциональности можно получить доступ через ``getApp().service(UiService.class)``.
+* В связи с удалением метода ``App.getInst()`` уделен статический класс ``jandcode.web.Web``,
+  Теперь к его функциональности можно получить доступ через ``getApp().service(WebService.class)``.
+* Из ``Rt`` механизм ``x-loaderhandler`` заменен на ``x-plugin``. Варианты использования
+  теперь стали гораздо гибче.
+* Модель теперь регистрируется в узле ``dbm`` (ранее регистрировалась в сервисе ``jandcode.dbm.ModelService``):
+
+    .. code-block:: xml
+
+        <root>
+            <dbm>
+                <registermodel name="default" model="myapp.model"/>
+            </dbm>
+        </root>
+
+* Убраны все модели по умолчанию: ``default``, ``wax.sys``, ``wax.default``. В комплекте
+  теперь только модель ``sys``, которая используется как предок для моделей. Все промежуточные
+  составные части моделей (например из ``jandcode.wax.verdb``) реализованы через плагины
+  загрузки Rt. Пример:
+
+    .. code-block:: xml
+
+        <!-- модуль где-то в библиотеке объявляет плагин модели... -->
+        <x-plugin name="mylib1.model" path="model/model.rt">
+            <depend name="jandcode.wax.core.model"/> <!-- от этого плагина зависит объявленный -->
+        </x-plugin>
+
+        <!-- модуль приложения объявляет свою модель и использует плагины -->
+        <model name="myapp1.model" parent="sys" x-root="true">
+            <!-- включаем плагин модели вместе с его зависимостями -->
+            <x-include plugin="mylib1.model"/>
+            <!-- собственно модель приложения -->
+            <x-include path="model/model.rt"/>
+        </model>
+
+        <!-- регистрируем модель -->
+        <dbm>
+            <registermodel name="default" model="myapp1.model"/>
+        </dbm>
+
+* Убран атрибут модуля ``wax="true"``. Теперь файлы из каталога
+  ``model`` не подключаются автоматически в модель ``wax.default``, их нужно подключать явно
+  и можно держать в любом удобном каталоге внутри модуля.
+* Убран атрибут модуля ``web="true"``. Теперь пакет модуля нужно явно назначать как
+  каталог с web-ресурсами, например:
+
+    .. code-block:: xml
+
+        <root>
+            <web>
+                <resource name="myapp1.main" package="myapp1.main"/>
+            </web>
+        </root>
+
+* Введен специальный тег для модели ``x-dbdata``, который определяет откуда загружать
+  данные для базы по умолчанию и тестовые данные. Теперь их можно хранить там, где удобно:
+
+    .. code-block:: xml
+
+        <root>
+            <!-- модуль приложения объявляет свою модель и использует плагины -->
+            <model name="myapp1.model" parent="sys" x-root="true">
+                ....
+
+                <!-- в каталоге dbdata могут быть каталоги prod (для данных по умолчанию)
+                     и test (для тестовых данных) -->
+                <x-dbdata path="dbdata"/>
+
+                <!-- можно указывать явный каталог и тип данных -->
+                <x-dbdata path="dbdata/prod" dbtype="prod"/>
+                <x-dbdata path="dbdata/test" dbtype="test"/>
+
+            </model>
+        </root>
+
+* Модель ``jandcode.dbm.Model`` может быть настроена на поддержку нескольких языков
+  хранения данных. Для этой поддержки в модель введен сервис ``jandcode.dbm.dblang.DblangService``
+* Поддержка (пока не полная) многоязыковых полей. Тип поля: ``lang.string`` и ``lang.memo``
+* При описании ddl операторов для домена (например для view) можно писать текст ddl
+  оператора на gsp в контексте текущего домена. Например так:
+
+    .. code-block:: xml
+
+        <domain name="V_View1" parent="wax.Table" tag.db="true" tag.dbview="true"
+            basetable="ViewBase">
+            <ddl name="view"><![CDATA[
+                create view ${th.domain.name}
+                as
+                select id<%
+                  for (lang in th.model.getDblangService().langs) {
+                    out(",name_")
+                    out(lang.name)
+                  }
+                %>
+                from ${th.domain.rt.getValueString('basetable')} where level=1
+            ]]>
+            </ddl>
+        </domain>
+
+* Поле может ссылатся на view, физические reference при этом не генерируются
+* В шаблонах gsp, используемых для генерации утилитой jc можно выводить результат
+  фрагмента шаблона из текста:
+
+    .. code-block:: jsp
+
+        <%
+            outTemplate("hello, \${project.name}!")
+        %>
+
+* fix: jc db-doc теперь вставляет в документацию не шаблон view, а его сгенерированное
+  представление
+
+1.3.6
+-----
+
+* jc: игнорирование команд, которые начинаются с '_'
+* fix: шаблон проекта wax-complex теперь поддерживает запуск тестов для всех модулей
+* sphinx-doc: поддержка расширений для sphinx
+
+1.3.5
+-----
+
+* обновление библиотек groovy 2.0.5
+* Новый модуль jandcode-jboss-fixvfs для поддержки запуска проекта на jboss. Этот модуль нужно просто подключить к проекту.  
+
+
+1.3.3
+-----
+
+* обновление библиотек ant 1.8.4, groovy 2.0.4, commons-io 2.4, commons-pool 1.6, log4j 1.2.17, joda-time 2.1
+* новый шаблон проекта wax-complex: многомодульное wax-приложение
+* UtilsTestCase.replaceTestName - замена & на имя пакета тестового класса
+* AppTestExt.saveAppRt - записывает rt в файл с учетом имени пакетом
+
+
+1.3.2
+-----
+
+* поддержка локализации
+* fix: ``<jc:value type="dict" ... />`` теперь работает
+
+1.3.1
+-----
+
+* рефакторинг обработчиков ошибок
+* документация для каждого модуля теперь независимая, включая описание rt-конфигураций
+* начальная поддержка локализации
+* поддержка jdk7
+
+**wax**
+
+* fix: компоненты input CbXXX не принимали значение по умолчанию без явно назначенного поля
+
+1.3.0
+-----
+
+Эта версия является объединением проектов:
+
+* Jandcode Core 1.2.5
+* Jandcode Wax 1.0.8
+
+
+
+ 

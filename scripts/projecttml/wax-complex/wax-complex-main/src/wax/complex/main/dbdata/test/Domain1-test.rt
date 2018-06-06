@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+
+    <dataloader name="default" parent="random" size="5" id="1000">
+        <field name="s1" template="${text:eng,fupper,10,15}"/>
+    </dataloader>
+
+</root>

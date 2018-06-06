@@ -1,0 +1,515 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Что нового &mdash; jandcode-core</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-core" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li><a href="index.html">jandcode-core</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Что нового<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p><a class="reference internal" href="whatnew14.html"><em>Что нового в 1.4.x</em></a></p>
+<div class="section" id="id2">
+<h2>1.5.21<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>web: <tt class="docutils literal"><span class="pre">WebRequest#getStartTime()</span></tt> - время начала запроса</li>
+<li>web: фильтры теперь могут выполнятся после полной обработки запроса
+(включая render и ошибки). Для этого введен метод фильтра: <tt class="docutils literal"><span class="pre">afterHandleRequest</span></tt></li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>1.5.20<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<ul>
+<li><p class="first">fix: jc create-project не копировал .hgignore</p>
+</li>
+<li><p class="first">web: JcServlet теперь имеет свойство getApp(), которое возвращает ссылку на приложение,
+которое он создал.</p>
+</li>
+<li><p class="first">web: JcServlet теперь регистрируется в контексте сервлета:</p>
+<blockquote>
+<div><div class="highlight-java"><div class="highlight"><pre><span class="n">getServletContext</span><span class="o">().</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">&quot;servlet:&quot;</span> <span class="o">+</span> <span class="n">getServletName</span><span class="o">(),</span> <span class="k">this</span><span class="o">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>что позволяет получить к нему (и к его приложению) доступ из другого сервлета:</p>
+<blockquote>
+<div><div class="highlight-java"><div class="highlight"><pre><span class="n">JcServlet</span> <span class="n">servletApp</span> <span class="o">=</span> <span class="o">(</span><span class="n">JcServlet</span><span class="o">)</span> <span class="n">getServletContext</span><span class="o">().</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">&quot;servlet:jandcode-web&quot;</span><span class="o">);</span>
+<span class="n">App</span> <span class="n">app</span> <span class="o">=</span> <span class="n">servletApp</span><span class="o">.</span><span class="na">getApp</span><span class="o">();</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h2>1.5.19<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h2>
+<ul>
+<li><p class="first">UtCnv.toMap - функция для разделения строк вида &#8216;a:b;c:d&#8217;</p>
+</li>
+<li><p class="first">auth: поддержка провайдеров проверки прав</p>
+</li>
+<li><p class="first">fix: js: для grid и sgrid: не обновлялись словарные поля</p>
+</li>
+<li><p class="first">fix: dbm: sqlfilter не ставил флаг prepare, в результате prepare выполнялось постоянно</p>
+</li>
+<li><p class="first">fix: jc: настройка памяти для javac и groovyc вынесена в параметр
+ut.javac_memoryMaximumSize. Теперь по умолчанию 800m.</p>
+</li>
+<li><p class="first">fix: dbm: validationQuery для ConnectionService. Устанавливаются в rt-атрибутах
+ConnectionService:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;service</span> <span class="na">name=</span><span class="s">&quot;jandcode.dbm.db.ConnectionService&quot;</span>
+         <span class="na">class=</span><span class="s">&quot;jandcode.dbm.db.impl.ConnectionServiceImpl&quot;</span>
+         <span class="na">validationQuery.mysql=</span><span class="s">&quot;select 1&quot;</span>
+         <span class="na">validationQuery.oracle=</span><span class="s">&quot;select 1 from dual&quot;</span>
+        <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">wax: В качестве компонента для showWait можно использовать наследников от панели.
+см: <tt class="docutils literal"><span class="pre">jandcode/wax/core/js/theme/Base.js#showWait</span></tt></p>
+</li>
+<li><p class="first">fix: jc create-project не копировал .hgignore</p>
+</li>
+<li><p class="first">новый шаблон проекта wax-ext для дополнительных модулей wax</p>
+</li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h2>1.5.18<a class="headerlink" href="#id5" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li><strong>fix</strong> для предыдущей версии: dao перестал работать</li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h2>1.5.17<a class="headerlink" href="#id6" title="Ссылка на этот заголовок">¶</a></h2>
+<ul>
+<li><p class="first">dbm: глобальные фильтры для вызова dao.
+Для добавления фильтра необходимо реализовать в
+наследнике класса <tt class="docutils literal"><span class="pre">jandcode.dbm.dao.DaoFilter</span></tt> нужные методы
+<tt class="docutils literal"><span class="pre">onBeforeDaoMethod</span></tt>, <tt class="docutils literal"><span class="pre">onAfterDaoMethod</span></tt>, <tt class="docutils literal"><span class="pre">onErrorDaoMethod</span></tt> (описаны в
+исходнике класса) и зарегистрировать фильтр в модели:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;model</span> <span class="na">name=</span><span class="s">&quot;my.model1&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;daofilter</span> <span class="na">name=</span><span class="s">&quot;ИМЯ_ФИЛЬТРА&quot;</span>
+                   <span class="na">class=</span><span class="s">&quot;КЛАСС_ФИЛЬТРА&quot;</span>
+                   <span class="na">enabled=</span><span class="s">&quot;TRUE/FALSE&quot;</span>
+                   <span class="na">weight=</span><span class="s">&quot;int(чем меньше, тем раньше вызывается)&quot;</span>
+                   <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/model&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="id7">
+<h2>1.5.16<a class="headerlink" href="#id7" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>fix: jc: Надоевшая ошибка &#8220;Не найден файл <a class="reference external" href="res:jandcode/app/module.rt">res:jandcode/app/module.rt</a>&#8221; теперь точно
+исправлена</li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h2>1.5.15<a class="headerlink" href="#id8" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>jc: компиляция в командной строке делает классы для 1.6, теперь можно использовать
+java 7/8 как среду разработки по умолчанию для командной строки</li>
+<li>fix: web: при замене action в фильтре не использовалась новая action, обработка
+делегировалась в предыдущую action</li>
+<li>fix: jc: Надоевшая ошибка &#8220;Не найден файл <a class="reference external" href="res:jandcode/app/module.rt">res:jandcode/app/module.rt</a>&#8220;</li>
+</ul>
+</div>
+<div class="section" id="id9">
+<h2>1.5.14<a class="headerlink" href="#id9" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>lib: httpclient 4.2.3</li>
+<li>lib: extjs 4.2.0</li>
+<li>lib: groovy 2.1.2</li>
+<li>fix: не показывались ошибки при показе фрейма через Jc.showFrame(класс)</li>
+<li>wax: надеюсь полная адаптация ui к extjs 4.2.0</li>
+<li><strong>Несовместимость</strong> fix: плагин гриды <tt class="docutils literal"><span class="pre">jcbufferedrenderer</span></tt> уже не нужен,
+теперь работает и встроенный плагин гриды <tt class="docutils literal"><span class="pre">``jcbufferedrenderer``</span></tt>. Просто замените
+<tt class="docutils literal"><span class="pre">jcbufferedrenderer</span></tt>-&gt;``bufferedrenderer``</li>
+<li>fix: wax: table layout. убран мелкий padding в ячейке</li>
+<li>fix: wax: tooltip был слишком маленьким в chrome</li>
+</ul>
+</div>
+<div class="section" id="id10">
+<h2>1.5.13<a class="headerlink" href="#id10" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>jc: db-doc: Дополнительный раздел в генерируемой документации
+&#8220;Таблицы не показанные на диаграммах&#8221;</li>
+<li>dao: убрано явное назначение домена, оставлено только назначение по имени</li>
+<li>dao: явно определенный в конструкторе домен не перекрывается автоматом при создании dao.
+Однако если домен определен в теге dao, то он переназначается. Описано
+тут: <a class="reference external" href="jandcode-dbm/dao.html">jandcode-dbm/dao.html</a></li>
+<li>в поставку включена новая библиотека <tt class="docutils literal"><span class="pre">js</span> <span class="pre">1.7R4</span></tt> (Rhino Javascript)</li>
+<li>wax: фрейм <tt class="docutils literal"><span class="pre">Jc.frame.DelRec</span></tt> - удаление записи через dao. Более удобная альтернатива
+для <tt class="docutils literal"><span class="pre">Jc.frame.SimpleDelRec</span></tt></li>
+<li>wax: UiBuilder: дополнительные методы: <tt class="docutils literal"><span class="pre">actionGrid</span></tt> (action, которая знает про гриду
+(или дерево) к которому прикреплена), <tt class="docutils literal"><span class="pre">actionRec</span></tt> (action, которая знает про гриду
+(или дерево) к которому прикреплена и авполняется только если есть выделенная запись).
+Ссылка на гриду в свойстве action <tt class="docutils literal"><span class="pre">grid</span></tt> и доступно только в onExec.
+Запись доступна в свойстве <tt class="docutils literal"><span class="pre">rec</span></tt>, id записи в свойстве <tt class="docutils literal"><span class="pre">recId</span></tt></li>
+<li><strong>Несовместимость</strong> SGrid и STree изменены. Теперь это не &#8220;контейнер с гридой&#8221;, а
+&#8220;грида&#8221;. Соотвественно для доступа к компоненту &#8220;грида&#8221;, не нужно использовать
+<tt class="docutils literal"><span class="pre">sgrid.grid</span></tt>, можно просто писать <tt class="docutils literal"><span class="pre">sgrid</span></tt>. В связи с сильными изменениями
+возможны временные неполадки</li>
+<li>fix: extjs: <tt class="docutils literal"><span class="pre">Ext.resizer.BorderSplitter</span></tt> может имет рамки если у панели со
+<tt class="docutils literal"><span class="pre">split=true</span></tt> дополнительно поставить``splitterBorder=true``</li>
+<li>fix: dbm: <tt class="docutils literal"><span class="pre">FirstEmptyRecordProxy</span></tt> при <tt class="docutils literal"><span class="pre">getValue()</span></tt> возвращала <tt class="docutils literal"><span class="pre">null</span></tt></li>
+<li>fix: dbm: <tt class="docutils literal"><span class="pre">WaxLoadSqlFilterDao</span></tt> добавлено свойство <tt class="docutils literal"><span class="pre">idField</span></tt></li>
+<li>fix: extjs: Исправлено отсутствие верхней рамки у заголовка гриды для
+гриды без рамки и с тулбарой</li>
+<li>js: новая функция <tt class="docutils literal"><span class="pre">Jc.isDateEmpty</span></tt> - возвращает true, если d - пустая дата</li>
+<li>fix: js: input <tt class="docutils literal"><span class="pre">Date</span></tt> показывал пустые даты как даты (см. <tt class="docutils literal"><span class="pre">Jc.isDateEmpty</span></tt>)</li>
+<li>fix: js: grid теперь принимает 0 для setCurRec</li>
+<li>fix: js: b.panel теперь создает Jc.control.Panel</li>
+<li>fix: dbm: <tt class="docutils literal"><span class="pre">jandcode.dbm.sqlfilter.SqlFilter#getParams</span></tt> теперь возвращает <tt class="docutils literal"><span class="pre">IVariantMap</span></tt></li>
+<li>dbm: <tt class="docutils literal"><span class="pre">ValidateErrors</span></tt> добавлены методы <tt class="docutils literal"><span class="pre">addErrorFatal</span></tt>, которые автоматом
+вызывают <tt class="docutils literal"><span class="pre">checkErrors</span></tt></li>
+<li>jc: <tt class="docutils literal"><span class="pre">ut.version</span></tt> теперь возвращает lastVersion+revno</li>
+<li><strong>Несовместимость</strong> jc: <tt class="docutils literal"><span class="pre">ut.version</span></tt> - убрана поддержка bzr</li>
+<li>jc: db-project: команда db-drop для удаления тестовой базы</li>
+<li>js: trigger может опционально иметь кнопку &#8220;очистить&#8221;. Как глобально так и локально</li>
+<li>fix: js: b.layout не понимал &#8216;border&#8217;</li>
+<li>fix: GfContent имеет метод setTitle</li>
+<li>fix: jc:string экранирует &lt;/script&gt; и имеет аргумент normalizeIndent</li>
+<li>js: jc:tstFrame для тестирования gf-фреймов</li>
+<li>fix: SGridDataStore может быть передана клиенту в незагруженном виде</li>
+<li><strong>Несовместимость</strong> js: tree useArrows=true by default</li>
+<li>fix: Jc.ActionGrid не определяла дерево</li>
+<li>fix: css: jc-treegrid убран за ненадобностью</li>
+</ul>
+</div>
+<div class="section" id="id11">
+<h2>1.5.12<a class="headerlink" href="#id11" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>wax: метод onAfterRenderCell для колонки гриды. Вызывается после onRenderCell.
+В качестве значения (первого параметра) получает то, что было создано в onRenderCell.
+Остальные параметры совпадают с onRenderCell. Используется для модификации рендеринга
+встроенных колонок</li>
+<li>wax: SGrid принимает атрибут: features (как в grid)</li>
+<li>wax: SGrid принимает атрибут: gridConfig (атрибуты для grid)</li>
+<li>wax: параметры по умолчанию Jc.ini.grid для гриды: columnSortable=false,
+columnMenu=false, trackOver=false. Соответсвенно гриды по умолчанию не имеют
+меню, несортируемые, курсор мыши не отслеживают</li>
+<li>fix: gfpanel. Мелочи всякие</li>
+<li>lib: groovy 2.1.1</li>
+</ul>
+</div>
+<div class="section" id="id12">
+<h2>1.5.11<a class="headerlink" href="#id12" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>wax: Jc.showFrame поддерживает параметр onShowFrame для отложенного отображения фрейма</li>
+<li>wax: Jc.input.Cbfrm может показывать gf-фрейм</li>
+<li>wax: Jc.input.Cbfrm теперь корректно работает в режиме эмуляции диалога, когда
+всплывающие повер него окна не вызывают закрытие popup-фрейма</li>
+<li>wax: Jc.input.Cb_SGrid и Jc.input.Cb_STree удалены</li>
+<li>gfpanel - средство показа встроенных gf-фреймов (как содержимое внутренней панели)</li>
+<li>outTable может печатать объект DataTreeNode</li>
+<li>Множественные изменения в SGrid. В частности убрано средство создания store внутри гриды.
+Теперь store нужно всегда передавать</li>
+<li>Мелкие и не очень мелкие багфиксы и улучшения, которые все равно никто явно незаметит,
+а жить мешали</li>
+</ul>
+</div>
+<div class="section" id="id13">
+<h2>1.5.10<a class="headerlink" href="#id13" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>wax: в grid и tree теперь по умолчанию отключен trackOver</li>
+<li>wax: Jc.ActionRec - для action, которые работают с выбранной записью</li>
+<li>fix: dbm: validator delref не игнорировал каскадные ссылки</li>
+<li>wax: STreeDataStore для деревьев в STree</li>
+<li>fix: wax: TreeStore работало не корректно, особенно в паре с STree</li>
+</ul>
+</div>
+<div class="section" id="id14">
+<h2>1.5.9<a class="headerlink" href="#id14" title="Ссылка на этот заголовок">¶</a></h2>
+<ul>
+<li><p class="first">web: WebAction теперь можно регистрировать с произвольным url:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;web&gt;</span>
+        <span class="nt">&lt;action</span> <span class="na">name=</span><span class="s">&quot;act1&quot;</span> <span class="na">class=</span><span class="s">&quot;mypak.Act1&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;action</span> <span class="na">name=</span><span class="s">&quot;act2&quot;</span> <span class="na">url=</span><span class="s">&quot;admin/act2&quot;</span> <span class="na">class=</span><span class="s">&quot;mypak.Act2&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;action</span> <span class="na">name=</span><span class="s">&quot;act3&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;action</span> <span class="na">name=</span><span class="s">&quot;a1&quot;</span> <span class="na">class=</span><span class="s">&quot;mypak.A1&quot;</span><span class="nt">/&gt;</span>  <span class="c">&lt;!-- url=act3/a1 --&gt;</span>
+        <span class="nt">&lt;/action&gt;</span>
+    <span class="nt">&lt;/web&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">web: Tml теперь можно регистрировать с произвольным именем:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;web&gt;</span>
+        <span class="nt">&lt;tml</span> <span class="na">name=</span><span class="s">&quot;jc&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tml</span> <span class="na">name=</span><span class="s">&quot;mytag&quot;</span> <span class="na">class=</span><span class="s">&quot;mypak.MyTag&quot;</span><span class="nt">/&gt;</span> <span class="c">&lt;!-- tag=jc:mytag --&gt;</span>
+        <span class="nt">&lt;/tml&gt;</span>
+    <span class="nt">&lt;/web&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>preview</strong> wax: Новый тип фреймов - <tt class="docutils literal"><span class="pre">gf</span></tt>. Представляет собой gsp-файл, в котором присутствует
+серверный и клиентский код. Может использовать переменные, созданные в серверном коде,
+в клиентском коде.</p>
+</li>
+<li><p class="first">REMOVE: <tt class="docutils literal"><span class="pre">xf</span></tt> фреймы анонсированные в 1.5.6 убраны, как не оправдавшие надежд</p>
+</li>
+<li><p class="first">web: поддержка интерфейсов <tt class="docutils literal"><span class="pre">jandcode.web.ITmlTagOwner</span></tt>, <tt class="docutils literal"><span class="pre">jandcode.web.ITmlInclude</span></tt>
+для Tml</p>
+</li>
+<li><p class="first">gsp: тег <tt class="docutils literal"><span class="pre">&lt;jc:include</span> <span class="pre">url=&quot;path/to/file.gsp&quot;/&gt;</span></tt> как альтернатива вызову метода <tt class="docutils literal"><span class="pre">include</span></tt></p>
+</li>
+<li><p class="first">dbm: <tt class="docutils literal"><span class="pre">jandcode.dbm.data.WrapperDataStore</span></tt> - обертка вокруг DataStore</p>
+</li>
+<li><p class="first">dao: метод <tt class="docutils literal"><span class="pre">getContextParams</span></tt> - контекстные параметры для dao</p>
+</li>
+<li><p class="first"><strong>Несовместимость</strong> удален класс RequestMap. Используйте вместо него getContextParams. Если вы использовали
+RequestMap только в dao с фильтрами (передавали его в createSqlFilter), то просто
+замените тип параметра dao на Map</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">jandcode.wax.core.utils.gf.SGridDataStore</span></tt> для gf-фреймов</p>
+</li>
+</ul>
+</div>
+<div class="section" id="id15">
+<h2>1.5.8<a class="headerlink" href="#id15" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>fix: sqlfilter для oracle не учитывал сортировку при пагинации</li>
+<li>запуск web-приложения из ide без tomcat. Используйте класс
+<tt class="docutils literal"><span class="pre">jandcode.web.RunJettyApp</span></tt></li>
+<li>SqlPrepared теперь можно убрать из вывода лога.
+Настраивается в <tt class="docutils literal"><span class="pre">log4j.logger.jandcode.dbm.db.DbQuery.sqlPrepared=OFF</span></tt></li>
+<li>fix: wax: Langstring возвращал ссылку на значение, а не копию</li>
+</ul>
+</div>
+<div class="section" id="id16">
+<h2>1.5.7<a class="headerlink" href="#id16" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>fix: dbm: новый метод DbUtils.createDao(Class&lt;A&gt; cls)</li>
+<li>fix: в шаблон приложения wax-complex добавлено подключение скрипта <tt class="docutils literal"><span class="pre">wax-verdb-project-product</span></tt>
+для обеспечения команд <tt class="docutils literal"><span class="pre">db-upgrade</span></tt> и <tt class="docutils literal"><span class="pre">db-ver</span></tt> в режиме разработки</li>
+</ul>
+</div>
+<div class="section" id="id17">
+<h2>1.5.6<a class="headerlink" href="#id17" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>utils: новый метод UtString.indent()</li>
+<li>fix: web: для ресурсов без даты модификации (виртуальных) не проверялось что дата null</li>
+<li>wax: новый метод WaxUpdaterDao.newRec() - создание пустой записи для updater</li>
+<li>wax: WaxJsonService теперь имеет конверторы для данных из строк</li>
+<li>wax: новые метода для Jc.dbm.Storejs: get/set для чтения/записи значений в текущую запись</li>
+<li>wax: новый метод для dao <tt class="docutils literal"><span class="pre">dict.utils/default</span></tt> - resolveDictsFor</li>
+<li>dbm: новый сервис для модели <tt class="docutils literal"><span class="pre">jandcode.dbm.dbpostcreate.DbPostCreateService</span></tt>.
+Предназначен для постобработки свежесозданной базы данных.</li>
+<li><strong>preview</strong> wax: Новый тип фреймов - <tt class="docutils literal"><span class="pre">xf</span></tt>. Представляет собой xml-файл, в котором присутствует
+серверный и клиентский код. Может использовать переменные, созданные в серверном коде,
+в клиентском коде. Примеры в <tt class="docutils literal"><span class="pre">jandcode.wax.core.js.xf</span></tt>
+и <tt class="docutils literal"><span class="pre">jandcode.wax.core_test.tst.core_test.xf</span></tt></li>
+</ul>
+</div>
+<div class="section" id="id18">
+<h2>1.5.5<a class="headerlink" href="#id18" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li><strong>Несовместимость</strong> fix: Model получала имя только после полной инициализации</li>
+<li><strong>Несовместимость</strong> fix: теперь настройки базы по умолчанию берутся из <tt class="docutils literal"><span class="pre">db\MODELNAME</span></tt>
+(раньше бралось из <tt class="docutils literal"><span class="pre">db\DBSOURCENAME</span></tt>, т.е. фактически всегда <tt class="docutils literal"><span class="pre">db\default</span></tt>)</li>
+</ul>
+</div>
+<div class="section" id="id19">
+<h2>1.5.4<a class="headerlink" href="#id19" title="Ссылка на этот заголовок">¶</a></h2>
+<ul>
+<li><p class="first">fix: Gsp фрейм не удалял содержимое content-фрейма</p>
+</li>
+<li><p class="first">fix: jc db-doc: на диаграммах не отображалось поле id</p>
+</li>
+<li><p class="first">теперь каталоги с ресурсами можно прикреплять к виртуальному пути. Для этого используется
+атрибут <tt class="docutils literal"><span class="pre">prefix</span></tt> в описании ресурса. Если его значение не указано, то прикрепление
+делается в корень виртуального каталога, если указано, то к указанному:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;web&gt;</span>
+        <span class="nt">&lt;resource</span> <span class="na">name=</span><span class="s">&quot;i&quot;</span> <span class="na">path=</span><span class="s">&quot;#{path}/web&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;resource</span> <span class="na">name=</span><span class="s">&quot;i&quot;</span> <span class="na">path=</span><span class="s">&quot;#{path}/test/jandcode/sandbox/wax&quot;</span>
+                  <span class="na">prefix=</span><span class="s">&quot;tst/sandbox-wax&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;resource</span> <span class="na">name=</span><span class="s">&quot;i&quot;</span> <span class="na">path=</span><span class="s">&quot;#{path}/test/jandcode/sandbox&quot;</span>
+                  <span class="na">prefix=</span><span class="s">&quot;tst/sandbox-wax/inner1&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/web&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">fix: если в таблице базы данных есть ссылка на домен, который в базе отсутствует
+(например MemDict), то нее генерировался reference и в итоге база не создавалась</p>
+</li>
+<li><p class="first">fix: исправлена высота Cb_SGrid и Cb_STree</p>
+</li>
+<li><p class="first">fix: Cbfrm задавал минимальный размер для фрейма, в итоге Langstring был больше ожидаемого</p>
+</li>
+</ul>
+</div>
+<div class="section" id="id20">
+<h2>1.5.3<a class="headerlink" href="#id20" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>lib: groovy 2.1rc1</li>
+<li>fix: DbUtils игнорировал в качестве базового компонента явно переданную модель</li>
+</ul>
+</div>
+<div class="section" id="id21">
+<h2>1.5.2<a class="headerlink" href="#id21" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>js: окна сообщений <tt class="docutils literal"><span class="pre">Jc.showYN</span></tt> и <tt class="docutils literal"><span class="pre">Jc.showMsg</span></tt> теперь имеют дизайн обычных диалоговых
+окон</li>
+<li>fix: js: <tt class="docutils literal"><span class="pre">Jc.showYN</span></tt> при вложенном показ окна YN из диалогового, второе окно
+показывалось под диалоговым</li>
+</ul>
+</div>
+<div class="section" id="id22">
+<h2>1.5.1<a class="headerlink" href="#id22" title="Ссылка на этот заголовок">¶</a></h2>
+<p><strong>ВАЖНО</strong> : В этой версии есть несовместимые изменения</p>
+<ul class="simple">
+<li><strong>Несовместимость</strong> <tt class="docutils literal"><span class="pre">Jc.dbm.Store</span></tt> теперь не имеет свойства <tt class="docutils literal"><span class="pre">vpaging</span></tt>
+и соответственно механизм виртуального пагинирования не доступен. Он был введен
+для отображения больших объемов данных в гриде, но в extjs 4.2 грида может быть
+буфферизированной и механизм <tt class="docutils literal"><span class="pre">vpaging</span></tt> не нужен.</li>
+<li><strong>Несовместимость</strong> Для всех input убрана поддержка рудиментарного свойства
+<tt class="docutils literal"><span class="pre">inputWidth</span></tt>, теперь нужно пользоваться только свойством <tt class="docutils literal"><span class="pre">width</span></tt></li>
+<li>fix: js: буферизированная грида теперь работает правильно с локальным store (это
+ошибка в extjs). Для превращения обычной гриды в буферизированную нужно у гриды
+указать свойство: <tt class="docutils literal"><span class="pre">plugins:</span> <span class="pre">'jcbufferedrenderer'</span></tt>.</li>
+</ul>
+</div>
+<div class="section" id="id23">
+<h2>1.5.0<a class="headerlink" href="#id23" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>Переход на <strong>extjs 4.2</strong>. На данный момент времени extjs 4.2 не стабильна,
+возможны глюки, имейте ввиду и пожайлуста предоставляйте отчеты о ошибках.</li>
+<li>lib: groovy 2.1rc1</li>
+<li>В проекте по шаблону <strong>wax-complex</strong> больше не нужны каталоги <strong>src</strong> и <strong>test</strong></li>
+<li>Удален шаблон проекта <strong>wax-empty</strong> за ненадобностью</li>
+</ul>
+<p>Примечания для extjs 4.2</p>
+<p>Бывают ситуации, когда диалоговые окна, которые используют внутри гриду/панель
+со свойством <tt class="docutils literal"><span class="pre">spancol:2</span></tt> (или любой span &gt; 1), отображаются неверно. Такие окна
+могут терять заголовок или расширятся на весь экран замысловатым способом.
+Для решения этой проблемы явно задайте необходимую ширину фрейма.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Содержание</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Что нового</a><ul>
+<li><a class="reference internal" href="#id2">1.5.21</a></li>
+<li><a class="reference internal" href="#id3">1.5.20</a></li>
+<li><a class="reference internal" href="#id4">1.5.19</a></li>
+<li><a class="reference internal" href="#id5">1.5.18</a></li>
+<li><a class="reference internal" href="#id6">1.5.17</a></li>
+<li><a class="reference internal" href="#id7">1.5.16</a></li>
+<li><a class="reference internal" href="#id8">1.5.15</a></li>
+<li><a class="reference internal" href="#id9">1.5.14</a></li>
+<li><a class="reference internal" href="#id10">1.5.13</a></li>
+<li><a class="reference internal" href="#id11">1.5.12</a></li>
+<li><a class="reference internal" href="#id12">1.5.11</a></li>
+<li><a class="reference internal" href="#id13">1.5.10</a></li>
+<li><a class="reference internal" href="#id14">1.5.9</a></li>
+<li><a class="reference internal" href="#id15">1.5.8</a></li>
+<li><a class="reference internal" href="#id16">1.5.7</a></li>
+<li><a class="reference internal" href="#id17">1.5.6</a></li>
+<li><a class="reference internal" href="#id18">1.5.5</a></li>
+<li><a class="reference internal" href="#id19">1.5.4</a></li>
+<li><a class="reference internal" href="#id20">1.5.3</a></li>
+<li><a class="reference internal" href="#id21">1.5.2</a></li>
+<li><a class="reference internal" href="#id22">1.5.1</a></li>
+<li><a class="reference internal" href="#id23">1.5.0</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/whatnew.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li><a href="index.html">jandcode-core</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

@@ -1,0 +1,317 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Rt конфигурация &mdash; jandcode-app</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-app" href="index.html" />
+    <link rel="prev" title="Локализация приложений" href="lang.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li class="right" >
+          <a href="lang.html" title="Локализация приложений"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-app</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rt">
+<h1>Rt конфигурация<a class="headerlink" href="#rt" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#app" id="id9">&lt;app&gt;</a><ul>
+<li><a class="reference internal" href="#appdir-path" id="id10">appdir=&#8221;path&#8221;</a></li>
+<li><a class="reference internal" href="#debug-bool" id="id11">debug=&#8221;bool&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#service" id="id12">&lt;service&gt;</a><ul>
+<li><a class="reference internal" href="#item" id="id13">&lt;ITEM&gt;</a><ul>
+<li><a class="reference internal" href="#class-class" id="id14">class=&#8221;class&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#error" id="id15">&lt;error&gt;</a><ul>
+<li><a class="reference internal" href="#formatter" id="id16">&lt;formatter&gt;</a><ul>
+<li><a class="reference internal" href="#rt-error-formatter-item" id="id17">&lt;ITEM&gt;</a><ul>
+<li><a class="reference internal" href="#rt-error-formatter-item-class" id="id18">class=&#8221;class&#8221;</a></li>
+<li><a class="reference internal" href="#showsource-boolean" id="id19">showSource=&#8221;boolean&#8221;</a></li>
+<li><a class="reference internal" href="#showstack-boolean" id="id20">showStack=&#8221;boolean&#8221;</a></li>
+<li><a class="reference internal" href="#showfullstack-boolean" id="id21">showFullStack=&#8221;boolean&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="app">
+<span id="rt-app"></span><h2><a class="toc-backref" href="#id9">&lt;app&gt;</a><a class="headerlink" href="#app" title="Ссылка на этот заголовок">¶</a></h2>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">app</span></tt></p>
+<div class="contents local topic" id="id1">
+<ul class="simple">
+<li><a class="reference internal" href="#appdir-path" id="id22">appdir=&#8221;path&#8221;</a></li>
+<li><a class="reference internal" href="#debug-bool" id="id23">debug=&#8221;bool&#8221;</a></li>
+</ul>
+</div>
+<p>В этом узле хранятся свойства приложения.</p>
+<div class="highlight-xml"><div class="highlight"><pre>// file: d:/project/myproject/app.rt
+<span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;app</span> <span class="na">appdir=</span><span class="s">&quot;W:\p\_RELEASE_\jandcode-core\jandcode-core\jandcode-app\temp\doc._src\rtdoc&quot;</span> <span class="na">debug=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="appdir-path">
+<span id="rt-app-appdir"></span><h3><a class="toc-backref" href="#id22">appdir=&#8221;path&#8221;</a><a class="headerlink" href="#appdir-path" title="Ссылка на этот заголовок">¶</a></h3>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">app:appdir</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">path</span></tt></p>
+<p>Каталог приложения. Определяет корневой каталог приложения. Если не задан, определяется
+как каталог, из которого был загружен файл конфигурации приложения. Обычно используется
+для указания каталога приложения в случаях, когда конфигурация приложения загружается
+не из каталога приложения. Например, таким образом можно сообщить
+<em>&#8220;каталогом приложения является каталог, в котором лежит файл app.rt&#8221;</em>:</p>
+<div class="highlight-xml"><div class="highlight"><pre>// file: d:/project/myproject/app.rt
+<span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;app</span> <span class="na">appdir=</span><span class="s">&quot;W:\p\_RELEASE_\jandcode-core\jandcode-core\jandcode-app\temp\doc._src\rtdoc&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+<p>В этом случае значение атрибута <tt class="docutils literal"><span class="pre">appdir=d:/project/myproject</span></tt>.</p>
+</div>
+<div class="section" id="debug-bool">
+<span id="rt-app-debug"></span><h3><a class="toc-backref" href="#id23">debug=&#8221;bool&#8221;</a><a class="headerlink" href="#debug-bool" title="Ссылка на этот заголовок">¶</a></h3>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">app:debug</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">bool</span></tt></p>
+<p>При значении <tt class="docutils literal"><span class="pre">true</span></tt> приложение работает в отладочном режиме. По умолчанию <tt class="docutils literal"><span class="pre">false</span></tt>.
+Отладочный режим можно, например, использовать для формирования расширенных
+сообщений об ошибках или вывода отладочной информации непосредственно в приложении.
+В приложении доступно через <tt class="docutils literal"><span class="pre">App.isDebug()</span></tt> или <tt class="docutils literal"><span class="pre">App.isRelease()</span></tt>.
+Пример:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;app</span> <span class="na">debug=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+<p>При этой настройке:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="k">assert</span> <span class="n">App</span><span class="o">.</span><span class="na">isDebug</span><span class="o">()</span> <span class="o">==</span> <span class="kc">true</span>
+<span class="k">assert</span> <span class="n">App</span><span class="o">.</span><span class="na">isRelease</span><span class="o">()</span> <span class="o">==</span> <span class="kc">false</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="service">
+<span id="rt-service"></span><h2><a class="toc-backref" href="#id12">&lt;service&gt;</a><a class="headerlink" href="#service" title="Ссылка на этот заголовок">¶</a></h2>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">service</span></tt> , <em>тип:</em> <tt class="docutils literal"><span class="pre">list</span></tt></p>
+<div class="contents local topic" id="id2">
+<ul class="simple">
+<li><a class="reference internal" href="#item" id="id24">&lt;ITEM&gt;</a><ul>
+<li><a class="reference internal" href="#class-class" id="id25">class=&#8221;class&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Описание сервисов приложение.</p>
+<div class="section" id="item">
+<span id="rt-service-item"></span><h3><a class="toc-backref" href="#id24">&lt;ITEM&gt;</a><a class="headerlink" href="#item" title="Ссылка на этот заголовок">¶</a></h3>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">service/ITEM</span></tt></p>
+<div class="contents local topic" id="id3">
+<ul class="simple">
+<li><a class="reference internal" href="#class-class" id="id26">class=&#8221;class&#8221;</a></li>
+</ul>
+</div>
+<p>Сервис. Имя узла - имя сервиса. В качестве имени <strong>должен</strong> быть указан
+класс-интерфейс сервиса</p>
+<div class="section" id="class-class">
+<span id="rt-service-item-class"></span><h4><a class="toc-backref" href="#id26">class=&#8221;class&#8221;</a><a class="headerlink" href="#class-class" title="Ссылка на этот заголовок">¶</a></h4>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">service/ITEM:class</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">class</span></tt></p>
+<p>Класс-реализатор сервиса</p>
+</div>
+</div>
+</div>
+<div class="section" id="error">
+<span id="rt-error"></span><h2><a class="toc-backref" href="#id15">&lt;error&gt;</a><a class="headerlink" href="#error" title="Ссылка на этот заголовок">¶</a></h2>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">error</span></tt></p>
+<div class="contents local topic" id="id4">
+<ul class="simple">
+<li><a class="reference internal" href="#formatter" id="id27">&lt;formatter&gt;</a><ul>
+<li><a class="reference internal" href="#rt-error-formatter-item" id="id28">&lt;ITEM&gt;</a><ul>
+<li><a class="reference internal" href="#rt-error-formatter-item-class" id="id29">class=&#8221;class&#8221;</a></li>
+<li><a class="reference internal" href="#showsource-boolean" id="id30">showSource=&#8221;boolean&#8221;</a></li>
+<li><a class="reference internal" href="#showstack-boolean" id="id31">showStack=&#8221;boolean&#8221;</a></li>
+<li><a class="reference internal" href="#showfullstack-boolean" id="id32">showFullStack=&#8221;boolean&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Настройки для сервиса ошибок</p>
+<div class="section" id="formatter">
+<span id="rt-error-formatter"></span><h3><a class="toc-backref" href="#id27">&lt;formatter&gt;</a><a class="headerlink" href="#formatter" title="Ссылка на этот заголовок">¶</a></h3>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">error/formatter</span></tt></p>
+<div class="contents local topic" id="id5">
+<ul class="simple">
+<li><a class="reference internal" href="#rt-error-formatter-item" id="id33">&lt;ITEM&gt;</a><ul>
+<li><a class="reference internal" href="#rt-error-formatter-item-class" id="id34">class=&#8221;class&#8221;</a></li>
+<li><a class="reference internal" href="#showsource-boolean" id="id35">showSource=&#8221;boolean&#8221;</a></li>
+<li><a class="reference internal" href="#showstack-boolean" id="id36">showStack=&#8221;boolean&#8221;</a></li>
+<li><a class="reference internal" href="#showfullstack-boolean" id="id37">showFullStack=&#8221;boolean&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Настройка форматировщиков ошибок</p>
+<div class="section" id="rt-error-formatter-item">
+<span id="id6"></span><h4><a class="toc-backref" href="#id33">&lt;ITEM&gt;</a><a class="headerlink" href="#rt-error-formatter-item" title="Ссылка на этот заголовок">¶</a></h4>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">error/formatter/ITEM</span></tt></p>
+<div class="contents local topic" id="id7">
+<ul class="simple">
+<li><a class="reference internal" href="#rt-error-formatter-item-class" id="id38">class=&#8221;class&#8221;</a></li>
+<li><a class="reference internal" href="#showsource-boolean" id="id39">showSource=&#8221;boolean&#8221;</a></li>
+<li><a class="reference internal" href="#showstack-boolean" id="id40">showStack=&#8221;boolean&#8221;</a></li>
+<li><a class="reference internal" href="#showfullstack-boolean" id="id41">showFullStack=&#8221;boolean&#8221;</a></li>
+</ul>
+</div>
+<p>Настройка форматировщика ошибок</p>
+<div class="section" id="rt-error-formatter-item-class">
+<span id="id8"></span><h5><a class="toc-backref" href="#id38">class=&#8221;class&#8221;</a><a class="headerlink" href="#rt-error-formatter-item-class" title="Ссылка на этот заголовок">¶</a></h5>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">error/formatter/ITEM:class</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">class</span></tt></p>
+<p>Имя класса форматировщика ошибок. Можно не указывать, тогда
+будет использован класс по умолчанию.
+Должен реализовывать интерфейсы:
+jandcode.utils.error.ErrorFormatter и
+jandcode.utils.rt.IRtLinkSet</p>
+</div>
+<div class="section" id="showsource-boolean">
+<span id="rt-error-formatter-item-showsource"></span><h5><a class="toc-backref" href="#id39">showSource=&#8221;boolean&#8221;</a><a class="headerlink" href="#showsource-boolean" title="Ссылка на этот заголовок">¶</a></h5>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">error/formatter/ITEM:showSource</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">boolean</span></tt></p>
+<p>Показывать ли текст скрипта, где возникла ошибка.
+По умолчанию false.</p>
+</div>
+<div class="section" id="showstack-boolean">
+<span id="rt-error-formatter-item-showstack"></span><h5><a class="toc-backref" href="#id40">showStack=&#8221;boolean&#8221;</a><a class="headerlink" href="#showstack-boolean" title="Ссылка на этот заголовок">¶</a></h5>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">error/formatter/ITEM:showStack</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">boolean</span></tt></p>
+<p>Показывать ли стек.
+По умолчанию false.</p>
+</div>
+<div class="section" id="showfullstack-boolean">
+<span id="rt-error-formatter-item-showfullstack"></span><h5><a class="toc-backref" href="#id41">showFullStack=&#8221;boolean&#8221;</a><a class="headerlink" href="#showfullstack-boolean" title="Ссылка на этот заголовок">¶</a></h5>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">error/formatter/ITEM:showFullStack</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">boolean</span></tt></p>
+<p>Показывать ли полный стек.
+По умолчанию false. В случае false и showStack=true будет показан
+отфильтрованный стек без сильно внутренних методов.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Содержание</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Rt конфигурация</a><ul>
+<li><a class="reference internal" href="#app">&lt;app&gt;</a><ul>
+<li><a class="reference internal" href="#appdir-path">appdir=&#8221;path&#8221;</a></li>
+<li><a class="reference internal" href="#debug-bool">debug=&#8221;bool&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#service">&lt;service&gt;</a><ul>
+<li><a class="reference internal" href="#item">&lt;ITEM&gt;</a><ul>
+<li><a class="reference internal" href="#class-class">class=&#8221;class&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#error">&lt;error&gt;</a><ul>
+<li><a class="reference internal" href="#formatter">&lt;formatter&gt;</a><ul>
+<li><a class="reference internal" href="#rt-error-formatter-item">&lt;ITEM&gt;</a><ul>
+<li><a class="reference internal" href="#rt-error-formatter-item-class">class=&#8221;class&#8221;</a></li>
+<li><a class="reference internal" href="#showsource-boolean">showSource=&#8221;boolean&#8221;</a></li>
+<li><a class="reference internal" href="#showstack-boolean">showStack=&#8221;boolean&#8221;</a></li>
+<li><a class="reference internal" href="#showfullstack-boolean">showFullStack=&#8221;boolean&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="lang.html"
+                        title="предыдущая глава">Локализация приложений</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/rtdoc.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li class="right" >
+          <a href="lang.html" title="Локализация приложений"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-app</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

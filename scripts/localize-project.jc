@@ -1,0 +1,225 @@
+/**
+ * Поддержка локализации проекта
+ */
+
+import jandcode.jc.langtools.*
+import jandcode.utils.*
+import jandcode.utils.easyxml.*
+
+localize = createExt(LocalizeProjectExt)
+
+include "java-project"
+
+/**
+ * Маски исходных файлов
+ */
+localize.src_file_masks = ["**/*.java", "**/*.groovy", "**/*.js", "**/*.js.gsp", "**/*.gsp"]
+
+/**
+ * Маски файлов xml/rt
+ */
+localize.src_file_masks_xml = ["**/*.xml", "**/*.rt"]
+
+/**
+ * Имена атрибутов в xml с локализируемыми строками
+ */
+localize.xml_lang_attrs = ["title", "titleShort"]
+
+/**
+ * Имена детей в xml с локализируемыми строками
+ */
+localize.xml_lang_childs = []
+
+/**
+ * В какой файл собираются строки из исходников.
+ * Имя относительно каталога корневого пакета модуля.
+ */
+localize.lang_file_grab = "lang-data.xml"
+
+/**
+ * Дополнительные файлы, которые содержат оригинальные ключи для перевода
+ * Имя относительно каталога корневого пакета модуля.
+ */
+localize.lang_files = []
+
+/**
+ * Сбор всех строковых констант из проекта
+ */
+localize.grab_strs = {
+    return localize.parseDirs(dirs_src, localize.src_file_masks)
+}
+
+/**
+ * Сбор строковых констант из xml файлов проекта
+ */
+localize.grab_strs_xml = {
+    List res = new ArrayList<StrItem>()
+    for (d in dirs_src) {
+        def files = ut.filelist(localize.src_file_masks_xml, d)
+        for (f in files) {
+            def r1 = localize.parseFileXml(f, localize.xml_lang_attrs, localize.xml_lang_childs)
+            res.addAll(r1)
+        }
+    }
+    return res
+}
+
+/**
+ * Проверка имени функции: это функция локализации?
+ */
+localize.is_localize_func = {func ->
+    return func == "UtLang.t"
+}
+
+/**
+ * Фильтр для не переведенных строк (не помеченных или не обернутых)
+ */
+localize.filter_notlocalized = {StrItem item ->
+    if (UtLangtools.isRusStr(item.str)) {
+        if (item.mark == "" && !localize.is_localize_func(item.func)) {
+            return true
+        }
+    }
+    return false
+}
+
+/**
+ * Фильтр для предназначенных к переводу строк (помеченных NLS или обернутых в UtLang.t)
+ */
+localize.filter_localized = {StrItem item ->
+    if (item.mark == StrItem.nlsMark || localize.is_localize_func(item.func)) {
+        return true
+    }
+    return false
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+
+//
+lang_check = cm("Сбор непомеченных строковых констант, требующих перевода") {
+    def items = localize.grab_strs()
+    StringBuilder sb = new StringBuilder()
+    def cnt = 0
+    for (item in items) {
+        if (localize.filter_notlocalized(item)) {
+            cnt++
+            sb.append("""${'-' * 80} ${fu.filename(item.filename)}:${item.lineNo} => ${item.filename}
+${item.str}
+""")
+        }
+    }
+    log "Found not localized strings: ${cnt}"
+    def fn = wd("temp/lang-check.txt")
+    log "save file: ${fn}"
+    UtFile.saveString(sb.toString(), new File(fn))
+}
+
+//
+//
+lang_grab = cm("Сбор строк для перевода") {
+    // собираем строки из исходников
+    def items = localize.grab_strs()
+    // фильтруем нужные
+    def tmp = []
+    for (item in items) {
+        if (localize.filter_localized(item)) {
+            tmp.add(item)
+        }
+    }
+    // собираем из xml
+    def tmp2 = localize.grab_strs_xml()
+    tmp.addAll(tmp2)
+    // убираем дубли
+    items = UtLangtools.removeDup(tmp)
+    //
+    items.sort()
+    EasyXml x = new EasyXml()
+    def cnt = 0
+    for (item in items) {
+        def x1 = x.addChild("i")
+        def x2 = x1.addChild("s")
+        x2.value = item.str
+    }
+    log "Found localized strings: ${items.size()}"
+    //def fn = wd("temp/for-translate--${project.name}.xml")
+    def wd1 = wd.dir(dirs_src[0] + "/" + package_root_dir)
+    def fn = wd1(localize.lang_file_grab)
+    log "save file: ${fn}"
+    ut.cleanfile(fn)
+    EasyXmlSaver sv = new EasyXmlSaver(x)
+    sv.setAlwaysCloseTag(true)
+    sv.save().toFile(new File(fn))
+}
+
+//
+lang_update = cm("Обновление файлов перевода") {
+    // получаем список файлов с ключами
+    def wd1 = wd.dir(dirs_src[0] + "/" + package_root_dir)
+    def files = []
+    files.add(wd1(localize.lang_file_grab))
+    for (f in localize.lang_files) {
+        files.add(wd1(f))
+    }
+    for (f in files) {
+        log "Key file: ${f}"
+        def origData = localize.loadTranslateFile(f)
+        //
+        def mask = fu.basename(f) + "-*." + fu.ext(f)
+        def files1 = ut.filelist(mask, fu.path(f))
+        for (f1 in files1) {
+            log "Translate file: ${f1}"
+            def trData = localize.loadTranslateFile(f1)
+            // создаем новый файл
+            def tmpData = [:]
+            // ищем существующие переводы
+            for (item in origData) {
+                def itm1 = [:]
+                def v = trData.get(item.key)
+                if (v != null && v != "" && v != item.key) {
+                    // имеется перевод, вставляем его
+                    itm1.translated = true
+                    itm1.value = v
+                } else {
+                    itm1.translated = false
+                }
+                tmpData[item.key] = itm1
+            }
+            // ищем переводы, которые не актуальные уже
+            for (item in trData) {
+                def v = origData.get(item.key)
+                if (v == null || v == "") {
+                    // в переводе есть, в оригинале нет
+                    def itm1 = [:]
+                    itm1.translated = true
+                    itm1.actual = false
+                    itm1.value = v
+                    tmpData[item.key] = itm1
+                }
+            }
+            // сортируем
+            tmpData = UtLangtools.sortMap(tmpData)
+            // записываем
+            EasyXml x = new EasyXml()
+            for (item in tmpData) {
+                def x1 = x.addChild("i")
+                def xK = x1.addChild("s")
+                def xV = x1.addChild("t")
+                xK.value = item.key
+                def v = item.value.value
+                if (v != null && v != "" && v != item.key) {
+                    // имеется перевод, вставляем его
+                    xV.value = v
+                }
+                if (item.value.translated == false) {
+                    x1.attrs["translated"] = "false"
+                }
+                if (item.value.actual == false) {
+                    x1.attrs["actual"] = "false"
+                }
+            }
+            EasyXmlSaver sv = new EasyXmlSaver(x)
+            sv.setAlwaysCloseTag(true)
+            sv.save().toFile(new File(f1))
+        }
+    }
+}

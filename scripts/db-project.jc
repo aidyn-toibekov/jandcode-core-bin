@@ -1,0 +1,123 @@
+//#classpath=jandcode-dbm
+
+/**
+ * Проект с поддержкой баз данных
+ */
+
+import jandcode.dbm.jc.*
+
+DbmProjectExt dbmext = createExt(DbmProjectExt)
+
+// help по умолчанию для указания модели
+def HELP_M = [value: "default", help: "Имя зарегистрированной модели. По умолчанию 'default'"]
+
+/////////////////////
+
+db_info = cm("Информация о базе данных и проверка соединения",
+        c: [value: false, help: "Проверить установку соединения"],
+        m: HELP_M,
+        a: [value: false, help: "Для всех зарегистрированных моделей"]
+) {
+    if (args.a) {
+        for (mn in dbmext.models) {
+            dbmext.modelName = mn.name
+            dbmext.printDbInfo()
+            if (args.c) {
+                dbmext.checkConnect()
+            }
+        }
+    } else {
+        dbmext.modelName = args.m
+        dbmext.printDbInfo()
+        if (args.c) {
+            dbmext.checkConnect()
+        }
+    }
+}
+
+db_create = cm("Создание базы данных и (или) скриптов на создание базы",
+        e: [help: "Не загружать тестовые данные"],
+        d: [help: "Не загружать данные по умолчанию"],
+        c: [help: "Не создавать структуру базы"],
+        g: [help: "Только генерация скриптов"],
+        m: HELP_M
+) {
+    dbmext.modelName = args.m
+    dbmext.printDbInfo()
+    dbmext.generateDbScript(true, !args.e)
+    if (args.g) {
+        return
+    }
+    dbmext.createDatabase(false, !args.c, !args.d, !args.e)
+}
+
+db_drop = cm("Удалить базу данных",
+        m: HELP_M
+) {
+    dbmext.modelName = args.m
+    dbmext.printDbInfo()
+    dbmext.dropDatabase()
+}
+
+db_data = cm("Данные для базы данных",
+        n: [value: "prod", help: """Имя dbdata данных. По умолчанию - prod
+"""],
+        t: [value: "xml", help: "Формат данных (xml, text). По умолчанию - xml"],
+        m: HELP_M
+) {
+    dbmext.modelName = args.m
+    def format = args.t
+    def outdir = wd("temp/dbdata.${args.n}.${format}")
+    if (format == "xml") {
+        ut.cleandir(outdir)
+        dbmext.saveDataToXml(args.n, outdir)
+    } else if (format == "text") {
+        ut.cleandir(outdir)
+        dbmext.saveDataToText(args.n, outdir)
+    } else {
+        error("Формат ${format} не верный")
+    }
+}
+
+db_create_ref = cm("Создание references",
+        ie: [help: 'Игнорировать ошибки'],
+        m: HELP_M
+) {
+    dbmext.modelName = args.m
+    dbmext.createRef(args.ie)
+}
+
+db_drop_ref = cm("Удаление references",
+        ie: [help: 'Игнорировать ошибки'],
+        m: HELP_M
+) {
+    dbmext.modelName = args.m
+    dbmext.dropRef(args.ie)
+}
+
+db_doc = cm("Генерация документации по базе данных",
+        m: HELP_M
+) {
+    dbmext.modelName = args.m
+    def fn = "index.html"
+    //
+    def outdir = wd("temp/db.doc/" + dbmext.model.name)
+    //
+    ut.cleandir(outdir)
+    ut.generate("scripts/dbdoc/dbdoc.gsp", outdir, [db: dbmext.db, outfile: fn])
+    //
+    def dots = ut.filelist("${outdir}/images/*.dot")
+    log "make diagrams..."
+    for (f in dots) {
+        def f1 = fu.removeExt(f) + ".png"
+        ut.runexe(cmd: "dot ${f} -Tpng -o${f1}")
+    }
+    log "ok"
+}
+
+db_recover_id = cm("Восстановление id после ручной загрузки данных",
+        m: HELP_M
+) {
+    dbmext.modelName = args.m
+    dbmext.recoverId()
+}

@@ -1,0 +1,74 @@
+import jandcode.utils.easyxml.*
+
+/*
+    idea support
+*/
+
+project.event("ideaGenIPR") {m ->
+
+    def x_art = m.x.findChild("component@ArtifactManager/artifact@wax-debug-app", true)
+    x_art["@type"] = "exploded-war"
+    x_art["@build-on-make"] = true
+    x_art["output-path"] = "\$PROJECT_DIR\$/out/artifacts/wax-debug-app_exploded"
+
+    def x_root = x_art.findChild("root@id=root", true)
+    def x1 = x_root.findChild("element@WEB-INF", true)
+    x1.clearChilds()
+    x1["@id"] = "directory"
+
+    // source module
+
+    def x2 = x1.findChild("element@classes", true)
+    x2["@id"] = "directory"
+
+    for (a in m.libs) {
+        boolean isModule = a.project != null
+        if (!isModule) continue
+        def x3 = x2.findChild("element@${a.name}", true)
+        x3["@id"] = "module-output"
+    }
+
+    // library
+
+    x2 = x1.findChild("element@lib", true)
+    x2["@id"] = "directory"
+
+    for (a in m.libs) {
+        boolean isModule = a.project != null
+        if (isModule) continue
+        def x3 = x2.findChild("element@${a.name}", true)
+        x3["@id"] = "library"
+        x3["@level"] = "module"
+        x3["@module-name"] = m.prj.name
+    }
+
+    // web.xml
+    x1 = x_root.findChild("element@id=javaee-facet-resources", true)
+    x1.clearChilds()
+    x1["@facet"] = "${m.prj.name}/web/Web"
+
+    // run
+    def x_run = m.x.findChild("component@ProjectRunConfigurationManager/configuration@wax-run", true)
+    if (x_run.getValueString("@type") == "") {
+        def tml = repo.getFile("scripts/wax/template_idea_run_tomcat.xml")
+        def x_tml = new EasyXml()
+        x_tml.load().fromFile(tml)
+        x_run.join(x_tml)
+    }
+}
+
+project.event("ideaGenIML") {m ->
+    def x = m.x.findChild("component@FacetManager", true)
+    def x1 = x.findChild("facet@Web", true)
+    x1["@type"] = "web"
+
+    def x2 = x1.findChild("configuration/descriptors/deploymentDescriptor@web.xml", true)
+    x2["@url"] = "file://\$MODULE_DIR\$/web/WEB-INF/web.xml"
+
+    x2 = x1.findChild("configuration/webroots/root", true)
+    x2["@url"] = "file://\$MODULE_DIR\$/web"
+    x2["@relative"] = "/"
+
+    x2 = x1.findChild("configuration/sourceRoots/root", true)
+    x2["@url"] = "file://\$MODULE_DIR\$/src"
+}

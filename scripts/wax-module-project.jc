@@ -1,0 +1,24 @@
+/*
+   Модуль wax
+
+   Перед подключением файла нужно установить:
+        project.name
+        project.package_root
+
+*/
+
+//
+include "java-project"
+
+//
+if (project.package_root == "") {
+    project.package_root = project.name.replace("-", ".")
+}
+if (project.version == "") {
+    project.version = ut.version()
+}
+
+//
+libs = ["jandcode-wax-core"]
+libs_dev = ["junit"]
+

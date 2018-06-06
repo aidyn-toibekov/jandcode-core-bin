@@ -1,0 +1,172 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Конфигурация приложения &mdash; jandcode-app</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-app" href="index.html" />
+    <link rel="next" title="Создание экземпляров объектов по rt" href="objectfactory.html" />
+    <link rel="prev" title="Инициализация приложения" href="load.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li class="right" >
+          <a href="objectfactory.html" title="Создание экземпляров объектов по rt"
+             accesskey="N">следующий</a> |</li>
+        <li class="right" >
+          <a href="load.html" title="Инициализация приложения"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-app</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Конфигурация приложения<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Конфигурация приложения загружается из одного rt-файла. Обычно он имеет имя <tt class="docutils literal"><span class="pre">app.rt</span></tt>.</p>
+<div class="section" id="id2">
+<h2>Узлы конфигурации<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="section" id="app">
+<h3>app (узел)<a class="headerlink" href="#app" title="Ссылка на этот заголовок">¶</a></h3>
+<p>В этом узле хранятся свойства приложения. Пример:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!-- file: d:/project/myproject/app.rt --&gt;</span>
+<span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;app</span> <span class="na">appdir=</span><span class="s">&quot;#{path}&quot;</span> <span class="na">debug=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="appdir">
+<h4>appdir (атрибут)<a class="headerlink" href="#appdir" title="Ссылка на этот заголовок">¶</a></h4>
+<p>Каталог приложения. Определяет корневой каталог приложения. Если не задан, определяется
+как каталог, из которого был загружен файл конфигурации приложения. Обычно используется
+для указания каталога приложения в случаях, когда конфигурация приложения загружается
+не из каталога приложения. Например, таким образом можно сообщить
+<em>&#8220;каталогом приложения является каталог, в котором лежит файл app.rt&#8221;</em>:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!-- file: d:/project/myproject/app.rt --&gt;</span>
+<span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;app</span> <span class="na">appdir=</span><span class="s">&quot;#{path}&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+<p>В этом случае значение атрибута <tt class="docutils literal"><span class="pre">appdir=d:/project/myproject</span></tt>.</p>
+</div>
+<div class="section" id="debug">
+<h4>debug (атрибут)<a class="headerlink" href="#debug" title="Ссылка на этот заголовок">¶</a></h4>
+<p>При значении <tt class="docutils literal"><span class="pre">true</span></tt> приложение работает в отладочном режиме. По умолчанию <tt class="docutils literal"><span class="pre">false</span></tt>.
+Отладочный режим можно, например, использовать для формирования расширенных
+сообщений об ошибках или вывода отладочной информации непосредственно в приложении.
+В приложении доступно через <tt class="docutils literal"><span class="pre">App.isDebug()</span></tt> или <tt class="docutils literal"><span class="pre">App.isRelease()</span></tt>.
+Пример:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!-- file: d:/project/myproject/app.rt --&gt;</span>
+<span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;app</span> <span class="na">debug=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+<p>При этой настройке:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="k">assert</span> <span class="n">App</span><span class="o">.</span><span class="na">isDebug</span><span class="o">()</span> <span class="o">==</span> <span class="kc">true</span>
+<span class="k">assert</span> <span class="n">App</span><span class="o">.</span><span class="na">isRelease</span><span class="o">()</span> <span class="o">==</span> <span class="kc">false</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Содержание</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Конфигурация приложения</a><ul>
+<li><a class="reference internal" href="#id2">Узлы конфигурации</a><ul>
+<li><a class="reference internal" href="#app">app (узел)</a><ul>
+<li><a class="reference internal" href="#appdir">appdir (атрибут)</a></li>
+<li><a class="reference internal" href="#debug">debug (атрибут)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="load.html"
+                        title="предыдущая глава">Инициализация приложения</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="objectfactory.html"
+                        title="следующая глава">Создание экземпляров объектов по rt</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/config.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li class="right" >
+          <a href="objectfactory.html" title="Создание экземпляров объектов по rt"
+             >следующий</a> |</li>
+        <li class="right" >
+          <a href="load.html" title="Инициализация приложения"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-app</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

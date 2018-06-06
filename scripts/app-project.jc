@@ -1,0 +1,10 @@
+/**
+ * Поддержка jandcode.app.App в скриптах
+ * См: jandcode.jc.AppProjectExt
+ */
+
+app = createExt("jandcode.jc.AppProjectExt")
+
+saveapprt = cm("Записать App.getRt() в файл") {
+    app.saveapprt(wd("temp/apprt-{0}.rt"))
+}

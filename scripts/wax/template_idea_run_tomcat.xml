@@ -1,0 +1,64 @@
+<configuration default="false" name="wax-run"
+               type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory"
+               factoryName="Local" APPLICATION_SERVER_NAME="wax-tomcat">
+    <option name="OPEN_IN_BROWSER" value="false"/>
+    <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/wax/"/>
+    <option name="UPDATE_ON_FRAME_DEACTIVATION" value="true"/>
+    <option name="UPDATE_CLASSES_ON_FRAME_DEACTIVATION" value="true"/>
+    <option name="SHOW_DIALOG_ON_UPDATE" value="false"/>
+    <option name="UPDATING_POLICY" value="restart-server"/>
+    <deployment>
+        <artifact name="wax-debug-app">
+            <settings>
+                <option name="CONTEXT_PATH" value="/wax"/>
+            </settings>
+        </artifact>
+    </deployment>
+    <server-settings>
+        <option name="BASE_DIRECTORY_NAME" value="Unnamed_myapp1_3"/>
+    </server-settings>
+    <predefined_log_file id="TOMCAT_LOCALHOST_LOG_ID" enabled="true"/>
+    <extension name="coverage" enabled="false" merge="false" sample_coverage="true"
+               runner="idea"/>
+    <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="62777"/>
+        <option name="TRANSPORT" value="0"/>
+        <option name="LOCAL" value="true"/>
+    </RunnerSettings>
+    <RunnerSettings RunnerId="Run"/>
+    <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
+        <option name="USE_ENV_VARIABLES" value="true"/>
+        <STARTUP>
+            <option name="USE_DEFAULT" value="true"/>
+            <option name="SCRIPT" value="%IDEA_RUN:TOMCAT_HOME%/bin/catalina.bat"/>
+            <option name="VM_PARAMETERS" value=""/>
+            <option name="PROGRAM_PARAMETERS" value="run"/>
+        </STARTUP>
+        <SHUTDOWN>
+            <option name="USE_DEFAULT" value="true"/>
+            <option name="SCRIPT" value="%IDEA_RUN:TOMCAT_HOME%/bin/catalina.bat"/>
+            <option name="VM_PARAMETERS" value=""/>
+            <option name="PROGRAM_PARAMETERS" value="stop"/>
+        </SHUTDOWN>
+    </ConfigurationWrapper>
+    <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
+        <option name="USE_ENV_VARIABLES" value="true"/>
+        <STARTUP>
+            <option name="USE_DEFAULT" value="true"/>
+            <option name="SCRIPT" value="%IDEA_RUN:TOMCAT_HOME%/bin/catalina.bat"/>
+            <option name="VM_PARAMETERS" value=""/>
+            <option name="PROGRAM_PARAMETERS" value="run"/>
+        </STARTUP>
+        <SHUTDOWN>
+            <option name="USE_DEFAULT" value="true"/>
+            <option name="SCRIPT" value="%IDEA_RUN:TOMCAT_HOME%/bin/catalina.bat"/>
+            <option name="VM_PARAMETERS" value=""/>
+            <option name="PROGRAM_PARAMETERS" value="stop"/>
+        </SHUTDOWN>
+    </ConfigurationWrapper>
+    <method>
+        <option name="BuildArtifacts" enabled="true">
+            <artifact name="wax-debug-app"/>
+        </option>
+    </method>
+</configuration>

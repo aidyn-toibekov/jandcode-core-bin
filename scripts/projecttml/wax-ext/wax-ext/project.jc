@@ -1,0 +1,13 @@
+//
+load '..'
+//
+project.name = "wax-ext"
+project.package_root = "wax.ext"
+//
+include "wax-module-project"
+include "localize-project"
+//
+libs = libs + []
+libs_dev = libs_dev + []
+//
+

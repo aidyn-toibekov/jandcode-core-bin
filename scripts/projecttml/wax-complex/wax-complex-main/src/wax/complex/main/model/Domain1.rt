@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+
+    <domain name="Domain1" parent="wax.Table" tag.db="true">
+
+        <field name="s1" parent="string" size="50"/>
+
+        <dao name="list" class="wax.complex.main.model.Domain1_list"/>
+        <dao name="updater" class="wax.complex.main.model.Domain1_updater"/>
+    </domain>
+
+</root>

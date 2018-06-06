@@ -1,0 +1,67 @@
+
+Разные заметки
+**************
+
+url по умолчанию
+================
+
+По умолчанию (если url не содержит pathinfo) отдается файл ``/page/index.html``.
+Например::
+
+    http://localhost:8080/context
+
+эквивалентно::
+
+    http://localhost:8080/context/page/index.html
+
+
+web.xml по умолчанию
+====================
+
+Содержимое файла ``web.xml`` по умолчанию:
+
+.. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <web-app xmlns="http://java.sun.com/xml/ns/javaee"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+              http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+             version="2.5">
+
+        <servlet>
+            <servlet-name>jandcode-web</servlet-name>
+            <servlet-class>jandcode.web.JcServlet</servlet-class>
+            <init-param>
+                <param-name>app.rt</param-name>
+                <param-value>app.rt</param-value>
+            </init-param>
+            <init-param>
+                <param-name>log</param-name>
+                <param-value>_log.properties</param-value>
+            </init-param>
+            <load-on-startup>1</load-on-startup>
+        </servlet>
+
+        <servlet-mapping>
+            <servlet-name>jandcode-web</servlet-name>
+            <url-pattern>/*</url-pattern>
+        </servlet-mapping>
+
+        <error-page>
+            <exception-type>java.lang.Exception</exception-type>
+            <location>/showerror</location>
+        </error-page>
+
+    </web-app>
+
+
+content-type
+============
+
+content-type должен быть установлен до того, как будет вызван request.getOutWriter()
+или request.getOutStream(). Точнее (по спецификации) до первого flush(), но лучше
+перестраховаться.
+
+
+

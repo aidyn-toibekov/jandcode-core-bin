@@ -1,0 +1,14 @@
+
+showlibs = cm("Список доступных библиотек",
+        d: [help: "Список библиотек через ','. Будут показаны вместе с зависимостями", value: ""]
+) {
+  def deps = args.getValueString("d", "")
+  def lst
+  if (deps.length() > 0) {
+    lst = repo.getLibs(deps)
+  } else {
+    lst = repo.getLibs()
+  }
+  ut.showlibs(lst)
+}
+

@@ -1,0 +1,163 @@
+
+.. _app-service:
+
+Сервисы приложения
+==================
+
+Сервисом является глобальный экземпляр класса, который реализует определенный интерфейс.
+Сервисы в приложении доступны через интерфейс, который они реализуют. В качестве
+интерфейса могут быть использованы обычные интерфейсы (interface), абстрактные классы,
+обычные классы.
+
+Сервисы создаются в процессе загрузки приложения и существуют все время жизни приложения.
+
+Сервисы в приложении описываются как дочерние узлы узла ``service``. Имя узла -
+это имя класса-интерфейса сервиса. Значение атрибута ``class`` - это класс реализатор
+сервиса:
+
+.. code-block:: xml
+
+    <root>
+        <service name="jandcode.app.ErrorService"
+                 class="jandcode.app.impl.ErrorServiceImpl"/>
+
+        <service name="jandcode.app.ReloadService"
+                 class="jandcode.app.impl.ReloadServiceImpl"/>
+    </root>
+
+
+Доступ к сервисам осуществляется через метод ``App.service(interfaceClass)``, где
+в качестве параметра передается интерфейсный класс сервиса:
+
+.. code-block:: java
+
+    ErrorFormatter fmt = getApp().service(ErrorService.class).getErrorFormatter();
+
+Активация сервисов
+------------------
+
+Если сервис реализует интерфейсы ``jandcode.app.IActivate``, ``jandcode.app.IAfterActivate``,
+или ``jandcode.app.IBeforeActivate``
+то он активируется в процессе :ref:`активации приложения <app-load_activate>`.
+
+
+Пример 1
+--------
+
+Создадим некий простой сервис:
+
+.. code-block:: java
+
+    package myapp;
+
+    // абстрактный интерфейс сервиса
+    public abstract class TimerService implements IActivate {
+        public abstract void startTimer();
+        public abstract long stopTimer();
+    }
+
+    // реализация сервиса
+    public class TimerServiceImpl extends TimerService {
+        private long saveTimer;
+
+        public void startTimer() {
+            saveTimer = System.currentTimeMillis();
+        }
+
+        public long stopTimer() {
+            return System.currentTimeMillis() - saveTimer;
+        }
+
+        public void activate() throws Exception {
+            startTimer();
+        }
+    }
+
+Далее сервис нужно описать в конфигурации (rt-файле):
+
+.. code-block:: xml
+
+    <root>
+        <service name="myapp.TimerService" class="myapp.TimerServiceImpl"/>
+    </root>
+
+что эквивалентно:
+
+.. code-block:: xml
+
+    <root>
+        <service>
+            <myapp.TimerService class="myapp.TimerServiceImpl"/>
+        </service>
+    </root>
+
+Используем сервис:
+
+.. code-block:: java
+
+    getApp().service(TimerService.class).startTimer()
+
+Пример 2. Без абстрактного интерфейса
+-------------------------------------
+
+Создадим простой сервис без абстрактного интерфейса. Фактически просто глобальный
+экземпляр объекта:
+
+.. code-block:: java
+
+    package myapp;
+
+    // интерфейс и реализация сервиса
+    public class TimerService implements IActivate {
+        private long saveTimer;
+
+        public void startTimer() {
+            saveTimer = System.currentTimeMillis();
+        }
+
+        public long stopTimer() {
+            return System.currentTimeMillis() - saveTimer;
+        }
+
+        public void activate() throws Exception {
+            startTimer();
+        }
+    }
+
+Далее сервис нужно описать в конфигурации (rt-файле). В качестве имени и атрибута
+``class`` указываем один и тот же класс:
+
+.. code-block:: xml
+
+    <root>
+        <service name="myapp.TimerService" class="myapp.TimerService"/>
+    </root>
+
+Пример 3. Замена реализации сервиса
+-----------------------------------
+
+Создадим альтернативную реализацию сервиса, описанного в предыдущем примере.
+
+.. code-block:: java
+
+    package myapp2;
+    import myapp.*;
+    // интерфейс и реализация сервиса
+    public class TimerServiceWithLog extends TimerService {
+        protected static Log log = LogFactory.getLog(TimerServiceWithLog.class);
+        public long stopTimer() {
+            long a = super.stopTimer();
+            log.info("timer stopped with: "+a);
+            return a;
+        }
+    }
+
+Далее сервис нужно описать в конфигурации (rt-файле). Заменяем существующему сервису
+атрибут ``class``:
+
+.. code-block:: xml
+
+    <root>
+        <service name="myapp.TimerService" class="myapp2.TimerServiceWithLog"/>
+    </root>
+

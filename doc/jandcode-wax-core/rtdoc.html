@@ -1,0 +1,656 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Rt конфигурация &mdash; jandcode-wax-core</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-wax-core" href="index.html" />
+    <link rel="prev" title="Структура модуля приложения" href="module-struct.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li class="right" >
+          <a href="module-struct.html" title="Структура модуля приложения"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-wax-core</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rt">
+<h1>Rt конфигурация<a class="headerlink" href="#rt" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#app" id="id21">&lt;app&gt;</a><ul>
+<li><a class="reference internal" href="#title-string" id="id22">title=&#8221;string&#8221;</a></li>
+<li><a class="reference internal" href="#titleshort-string" id="id23">titleShort=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#web" id="id24">&lt;web&gt;</a><ul>
+<li><a class="reference internal" href="#theme" id="id25">&lt;theme&gt;</a><ul>
+<li><a class="reference internal" href="#default-string" id="id26">default=&#8221;string&#8221;</a></li>
+<li><a class="reference internal" href="#theme-name" id="id27">&lt;THEME-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#jsclass-jsclass" id="id28">jsclass=&#8221;jsclass&#8221;</a></li>
+<li><a class="reference internal" href="#item" id="id29">&lt;item&gt;</a><ul>
+<li><a class="reference internal" href="#item-name" id="id30">&lt;ITEM-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#path-path" id="id31">path=&#8221;path&#8221;</a></li>
+<li><a class="reference internal" href="#pathdebug-path" id="id32">pathDebug=&#8221;path&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#model" id="id33">&lt;model&gt;</a><ul>
+<li><a class="reference internal" href="#model-name" id="id34">&lt;MODEL-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#field" id="id35">&lt;field&gt;</a><ul>
+<li><a class="reference internal" href="#field-name" id="id36">&lt;FIELD-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#visible-bool" id="id37">visible=&#8221;bool&#8221;</a></li>
+<li><a class="reference internal" href="#editable-bool" id="id38">editable=&#8221;bool&#8221;</a></li>
+<li><a class="reference internal" href="#weight-int" id="id39">weight=&#8221;int&#8221;</a></li>
+<li><a class="reference internal" href="#js" id="id40">&lt;js&gt;</a><ul>
+<li><a class="reference internal" href="#column" id="id41">&lt;column&gt;</a><ul>
+<li><a class="reference internal" href="#jsclass-string" id="id42">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#input" id="id43">&lt;input&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-field-field-name-js-input-jsclass" id="id44">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#datalabel" id="id45">&lt;datalabel&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-field-field-name-js-datalabel-jsclass" id="id46">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#domain" id="id47">&lt;domain&gt;</a><ul>
+<li><a class="reference internal" href="#domain-name" id="id48">&lt;DOMAIN-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-domain-domain-name-js" id="id49">&lt;js&gt;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="app">
+<span id="rt-app"></span><h2><a class="toc-backref" href="#id21">&lt;app&gt;</a><a class="headerlink" href="#app" title="Ссылка на этот заголовок">¶</a></h2>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">app</span></tt></p>
+<div class="contents local topic" id="id1">
+<ul class="simple">
+<li><a class="reference internal" href="#title-string" id="id50">title=&#8221;string&#8221;</a></li>
+<li><a class="reference internal" href="#titleshort-string" id="id51">titleShort=&#8221;string&#8221;</a></li>
+</ul>
+</div>
+<div class="section" id="title-string">
+<span id="rt-app-title"></span><h3><a class="toc-backref" href="#id50">title=&#8221;string&#8221;</a><a class="headerlink" href="#title-string" title="Ссылка на этот заголовок">¶</a></h3>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">app:title</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">string</span></tt></p>
+<p>Заголовок приложения</p>
+</div>
+<div class="section" id="titleshort-string">
+<span id="rt-app-titleshort"></span><h3><a class="toc-backref" href="#id51">titleShort=&#8221;string&#8221;</a><a class="headerlink" href="#titleshort-string" title="Ссылка на этот заголовок">¶</a></h3>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">app:titleShort</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">string</span></tt></p>
+<p>Краткий заголовок приложения</p>
+</div>
+</div>
+<div class="section" id="web">
+<span id="rt-web"></span><h2><a class="toc-backref" href="#id24">&lt;web&gt;</a><a class="headerlink" href="#web" title="Ссылка на этот заголовок">¶</a></h2>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">web</span></tt></p>
+<div class="contents local topic" id="id2">
+<ul class="simple">
+<li><a class="reference internal" href="#theme" id="id52">&lt;theme&gt;</a><ul>
+<li><a class="reference internal" href="#default-string" id="id53">default=&#8221;string&#8221;</a></li>
+<li><a class="reference internal" href="#theme-name" id="id54">&lt;THEME-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#jsclass-jsclass" id="id55">jsclass=&#8221;jsclass&#8221;</a></li>
+<li><a class="reference internal" href="#item" id="id56">&lt;item&gt;</a><ul>
+<li><a class="reference internal" href="#item-name" id="id57">&lt;ITEM-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#path-path" id="id58">path=&#8221;path&#8221;</a></li>
+<li><a class="reference internal" href="#pathdebug-path" id="id59">pathDebug=&#8221;path&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="theme">
+<span id="rt-web-theme"></span><h3><a class="toc-backref" href="#id52">&lt;theme&gt;</a><a class="headerlink" href="#theme" title="Ссылка на этот заголовок">¶</a></h3>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">web/theme</span></tt> , <em>тип:</em> <tt class="docutils literal"><span class="pre">list</span></tt></p>
+<div class="contents local topic" id="id3">
+<ul class="simple">
+<li><a class="reference internal" href="#default-string" id="id60">default=&#8221;string&#8221;</a></li>
+<li><a class="reference internal" href="#theme-name" id="id61">&lt;THEME-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#jsclass-jsclass" id="id62">jsclass=&#8221;jsclass&#8221;</a></li>
+<li><a class="reference internal" href="#item" id="id63">&lt;item&gt;</a><ul>
+<li><a class="reference internal" href="#item-name" id="id64">&lt;ITEM-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#path-path" id="id65">path=&#8221;path&#8221;</a></li>
+<li><a class="reference internal" href="#pathdebug-path" id="id66">pathDebug=&#8221;path&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Конфигурация тем.</p>
+<p>Пример:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;web&gt;</span>
+        <span class="nt">&lt;theme&gt;</span>
+            <span class="nt">&lt;mytheme</span> <span class="na">parent=</span><span class="s">&quot;web/theme/base&quot;</span> <span class="na">jsclass=</span><span class="s">&quot;Jc.theme.Ide&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&quot;ext-all.css&quot;</span> <span class="na">path=</span><span class="s">&quot;/js/ext4/resources/css/ext-all-gray.css&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/mytheme&gt;</span>
+        <span class="nt">&lt;/theme&gt;</span>
+    <span class="nt">&lt;/web&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="default-string">
+<span id="rt-web-theme-default"></span><h4><a class="toc-backref" href="#id60">default=&#8221;string&#8221;</a><a class="headerlink" href="#default-string" title="Ссылка на этот заголовок">¶</a></h4>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">web/theme:default</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">string</span></tt></p>
+<p>Имя темы по умолчанию.</p>
+</div>
+<div class="section" id="theme-name">
+<span id="rt-web-theme-theme-name"></span><h4><a class="toc-backref" href="#id61">&lt;THEME-NAME&gt;</a><a class="headerlink" href="#theme-name" title="Ссылка на этот заголовок">¶</a></h4>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">web/theme/THEME-NAME</span></tt></p>
+<div class="contents local topic" id="id4">
+<ul class="simple">
+<li><a class="reference internal" href="#jsclass-jsclass" id="id67">jsclass=&#8221;jsclass&#8221;</a></li>
+<li><a class="reference internal" href="#item" id="id68">&lt;item&gt;</a><ul>
+<li><a class="reference internal" href="#item-name" id="id69">&lt;ITEM-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#path-path" id="id70">path=&#8221;path&#8221;</a></li>
+<li><a class="reference internal" href="#pathdebug-path" id="id71">pathDebug=&#8221;path&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Описание темы. Имя узла - имя темы</p>
+<div class="section" id="jsclass-jsclass">
+<span id="rt-web-theme-theme-name-jsclass"></span><h5><a class="toc-backref" href="#id67">jsclass=&#8221;jsclass&#8221;</a><a class="headerlink" href="#jsclass-jsclass" title="Ссылка на этот заголовок">¶</a></h5>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">web/theme/THEME-NAME:jsclass</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">jsclass</span></tt></p>
+<p>Имя js-класса с клиентской частью темы.</p>
+</div>
+<div class="section" id="item">
+<span id="rt-web-theme-theme-name-item"></span><h5><a class="toc-backref" href="#id68">&lt;item&gt;</a><a class="headerlink" href="#item" title="Ссылка на этот заголовок">¶</a></h5>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">web/theme/THEME-NAME/item</span></tt> , <em>тип:</em> <tt class="docutils literal"><span class="pre">list</span></tt></p>
+<div class="contents local topic" id="id5">
+<ul class="simple">
+<li><a class="reference internal" href="#item-name" id="id72">&lt;ITEM-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#path-path" id="id73">path=&#8221;path&#8221;</a></li>
+<li><a class="reference internal" href="#pathdebug-path" id="id74">pathDebug=&#8221;path&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Список css/js/gsp, которые нужны для темы.
+Каждый элемент может иметь дочерние item.</p>
+<div class="section" id="item-name">
+<span id="rt-web-theme-theme-name-item-item-name"></span><h6><a class="toc-backref" href="#id72">&lt;ITEM-NAME&gt;</a><a class="headerlink" href="#item-name" title="Ссылка на этот заголовок">¶</a></h6>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">web/theme/THEME-NAME/item/ITEM-NAME</span></tt></p>
+<div class="contents local topic" id="id6">
+<ul class="simple">
+<li><a class="reference internal" href="#path-path" id="id75">path=&#8221;path&#8221;</a></li>
+<li><a class="reference internal" href="#pathdebug-path" id="id76">pathDebug=&#8221;path&#8221;</a></li>
+</ul>
+</div>
+<p>css</p>
+<div class="section" id="path-path">
+<span id="rt-web-theme-theme-name-item-item-name-path"></span><h7><a class="toc-backref" href="#id75">path=&#8221;path&#8221;</a><a class="headerlink" href="#path-path" title="Ссылка на этот заголовок">¶</a></h7>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">web/theme/THEME-NAME/item/ITEM-NAME:path</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">path</span></tt></p>
+<p>Виртуальный путь до css/js/gsp файла</p>
+</div>
+<div class="section" id="pathdebug-path">
+<span id="rt-web-theme-theme-name-item-item-name-pathdebug"></span><h7><a class="toc-backref" href="#id76">pathDebug=&#8221;path&#8221;</a><a class="headerlink" href="#pathdebug-path" title="Ссылка на этот заголовок">¶</a></h7>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">web/theme/THEME-NAME/item/ITEM-NAME:pathDebug</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">path</span></tt></p>
+<p>Виртуальный путь до css/js/gsp файла,
+который нужно использовать вместо path в отладочном режиме</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="model">
+<span id="rt-model"></span><h2><a class="toc-backref" href="#id33">&lt;model&gt;</a><a class="headerlink" href="#model" title="Ссылка на этот заголовок">¶</a></h2>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">model</span></tt></p>
+<div class="contents local topic" id="id7">
+<ul class="simple">
+<li><a class="reference internal" href="#model-name" id="id77">&lt;MODEL-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#field" id="id78">&lt;field&gt;</a><ul>
+<li><a class="reference internal" href="#field-name" id="id79">&lt;FIELD-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#visible-bool" id="id80">visible=&#8221;bool&#8221;</a></li>
+<li><a class="reference internal" href="#editable-bool" id="id81">editable=&#8221;bool&#8221;</a></li>
+<li><a class="reference internal" href="#weight-int" id="id82">weight=&#8221;int&#8221;</a></li>
+<li><a class="reference internal" href="#js" id="id83">&lt;js&gt;</a><ul>
+<li><a class="reference internal" href="#column" id="id84">&lt;column&gt;</a><ul>
+<li><a class="reference internal" href="#jsclass-string" id="id85">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#input" id="id86">&lt;input&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-field-field-name-js-input-jsclass" id="id87">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#datalabel" id="id88">&lt;datalabel&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-field-field-name-js-datalabel-jsclass" id="id89">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#domain" id="id90">&lt;domain&gt;</a><ul>
+<li><a class="reference internal" href="#domain-name" id="id91">&lt;DOMAIN-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-domain-domain-name-js" id="id92">&lt;js&gt;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="model-name">
+<span id="rt-model-model-name"></span><h3><a class="toc-backref" href="#id77">&lt;MODEL-NAME&gt;</a><a class="headerlink" href="#model-name" title="Ссылка на этот заголовок">¶</a></h3>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">model/MODEL-NAME</span></tt></p>
+<div class="contents local topic" id="id8">
+<ul class="simple">
+<li><a class="reference internal" href="#field" id="id93">&lt;field&gt;</a><ul>
+<li><a class="reference internal" href="#field-name" id="id94">&lt;FIELD-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#visible-bool" id="id95">visible=&#8221;bool&#8221;</a></li>
+<li><a class="reference internal" href="#editable-bool" id="id96">editable=&#8221;bool&#8221;</a></li>
+<li><a class="reference internal" href="#weight-int" id="id97">weight=&#8221;int&#8221;</a></li>
+<li><a class="reference internal" href="#js" id="id98">&lt;js&gt;</a><ul>
+<li><a class="reference internal" href="#column" id="id99">&lt;column&gt;</a><ul>
+<li><a class="reference internal" href="#jsclass-string" id="id100">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#input" id="id101">&lt;input&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-field-field-name-js-input-jsclass" id="id102">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#datalabel" id="id103">&lt;datalabel&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-field-field-name-js-datalabel-jsclass" id="id104">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#domain" id="id105">&lt;domain&gt;</a><ul>
+<li><a class="reference internal" href="#domain-name" id="id106">&lt;DOMAIN-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-domain-domain-name-js" id="id107">&lt;js&gt;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="field">
+<span id="rt-model-model-name-field"></span><h4><a class="toc-backref" href="#id93">&lt;field&gt;</a><a class="headerlink" href="#field" title="Ссылка на этот заголовок">¶</a></h4>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">model/MODEL-NAME/field</span></tt></p>
+<div class="contents local topic" id="id9">
+<ul class="simple">
+<li><a class="reference internal" href="#field-name" id="id108">&lt;FIELD-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#visible-bool" id="id109">visible=&#8221;bool&#8221;</a></li>
+<li><a class="reference internal" href="#editable-bool" id="id110">editable=&#8221;bool&#8221;</a></li>
+<li><a class="reference internal" href="#weight-int" id="id111">weight=&#8221;int&#8221;</a></li>
+<li><a class="reference internal" href="#js" id="id112">&lt;js&gt;</a><ul>
+<li><a class="reference internal" href="#column" id="id113">&lt;column&gt;</a><ul>
+<li><a class="reference internal" href="#jsclass-string" id="id114">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#input" id="id115">&lt;input&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-field-field-name-js-input-jsclass" id="id116">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#datalabel" id="id117">&lt;datalabel&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-field-field-name-js-datalabel-jsclass" id="id118">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="field-name">
+<span id="rt-model-model-name-field-field-name"></span><h5><a class="toc-backref" href="#id108">&lt;FIELD-NAME&gt;</a><a class="headerlink" href="#field-name" title="Ссылка на этот заголовок">¶</a></h5>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">model/MODEL-NAME/field/FIELD-NAME</span></tt></p>
+<div class="contents local topic" id="id10">
+<ul class="simple">
+<li><a class="reference internal" href="#visible-bool" id="id119">visible=&#8221;bool&#8221;</a></li>
+<li><a class="reference internal" href="#editable-bool" id="id120">editable=&#8221;bool&#8221;</a></li>
+<li><a class="reference internal" href="#weight-int" id="id121">weight=&#8221;int&#8221;</a></li>
+<li><a class="reference internal" href="#js" id="id122">&lt;js&gt;</a><ul>
+<li><a class="reference internal" href="#column" id="id123">&lt;column&gt;</a><ul>
+<li><a class="reference internal" href="#jsclass-string" id="id124">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#input" id="id125">&lt;input&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-field-field-name-js-input-jsclass" id="id126">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#datalabel" id="id127">&lt;datalabel&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-field-field-name-js-datalabel-jsclass" id="id128">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="visible-bool">
+<span id="rt-model-model-name-field-field-name-visible"></span><h6><a class="toc-backref" href="#id119">visible=&#8221;bool&#8221;</a><a class="headerlink" href="#visible-bool" title="Ссылка на этот заголовок">¶</a></h6>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">model/MODEL-NAME/field/FIELD-NAME:visible</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">bool</span></tt></p>
+<p>true - поле видимое для автогенерируемого интерфейса</p>
+</div>
+<div class="section" id="editable-bool">
+<span id="rt-model-model-name-field-field-name-editable"></span><h6><a class="toc-backref" href="#id120">editable=&#8221;bool&#8221;</a><a class="headerlink" href="#editable-bool" title="Ссылка на этот заголовок">¶</a></h6>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">model/MODEL-NAME/field/FIELD-NAME:editable</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">bool</span></tt></p>
+<p>true - поле редактируемое для автогенерируемого интерфейса</p>
+</div>
+<div class="section" id="weight-int">
+<span id="rt-model-model-name-field-field-name-weight"></span><h6><a class="toc-backref" href="#id121">weight=&#8221;int&#8221;</a><a class="headerlink" href="#weight-int" title="Ссылка на этот заголовок">¶</a></h6>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">model/MODEL-NAME/field/FIELD-NAME:weight</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">int</span></tt></p>
+<p>Вес поля (по умолчанию 50).
+Когда структура домена отдается клиенту, все поля сортируются в
+соотвествии с весом. Для полей с одинаковым весом, используется
+сортировка по индексу. Манипулирую свойством поля <tt class="docutils literal"><span class="pre">weight</span></tt>, можно
+установить некоторый &#8220;порядок полей по умолчанию&#8221; для домена.</p>
+</div>
+<div class="section" id="js">
+<span id="rt-model-model-name-field-field-name-js"></span><h6><a class="toc-backref" href="#id122">&lt;js&gt;</a><a class="headerlink" href="#js" title="Ссылка на этот заголовок">¶</a></h6>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">model/MODEL-NAME/field/FIELD-NAME/js</span></tt></p>
+<div class="contents local topic" id="id11">
+<ul class="simple">
+<li><a class="reference internal" href="#column" id="id129">&lt;column&gt;</a><ul>
+<li><a class="reference internal" href="#jsclass-string" id="id130">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#input" id="id131">&lt;input&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-field-field-name-js-input-jsclass" id="id132">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#datalabel" id="id133">&lt;datalabel&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-field-field-name-js-datalabel-jsclass" id="id134">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Все атрибуты и дочерние узлы отсюда наложатся на json, который описывает структуру
+поля, передаваемую клиенту.
+Пример:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;domain</span> <span class="na">name=</span><span class="s">&quot;MyDomain&quot;</span> <span class="na">parent=</span><span class="s">&quot;id&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;field1&quot;</span> <span class="na">parent=</span><span class="s">&quot;long&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;js</span> <span class="na">title=</span><span class="s">&quot;Field1 Title&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;input</span> <span class="na">jsclass=</span><span class="s">&quot;Cbdict&quot;</span> <span class="na">width=</span><span class="s">&quot;large&quot;</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;column</span> <span class="na">jsclass=</span><span class="s">&quot;Dict&quot;</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;datalabel</span> <span class="na">jsclass=</span><span class="s">&quot;Dict&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/js&gt;</span>
+        <span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;/domain&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="column">
+<span id="rt-model-model-name-field-field-name-js-column"></span><h7><a class="toc-backref" href="#id129">&lt;column&gt;</a><a class="headerlink" href="#column" title="Ссылка на этот заголовок">¶</a></h7>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">model/MODEL-NAME/field/FIELD-NAME/js/column</span></tt></p>
+<div class="contents local topic" id="id12">
+<ul class="simple">
+<li><a class="reference internal" href="#jsclass-string" id="id135">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</div>
+<p>Описание свойств колонки гриды для этого поля</p>
+<div class="section" id="jsclass-string">
+<span id="rt-model-model-name-field-field-name-js-column-jsclass"></span><h8><a class="toc-backref" href="#id135">jsclass=&#8221;string&#8221;</a><a class="headerlink" href="#jsclass-string" title="Ссылка на этот заголовок">¶</a></h8>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">model/MODEL-NAME/field/FIELD-NAME/js/column:jsclass</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">string</span></tt></p>
+<p>javascript класс колонки. Можно указывать как полное имя класса,
+например <tt class="docutils literal"><span class="pre">Jc.column.String</span></tt>, так и имя класса внутри пакета <tt class="docutils literal"><span class="pre">Jc.column</span></tt>,
+например <tt class="docutils literal"><span class="pre">String</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="input">
+<span id="rt-model-model-name-field-field-name-js-input"></span><h7><a class="toc-backref" href="#id131">&lt;input&gt;</a><a class="headerlink" href="#input" title="Ссылка на этот заголовок">¶</a></h7>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">model/MODEL-NAME/field/FIELD-NAME/js/input</span></tt></p>
+<div class="contents local topic" id="id13">
+<ul class="simple">
+<li><a class="reference internal" href="#rt-model-model-name-field-field-name-js-input-jsclass" id="id136">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</div>
+<p>Описание свойств поля ввода для этого поля</p>
+<div class="section" id="rt-model-model-name-field-field-name-js-input-jsclass">
+<span id="id14"></span><h8><a class="toc-backref" href="#id136">jsclass=&#8221;string&#8221;</a><a class="headerlink" href="#rt-model-model-name-field-field-name-js-input-jsclass" title="Ссылка на этот заголовок">¶</a></h8>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">model/MODEL-NAME/field/FIELD-NAME/js/input:jsclass</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">string</span></tt></p>
+<p>javascript класс поля ввода. Можно указывать как полное имя класса,
+например <tt class="docutils literal"><span class="pre">Jc.input.String</span></tt>, так и имя класса внутри пакета <tt class="docutils literal"><span class="pre">Jc.input</span></tt>,
+например <tt class="docutils literal"><span class="pre">String</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="datalabel">
+<span id="rt-model-model-name-field-field-name-js-datalabel"></span><h7><a class="toc-backref" href="#id133">&lt;datalabel&gt;</a><a class="headerlink" href="#datalabel" title="Ссылка на этот заголовок">¶</a></h7>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">model/MODEL-NAME/field/FIELD-NAME/js/datalabel</span></tt></p>
+<div class="contents local topic" id="id15">
+<ul class="simple">
+<li><a class="reference internal" href="#rt-model-model-name-field-field-name-js-datalabel-jsclass" id="id137">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</div>
+<p>Описание свойств метки с данными для этого поля</p>
+<div class="section" id="rt-model-model-name-field-field-name-js-datalabel-jsclass">
+<span id="id16"></span><h8><a class="toc-backref" href="#id137">jsclass=&#8221;string&#8221;</a><a class="headerlink" href="#rt-model-model-name-field-field-name-js-datalabel-jsclass" title="Ссылка на этот заголовок">¶</a></h8>
+<p><em>Атрибут:</em> <tt class="docutils literal"><span class="pre">model/MODEL-NAME/field/FIELD-NAME/js/datalabel:jsclass</span></tt>, <em>тип:</em> <tt class="docutils literal"><span class="pre">string</span></tt></p>
+<p>javascript класс метки с данными. Можно указывать как полное имя класса,
+например <tt class="docutils literal"><span class="pre">Jc.datalabel.String</span></tt>, так и имя класса внутри пакета <tt class="docutils literal"><span class="pre">Jc.datalabel</span></tt>,
+например <tt class="docutils literal"><span class="pre">String</span></tt>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="domain">
+<span id="rt-model-model-name-domain"></span><h4><a class="toc-backref" href="#id105">&lt;domain&gt;</a><a class="headerlink" href="#domain" title="Ссылка на этот заголовок">¶</a></h4>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">model/MODEL-NAME/domain</span></tt></p>
+<div class="contents local topic" id="id17">
+<ul class="simple">
+<li><a class="reference internal" href="#domain-name" id="id138">&lt;DOMAIN-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-domain-domain-name-js" id="id139">&lt;js&gt;</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="domain-name">
+<span id="rt-model-model-name-domain-domain-name"></span><h5><a class="toc-backref" href="#id138">&lt;DOMAIN-NAME&gt;</a><a class="headerlink" href="#domain-name" title="Ссылка на этот заголовок">¶</a></h5>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">model/MODEL-NAME/domain/DOMAIN-NAME</span></tt></p>
+<div class="contents local topic" id="id18">
+<ul class="simple">
+<li><a class="reference internal" href="#rt-model-model-name-domain-domain-name-js" id="id140">&lt;js&gt;</a></li>
+</ul>
+</div>
+<div class="section" id="rt-model-model-name-domain-domain-name-js">
+<span id="id19"></span><h6><a class="toc-backref" href="#id140">&lt;js&gt;</a><a class="headerlink" href="#rt-model-model-name-domain-domain-name-js" title="Ссылка на этот заголовок">¶</a></h6>
+<p><em>Узел:</em> <tt class="docutils literal"><span class="pre">model/MODEL-NAME/domain/DOMAIN-NAME/js</span></tt></p>
+<p>Все атрибуты и дочерние узлы отсюда наложатся на json, который описывает структуру
+домена, передаваемую клиенту.
+Пример:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;domain</span> <span class="na">name=</span><span class="s">&quot;MyDomain&quot;</span> <span class="na">parent=</span><span class="s">&quot;id&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;field1&quot;</span> <span class="na">parent=</span><span class="s">&quot;long&quot;</span><span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;js</span> <span class="na">title=</span><span class="s">&quot;MyDomain json title&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;customData</span> <span class="na">value1=</span><span class="s">&quot;1&quot;</span> <span class="na">value2=</span><span class="s">&quot;2&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/js&gt;</span>
+    <span class="nt">&lt;/domain&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Содержание</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Rt конфигурация</a><ul>
+<li><a class="reference internal" href="#app">&lt;app&gt;</a><ul>
+<li><a class="reference internal" href="#title-string">title=&#8221;string&#8221;</a></li>
+<li><a class="reference internal" href="#titleshort-string">titleShort=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#web">&lt;web&gt;</a><ul>
+<li><a class="reference internal" href="#theme">&lt;theme&gt;</a><ul>
+<li><a class="reference internal" href="#default-string">default=&#8221;string&#8221;</a></li>
+<li><a class="reference internal" href="#theme-name">&lt;THEME-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#jsclass-jsclass">jsclass=&#8221;jsclass&#8221;</a></li>
+<li><a class="reference internal" href="#item">&lt;item&gt;</a><ul>
+<li><a class="reference internal" href="#item-name">&lt;ITEM-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#path-path">path=&#8221;path&#8221;</a></li>
+<li><a class="reference internal" href="#pathdebug-path">pathDebug=&#8221;path&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#model">&lt;model&gt;</a><ul>
+<li><a class="reference internal" href="#model-name">&lt;MODEL-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#field">&lt;field&gt;</a><ul>
+<li><a class="reference internal" href="#field-name">&lt;FIELD-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#visible-bool">visible=&#8221;bool&#8221;</a></li>
+<li><a class="reference internal" href="#editable-bool">editable=&#8221;bool&#8221;</a></li>
+<li><a class="reference internal" href="#weight-int">weight=&#8221;int&#8221;</a></li>
+<li><a class="reference internal" href="#js">&lt;js&gt;</a><ul>
+<li><a class="reference internal" href="#column">&lt;column&gt;</a><ul>
+<li><a class="reference internal" href="#jsclass-string">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#input">&lt;input&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-field-field-name-js-input-jsclass">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#datalabel">&lt;datalabel&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-field-field-name-js-datalabel-jsclass">jsclass=&#8221;string&#8221;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#domain">&lt;domain&gt;</a><ul>
+<li><a class="reference internal" href="#domain-name">&lt;DOMAIN-NAME&gt;</a><ul>
+<li><a class="reference internal" href="#rt-model-model-name-domain-domain-name-js">&lt;js&gt;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="module-struct.html"
+                        title="предыдущая глава">Структура модуля приложения</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/rtdoc.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li class="right" >
+          <a href="module-struct.html" title="Структура модуля приложения"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-wax-core</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

@@ -1,0 +1,187 @@
+/**
+ * Поддержка idea
+ *
+ * events:
+ *
+ * ideaGenIML()
+ *      params:
+ *          x - xml
+ *          module - module project
+ *          libs - libs
+ *
+ * ideaGenIPR(iprXml, project, libs)
+ *      params:
+ *          x - xml
+ *          prj - project
+ *          libs - libs
+ *
+ * ideaGenIWS(iprXml, project, libs)
+ *      params:
+ *          x - xml
+ *          prj - project
+ *          libs - libs
+ *
+ */
+
+import jandcode.utils.easyxml.*
+
+idea = createExt()
+
+/**
+ * Генерация файла модуля для idea.
+ *
+ * @param module
+ *    Ссылка на проект для которого генерировать файл модуля
+ * @param libs
+ *    Список библиотек
+ */
+idea.gen_module = {module, libs ->
+    //
+    log "Генерация для [${module.name}]"
+
+    // берем файл модуля
+    def mf = module.wd.join("${module.name}.iml")
+    if (!fu.exists(mf)) {
+        log "Модуль не существует и будет создан"
+        def tml = repo.getFile("scripts/idea/template_module_iml.xml")
+        ant.copy(file: tml, tofile: mf)
+    }
+
+    // грузим модуль
+    def x = new EasyXml()
+    x.load().fromFile(mf)
+    def xc = x.findChild("component@NewModuleRootManager")
+    if (xc == null) {
+        error "Неправильный формат файла: ${mf}"
+    }
+
+    // удаляем существующие ссылки
+    int i = 0
+    while (i < xc.countChilds) {
+        def x1 = xc.getChild(i)
+        if (x1.name == "orderEntry" && (x1["@type"] == "module-library" || x1["@type"] == "module")) {
+            xc.removeChild(i)
+            continue
+        }
+        i++
+    }
+
+    // формируем библиотеки
+    def rlibs = repo.getLibs(libs, true)
+
+    for (a in rlibs) {
+        boolean isModule = a.project != null
+        def x1 = xc.addChild("orderEntry")
+        if (isModule) {
+            x1["@type"] = "module"
+            x1["@module-name"] = a.name
+            //x1["@exported"] = ""
+        }
+        else {
+            x1["@type"] = "module-library"
+            def x2 = x1.addChild("library")
+            x2["@name"] = a.name
+            def x3, x4
+
+            if (a.jar != "") {
+                x3 = x2.addChild("CLASSES")
+                x4 = x3.addChild('root')
+                x4["@url"] = "jar://${a.jar}!/"
+            }
+
+            if (a.src != "") {
+                x3 = x2.addChild("SOURCES")
+                x4 = x3.addChild('root')
+                x4["@url"] = "jar://${a.src}!/"
+            }
+        }
+    }
+
+    // уведомляем
+    project.fireEvent("ideaGenIML", [x: x, module: module, libs: rlibs])
+
+    x.save().toFile(mf)
+    log "Сгенерирован файл [${mf}]"
+
+}
+
+/**
+ * Генерация файла проекта для idea.
+ *
+ * @param prj
+ *    Ссылка на проект (IProject) для которого генерировать файл проекта
+ * @param libs
+ *    Список библиотек. Из них выбираются модули в исходниках и включаются в проект
+ */
+idea.gen_project = {prj, libs ->
+
+    log "Генерация файла проекта [${prj.name}]"
+
+    // берем файл проекта
+    def mf = prj.wd.join("${prj.name}.ipr")
+    if (!fu.exists(mf)) {
+        def tml = repo.getFile("scripts/idea/template_project_ipr.xml")
+        log "Проект не существует и будет создан"
+        ant.copy(file: tml, tofile: mf)
+    }
+
+    def x = new EasyXml()
+    x.load().fromFile(mf)
+    def xc = x.findChild("component@ProjectModuleManager")
+    if (xc == null) {
+        error "Неправильный формат файла ${mf}"
+        return
+    }
+
+    // формируем список библиотек
+    def rlibs = repo.getLibs(libs, true)
+
+    // вставляем
+    def xm = xc.findChild("modules", true)
+    //xm.clear()
+    for (m in rlibs) {
+        if (m.project == null) continue
+        // проверяем, есть ли такой модуль уже
+        def needAdd = true
+        for (x2 in xm) {
+            def s = fu.basename(x2.getValueString("@filepath"))
+            if (s == m.name) {
+                needAdd = false
+                break
+            }
+        }
+        if (!needAdd) continue
+        // нет, добавляем
+        def x1 = xm.addChild("module")
+        //def dir_name = fu.filename(m.workdir)
+        x1["@fileurl"] = "file://${m.project.wd}/${m.project.name}.iml"
+        x1["@filepath"] = "${m.project.wd}/${m.project.name}.iml"
+        log "Добавлен модуль: " + x1["@filepath"]
+    }
+
+    // уведомляем
+    project.fireEvent("ideaGenIPR", [x: x, prj: prj, libs: rlibs])
+
+    x.save().toFile(mf)
+
+    log("Сгенерирован файл  [${mf}]")
+
+    // берем файло iws
+    mf = prj.wd.join("${prj.name}.iws")
+    if (!fu.exists(mf)) {
+        def tml = repo.getFile("scripts/idea/template_project_iws.xml")
+        ant.copy(file: tml, tofile: mf)
+    }
+
+    x = new EasyXml()
+    x.load().fromFile(mf)
+
+    // уведомляем
+    project.fireEvent("ideaGenIWS", [x: x, prj: prj, libs: rlibs])
+
+    x.save().toFile(mf)
+
+    log "Сгенерирован файл [${mf}]"
+
+    // все
+}

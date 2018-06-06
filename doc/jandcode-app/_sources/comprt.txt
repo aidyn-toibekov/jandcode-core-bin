@@ -1,0 +1,43 @@
+
+jandcode.app.CompRt
+===================
+
+``jandcode.app.CompRt`` - это предок для компонентов, которые инициализируются по rt.
+
+При инициализации по rt (метод ``setRt``) для переданной rt создается клон rt (кония),
+которая запоминается в объекте и в дальнейшем может быть использована.
+
+Значения всех атрибутов переданной rt рассматриваются как значения свойств объекта и
+автоматически инициализируются.
+
+Пример:
+
+.. code-block:: java
+
+    package myapp;
+    public class Comp1 extends CompRt {
+        private String title;
+        public String getTitle() {
+            return title;
+        }
+        public void setTitle(String title) {
+            this.title = title;
+        }
+    }
+
+Конфигурация:
+
+.. code-block:: xml
+
+    <root>
+        <object name="z1" class="myapp.Comp1" title="Hello"/>
+    </root>
+
+Создание объекта:
+
+.. code-block:: java
+
+    Rt conf = getApp().getRt().getChild("object/z1");
+    Comp1 inst = (Comp1) getApp().getObjectFactory().create(conf);
+    assert inst.getTitle().equals("Hello");
+

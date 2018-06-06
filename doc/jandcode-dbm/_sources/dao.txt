@@ -1,0 +1,54 @@
+
+Dao
+=====
+
+Dao - средство выполнения операций с данными в контексте модели и домена.
+
+Домен в Dao
+-----------
+
+Dao имеет ссылку на домен. Эта ссылка автоматически назначается в момент создания dao.
+Если dao создается вне домена (через класс), то назначается домен "id".
+Домен можно указать следующим способом:
+
+* описать dao внутри домена и создавать через ``model.createDao('Domain1/dao1')``. В этом
+  случае будет использован домен ``Domain1``:
+
+    .. code-block:: xml
+
+        <domain name="Domain1" parent="id">
+            <dao name="dao1" class="pak.Domain1_dao1"/>
+        </domain>
+
+
+* описать dao внутри домена, создавать через ``model.createDao('Domain1/dao1')``,
+  а в описании регистрации dao явно указать другой домен. В этом
+  случае будет использован домен, описанный в теге ``dao``:
+
+      .. code-block:: xml
+
+          <domain name="Domain1" parent="id">
+              <dao name="dao1" class="pak.Domain1_dao1" domain="Domain1.other"/>
+          </domain>
+
+* указать имя домена в конструкторе dao. В этом случае, если явно не указан домен
+  в регистрации dao то он не будет переписан доменом по умолчанию:
+
+      .. code-block:: java
+
+          public class Domain1_dao1 extends Dao {
+                public Domain1_dao1() {
+                    setDomain("Domain1.other");
+                }
+          }
+
+      .. code-block:: xml
+
+          <domain name="Domain1" parent="id">
+              <!-- домен=Domain1.other -->
+              <dao name="dao1" class="pak.Domain1_dao1"/>
+
+              <!-- домен=Domain2.other -->
+              <dao name="dao1" class="pak.Domain1_dao1" domain="Domain2.other"/>
+          </domain>
+

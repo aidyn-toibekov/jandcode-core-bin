@@ -1,0 +1,58 @@
+
+Шаблоны GSP
+***********
+
+В качестве шаблонов для генерации текста используется :doc:`groovy-gsp`.
+В качестве базового класса для шаблонов используется ``jandcode.web.Tml``, у которого
+перекрывается метод ``onRender``.
+
+Например шаблон:
+
+.. code-block:: jsp
+
+    <%@ page import="org.joda.time.*; jandcode.app.*" %>
+    App debug: ${getApp().isDebug()}
+    Date: ${new DateTime()}
+
+будет преобразован в класс groovy:
+
+.. code-block:: java
+
+    import org.joda.time.*; import jandcode.app.*;
+    public class JCG__LongGeneratedName extends jandcode.web.Tml {
+    protected void onRender() {
+
+    ;out("App debug: ");;out(getApp().isDebug());;out("\n");
+    ;out("Date: ");;out(new DateTime());;out("\n");
+    ;out("\n");
+
+    }
+    }
+
+
+Вывод произвольного текста
+==========================
+
+Метод ``out`` используется для вывода произвольного текста:
+
+.. code-block:: jsp
+
+    <%
+        for (i in 1..5) {
+            out(i)
+            out('|')
+        }
+    %>
+
+Тип параметра может быть любой, он будет преобразован в строку методом ``toString``.
+
+Кроме метода ``out`` существует и одноименное свойство ``out``, которое содержит ссылку
+на экземпляр текущего шаблона и поддерживает следующий метод вывода текста:
+
+.. code-block:: jsp
+
+    <%
+        for (i in 1..5) {
+            out << i << '|'
+        }
+    %>

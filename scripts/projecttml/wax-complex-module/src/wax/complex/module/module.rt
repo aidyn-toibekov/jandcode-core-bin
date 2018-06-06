@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+
+    <x-module name="wax.complex.module">
+        <depend name="wax.complex.main"/>
+    </x-module>
+
+    <web>
+        <resource name="wax.complex.module" package="wax.complex.module"/>
+    </web>
+
+</root>

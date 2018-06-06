@@ -1,0 +1,10 @@
+﻿
+jandcode-wax-auth
+*****************
+
+Модуль аутенфикации для jandcode-wax.
+
+.. toctree::
+   :maxdepth: 2
+
+   rtdoc

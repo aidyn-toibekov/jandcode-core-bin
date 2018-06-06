@@ -1,0 +1,20 @@
+/**
+ * Проект с поддержкой web
+ */
+
+//#classpath=jandcode-web
+
+include "app-project"
+
+
+run_jetty = cm("Запуск jetty-сервера для приложения",
+        p: [value: 8080, help: "Порт. По умолчанию 8080"],
+        c: [value: "/", help: "Контекст. По умолчанию '/'"]
+) {
+    include "jetty"
+
+    def port = args.get("p")
+    def context = args.get("c")
+
+    jetty.run(port: port, context: context)
+}

@@ -1,0 +1,30 @@
+params = [
+        n: "Имя модуля. По умолчанию имя выходного каталога",
+        r: "Имя корневого модуля",
+]
+
+replaces = {p, res ->
+    def pname = p.getValueString("n", fu.filename(outdir))
+    def Pname = su.camelCase(pname)
+    def pak = su.unCamelCase(Pname, (char)'.')
+    //
+    res["wax-complex-module"] = pname
+    res["WaxComplexModule"] = Pname
+    res["wax.complex.module"] = pak
+    res["wax/complex/module"] = pak.replace(".", "/")
+    //
+    def root_pname = p.getValueString("r", "wax-complex")
+    def root_Pname = su.camelCase(root_pname)
+    def root_pak = su.unCamelCase(root_Pname, (char)'.')
+    //
+    res["wax-complex"] = root_pname
+    res["WaxComplex"] = root_Pname
+    res["wax.complex"] = root_pak
+    res["wax/complex"] = root_pak.replace(".", "/")
+
+}
+
+postcreate = {
+    ant.mkdir(dir: wd("temp"))
+    ut.runexe(cmd: "${ut.jcbat} gen-idea", dir: wd("."))
+}

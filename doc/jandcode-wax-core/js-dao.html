@@ -1,0 +1,265 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Dao в javascript &mdash; jandcode-wax-core</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-wax-core" href="index.html" />
+    <link rel="next" title="Приложение на javascript" href="appjs.html" />
+    <link rel="prev" title="Разное" href="misc.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li class="right" >
+          <a href="appjs.html" title="Приложение на javascript"
+             accesskey="N">следующий</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="Разное"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-wax-core</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="dao-javascript">
+<h1>Dao в javascript<a class="headerlink" href="#dao-javascript" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="section" id="id1">
+<h2>Поддерживаемые типы данных<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>В dao-методах, которые могут быть доступны в javascript, в качестве параметров и
+возвращаемого значения, поддерживаются следующие типы данных:</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>string</strong> - <tt class="docutils literal"><span class="pre">java.lang.String</span></tt></li>
+<li><strong>number</strong> - <tt class="docutils literal"><span class="pre">int</span></tt>, <tt class="docutils literal"><span class="pre">long</span></tt>, <tt class="docutils literal"><span class="pre">double</span></tt>, <tt class="docutils literal"><span class="pre">java.lang.Integer</span></tt>, <tt class="docutils literal"><span class="pre">java.lang.Long</span></tt>,
+<tt class="docutils literal"><span class="pre">java.lang.Double</span></tt></li>
+<li><strong>boolean</strong> - <tt class="docutils literal"><span class="pre">boolean</span></tt>, <tt class="docutils literal"><span class="pre">java.lang.Boolean</span></tt></li>
+<li><strong>date</strong> - <tt class="docutils literal"><span class="pre">org.joda.time.DateTime</span></tt></li>
+<li><strong>map</strong> - <tt class="docutils literal"><span class="pre">java.util.Map&lt;String,</span> <span class="pre">Object&gt;</span></tt>. В качестве значений могут быть использованы
+данные типа string, number, date, map, list. Не могут быть использованы в качестве значений
+данные типа store, databox</li>
+<li><strong>list</strong> - <tt class="docutils literal"><span class="pre">java.util.List&lt;Object&gt;</span></tt>. В качестве элементов списка могут быть использованы
+данные типа строка, число, дата, map, list. Не могут быть использованы в качестве
+элементов списка данные типа store, databox</li>
+<li><strong>datastore</strong> - <tt class="docutils literal"><span class="pre">jandcode.dbm.data.DataStore</span></tt></li>
+<li><strong>databox</strong> - <tt class="docutils literal"><span class="pre">jandcode.dbm.data.DataBox</span></tt></li>
+<li><strong>datatree</strong> - <tt class="docutils literal"><span class="pre">jandcode.dbm.data.DataTreeNode</span></tt></li>
+</ul>
+</div></blockquote>
+<p>Если dao-метод ничего не возвращает (<tt class="docutils literal"><span class="pre">void</span></tt>), то в javascript вернется результат <tt class="docutils literal"><span class="pre">null</span></tt>.</p>
+<p>Метод javascript <tt class="docutils literal"><span class="pre">Jc.dbm.Model.daoinvoke</span></tt> осуществляет преобразование результата
+dao-метода по следующей таблице:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="47%" />
+<col width="53%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">java тип</th>
+<th class="head">javascript тип</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">java.lang.String</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">string</span></tt></td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">boolean</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">boolean</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">java.lang.Boolean</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">boolean</span></tt></td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">int</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">number</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">long</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">number</span></tt></td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">double</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">number</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">java.lang.Integer</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">number</span></tt></td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">java.lang.Long</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">number</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">java.lang.Double</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">number</span></tt></td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">org.joda.time.DateTime</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">Date</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">java.util.Map&lt;String,</span> <span class="pre">Object&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">Object</span></tt></td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">java.util.List&lt;Object&gt;</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">Array</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">jandcode.dbm.data.DataStore</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">Jc.dbm.Store</span></tt></td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">jandcode.dbm.data.DataBox</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">Jc.dbm.DataBox</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">jandcode.dbm.data.DataTreeNode</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">Jc.dbm.TreeStore</span></tt></td>
+</tr>
+</tbody>
+</table>
+<p>Параметры метода javascript <tt class="docutils literal"><span class="pre">Jc.dbm.Model.daoinvoke</span></tt> преобразуются в java-объекты
+по следующей таблице:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="40%" />
+<col width="60%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">javascript тип</th>
+<th class="head">java тип (в зависимости от типа параметра dao-метода)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">string</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">java.lang.String</span></tt>,
+<tt class="docutils literal"><span class="pre">int</span></tt>,
+<tt class="docutils literal"><span class="pre">long</span></tt>,
+<tt class="docutils literal"><span class="pre">double</span></tt>,
+<tt class="docutils literal"><span class="pre">java.lang.Integer</span></tt>,
+<tt class="docutils literal"><span class="pre">java.lang.Long</span></tt>,
+<tt class="docutils literal"><span class="pre">java.lang.Double</span></tt>,
+<tt class="docutils literal"><span class="pre">org.joda.time.DateTime</span></tt>,
+<tt class="docutils literal"><span class="pre">boolean</span></tt>,
+<tt class="docutils literal"><span class="pre">java.lang.Boolean</span></tt>,</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">number</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">int</span></tt>,
+<tt class="docutils literal"><span class="pre">long</span></tt>,
+<tt class="docutils literal"><span class="pre">double</span></tt>,
+<tt class="docutils literal"><span class="pre">java.lang.Integer</span></tt>,
+<tt class="docutils literal"><span class="pre">java.lang.Long</span></tt>,
+<tt class="docutils literal"><span class="pre">java.lang.Double</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">boolean</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">boolean</span></tt>,
+<tt class="docutils literal"><span class="pre">java.lang.Boolean</span></tt>,
+<tt class="docutils literal"><span class="pre">int</span></tt>,
+<tt class="docutils literal"><span class="pre">long</span></tt>,
+<tt class="docutils literal"><span class="pre">double</span></tt>,
+<tt class="docutils literal"><span class="pre">java.lang.Integer</span></tt>,
+<tt class="docutils literal"><span class="pre">java.lang.Long</span></tt>,
+<tt class="docutils literal"><span class="pre">java.lang.Double</span></tt>,
+<tt class="docutils literal"><span class="pre">java.lang.String</span></tt>,</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">Date</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">org.joda.time.DateTime</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">Object</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">java.util.Map&lt;String,</span> <span class="pre">Object&gt;</span></tt></td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">Array</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">java.util.List&lt;Object&gt;</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">Jc.dbm.Store</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">jandcode.dbm.data.DataStore</span></tt></td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">Jc.dbm.DataBox</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">jandcode.dbm.data.DataBox</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">Ext.data.Model</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">jandcode.dbm.data.DataStore</span></tt></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Содержание</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Dao в javascript</a><ul>
+<li><a class="reference internal" href="#id1">Поддерживаемые типы данных</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="misc.html"
+                        title="предыдущая глава">Разное</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="appjs.html"
+                        title="следующая глава">Приложение на javascript</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/js-dao.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li class="right" >
+          <a href="appjs.html" title="Приложение на javascript"
+             >следующий</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="Разное"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-wax-core</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+
+    <x-include module="jandcode.web"/>
+
+    <x-module name="jandcode.demos.web.empty"/>
+
+    <web>
+        <resource name="i" package="jandcode.demos.web.empty"/>
+    </web>
+
+</root>

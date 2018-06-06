@@ -1,0 +1,13 @@
+
+jandcode-web
+************
+
+Модуль поддержки web-приложения.
+
+.. toctree::
+   :maxdepth: 2
+
+   action
+   gsp
+   misc
+

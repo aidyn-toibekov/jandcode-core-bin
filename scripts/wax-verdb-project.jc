@@ -1,0 +1,93 @@
+//#classpath=jandcode-wax-verdb
+
+import jandcode.wax.verdb.*
+
+/**
+ * Поддержка jandcode.wax.verdb для разработчика
+ */
+
+VerdbProjectExt verdb_ext = createExt("jandcode.wax.verdb.VerdbProjectExt")
+
+// help по умолчанию для указания модели
+def HELP_M = [value: "default", help: "Имя зарегистрированной модели. По умолчанию 'default'"]
+
+//
+verdb_newver = cm("Создание новой версии базы данных",
+        u: [help: "Обновить последнюю незакомиченную версию"],
+        m: HELP_M
+) {
+    verdb_ext.modelName = args.m
+    verdb_ext.cm_newver(args.u)
+}
+
+//
+verdb_diff = cm("Сравнение create.sql двух версий базы данных",
+        v1: [value: 0, help: "Первая версия"],
+        v2: [value: 0, help: "Вторая версия"],
+        ui: [value: true, help: "Показывать ui diff"],
+        m: HELP_M
+) {
+    verdb_ext.modelName = args.m
+    verdb_ext.cm_diff(args.v1, args.v2, args.ui)
+}
+
+//
+verdb_validate = cm("Проверка правильности выполнения смены структуры",
+        v1: [value: 0, help: "Первая версия"],
+        v2: [value: 0, help: "Вторая версия"],
+        ui: [value: true, help: "Показывать ui diff"],
+        c: [value: false, help: "Принудительно пересоздавать базу версии v2"],
+        m: HELP_M
+) {
+    verdb_ext.modelName = args.m
+    verdb_ext.cm_validate(args.v1, args.v2, args.ui, args.c)
+}
+
+//
+verdb_commit = cm("Подтверждение последней версии и прописываение ее в качестве рабочей",
+        m: HELP_M
+) {
+    verdb_ext.modelName = args.m
+    verdb_ext.cm_commit()
+}
+
+// product
+project.event("waxBeforeProduct") {
+    wax_scripts_masks.add("wax-verdb-project-product.jc")
+}
+
+project.event("waxAfterProduct") {m ->
+    log "verdb product update"
+    for (modelName in wax_distr_models) {
+        verdb_ext.modelName = modelName
+        if (verdb_ext.verInfos.empty) return
+        //
+        def distr_dir = m.distr_dir
+        def distr_dirWEBINF = m.distr_dir+"/web/WEB-INF"
+        //
+        ut.cleandir(distr_dirWEBINF + "/scripts/dbscript/${modelName}")
+        def v = verdb_ext.getVerInfoLastCommited()
+        v.createDbmext().copyDbScriptsTo(distr_dirWEBINF + "/scripts/dbscript/${modelName}", true, false)
+        //
+        ant.copy(todir: distr_dirWEBINF + "/scripts/verdb") {
+            fileset(dir: wd("scripts/verdb")) {
+                include(name: "**/*")
+                exclude(name: "**/*/create*.sql")
+                exclude(name: "**/*/drop*.sql")
+                exclude(name: "**/*/data/**/*")
+                exclude(name: "**/*/data")
+                exclude(name: verdb_ext.not_committed_file)
+            }
+        }
+        if (!verdb_ext.commited) {
+            println """
+*********************************************************************
+  WARNING! Вы собрали продукт с незакомиченной версией базы данных
+*********************************************************************
+"""
+        }
+
+        log "В продукте используется версия базы ${v.name}"
+    }
+}
+

@@ -1,0 +1,16 @@
+//
+project.name = "wax-complex"
+project.package_root = "wax.complex"
+//
+include "wax-root-project"
+include "wax-verdb-project"
+include "wax-verdb-project-product"
+//
+modules = [
+        'wax-complex-main',
+]
+
+//
+libs = libs + []
+libs_dev = libs_dev + []
+//

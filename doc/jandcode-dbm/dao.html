@@ -1,0 +1,168 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Dao &mdash; jandcode-dbm</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-dbm" href="index.html" />
+    <link rel="next" title="Словари" href="dict.html" />
+    <link rel="prev" title="Модель" href="model.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li class="right" >
+          <a href="dict.html" title="Словари"
+             accesskey="N">следующий</a> |</li>
+        <li class="right" >
+          <a href="model.html" title="Модель"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-dbm</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="dao">
+<h1>Dao<a class="headerlink" href="#dao" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Dao - средство выполнения операций с данными в контексте модели и домена.</p>
+<div class="section" id="id1">
+<h2>Домен в Dao<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Dao имеет ссылку на домен. Эта ссылка автоматически назначается в момент создания dao.
+Если dao создается вне домена (через класс), то назначается домен &#8220;id&#8221;.
+Домен можно указать следующим способом:</p>
+<ul>
+<li><p class="first">описать dao внутри домена и создавать через <tt class="docutils literal"><span class="pre">model.createDao('Domain1/dao1')</span></tt>. В этом
+случае будет использован домен <tt class="docutils literal"><span class="pre">Domain1</span></tt>:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;domain</span> <span class="na">name=</span><span class="s">&quot;Domain1&quot;</span> <span class="na">parent=</span><span class="s">&quot;id&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;dao</span> <span class="na">name=</span><span class="s">&quot;dao1&quot;</span> <span class="na">class=</span><span class="s">&quot;pak.Domain1_dao1&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/domain&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">описать dao внутри домена, создавать через <tt class="docutils literal"><span class="pre">model.createDao('Domain1/dao1')</span></tt>,
+а в описании регистрации dao явно указать другой домен. В этом
+случае будет использован домен, описанный в теге <tt class="docutils literal"><span class="pre">dao</span></tt>:</p>
+<blockquote>
+<div><div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;domain</span> <span class="na">name=</span><span class="s">&quot;Domain1&quot;</span> <span class="na">parent=</span><span class="s">&quot;id&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;dao</span> <span class="na">name=</span><span class="s">&quot;dao1&quot;</span> <span class="na">class=</span><span class="s">&quot;pak.Domain1_dao1&quot;</span> <span class="na">domain=</span><span class="s">&quot;Domain1.other&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/domain&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">указать имя домена в конструкторе dao. В этом случае, если явно не указан домен
+в регистрации dao то он не будет переписан доменом по умолчанию:</p>
+<blockquote>
+<div><div class="highlight-java"><div class="highlight"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Domain1_dao1</span> <span class="kd">extends</span> <span class="n">Dao</span> <span class="o">{</span>
+      <span class="kd">public</span> <span class="nf">Domain1_dao1</span><span class="o">()</span> <span class="o">{</span>
+          <span class="n">setDomain</span><span class="o">(</span><span class="s">&quot;Domain1.other&quot;</span><span class="o">);</span>
+      <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;domain</span> <span class="na">name=</span><span class="s">&quot;Domain1&quot;</span> <span class="na">parent=</span><span class="s">&quot;id&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- домен=Domain1.other --&gt;</span>
+    <span class="nt">&lt;dao</span> <span class="na">name=</span><span class="s">&quot;dao1&quot;</span> <span class="na">class=</span><span class="s">&quot;pak.Domain1_dao1&quot;</span><span class="nt">/&gt;</span>
+
+    <span class="c">&lt;!-- домен=Domain2.other --&gt;</span>
+    <span class="nt">&lt;dao</span> <span class="na">name=</span><span class="s">&quot;dao1&quot;</span> <span class="na">class=</span><span class="s">&quot;pak.Domain1_dao1&quot;</span> <span class="na">domain=</span><span class="s">&quot;Domain2.other&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/domain&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Содержание</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Dao</a><ul>
+<li><a class="reference internal" href="#id1">Домен в Dao</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="model.html"
+                        title="предыдущая глава">Модель</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="dict.html"
+                        title="следующая глава">Словари</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/dao.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li class="right" >
+          <a href="dict.html" title="Словари"
+             >следующий</a> |</li>
+        <li class="right" >
+          <a href="model.html" title="Модель"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-dbm</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

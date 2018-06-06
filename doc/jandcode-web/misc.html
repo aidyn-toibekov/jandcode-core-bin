@@ -1,0 +1,163 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Разные заметки &mdash; jandcode-web</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-web" href="index.html" />
+    <link rel="prev" title="Шаблоны GSP" href="gsp.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li class="right" >
+          <a href="gsp.html" title="Шаблоны GSP"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-web</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Разные заметки<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="section" id="url">
+<h2>url по умолчанию<a class="headerlink" href="#url" title="Ссылка на этот заголовок">¶</a></h2>
+<p>По умолчанию (если url не содержит pathinfo) отдается файл <tt class="docutils literal"><span class="pre">/page/index.html</span></tt>.
+Например:</p>
+<div class="highlight-python"><pre>http://localhost:8080/context</pre>
+</div>
+<p>эквивалентно:</p>
+<div class="highlight-python"><pre>http://localhost:8080/context/page/index.html</pre>
+</div>
+</div>
+<div class="section" id="web-xml">
+<h2>web.xml по умолчанию<a class="headerlink" href="#web-xml" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Содержимое файла <tt class="docutils literal"><span class="pre">web.xml</span></tt> по умолчанию:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;web-app</span> <span class="na">xmlns=</span><span class="s">&quot;http://java.sun.com/xml/ns/javaee&quot;</span>
+         <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+         <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://java.sun.com/xml/ns/javaee</span>
+<span class="s">          http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot;</span>
+         <span class="na">version=</span><span class="s">&quot;2.5&quot;</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;servlet&gt;</span>
+        <span class="nt">&lt;servlet-name&gt;</span>jandcode-web<span class="nt">&lt;/servlet-name&gt;</span>
+        <span class="nt">&lt;servlet-class&gt;</span>jandcode.web.JcServlet<span class="nt">&lt;/servlet-class&gt;</span>
+        <span class="nt">&lt;init-param&gt;</span>
+            <span class="nt">&lt;param-name&gt;</span>app.rt<span class="nt">&lt;/param-name&gt;</span>
+            <span class="nt">&lt;param-value&gt;</span>app.rt<span class="nt">&lt;/param-value&gt;</span>
+        <span class="nt">&lt;/init-param&gt;</span>
+        <span class="nt">&lt;init-param&gt;</span>
+            <span class="nt">&lt;param-name&gt;</span>log<span class="nt">&lt;/param-name&gt;</span>
+            <span class="nt">&lt;param-value&gt;</span>_log.properties<span class="nt">&lt;/param-value&gt;</span>
+        <span class="nt">&lt;/init-param&gt;</span>
+        <span class="nt">&lt;load-on-startup&gt;</span>1<span class="nt">&lt;/load-on-startup&gt;</span>
+    <span class="nt">&lt;/servlet&gt;</span>
+
+    <span class="nt">&lt;servlet-mapping&gt;</span>
+        <span class="nt">&lt;servlet-name&gt;</span>jandcode-web<span class="nt">&lt;/servlet-name&gt;</span>
+        <span class="nt">&lt;url-pattern&gt;</span>/*<span class="nt">&lt;/url-pattern&gt;</span>
+    <span class="nt">&lt;/servlet-mapping&gt;</span>
+
+    <span class="nt">&lt;error-page&gt;</span>
+        <span class="nt">&lt;exception-type&gt;</span>java.lang.Exception<span class="nt">&lt;/exception-type&gt;</span>
+        <span class="nt">&lt;location&gt;</span>/showerror<span class="nt">&lt;/location&gt;</span>
+    <span class="nt">&lt;/error-page&gt;</span>
+
+<span class="nt">&lt;/web-app&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="content-type">
+<h2>content-type<a class="headerlink" href="#content-type" title="Ссылка на этот заголовок">¶</a></h2>
+<p>content-type должен быть установлен до того, как будет вызван request.getOutWriter()
+или request.getOutStream(). Точнее (по спецификации) до первого flush(), но лучше
+перестраховаться.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Содержание</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Разные заметки</a><ul>
+<li><a class="reference internal" href="#url">url по умолчанию</a></li>
+<li><a class="reference internal" href="#web-xml">web.xml по умолчанию</a></li>
+<li><a class="reference internal" href="#content-type">content-type</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="gsp.html"
+                        title="предыдущая глава">Шаблоны GSP</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/misc.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li class="right" >
+          <a href="gsp.html" title="Шаблоны GSP"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-web</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

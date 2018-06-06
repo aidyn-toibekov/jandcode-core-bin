@@ -1,0 +1,360 @@
+Что нового
+==========
+
+:doc:`Что нового в 1.4.x <whatnew14>`
+
+1.5.21
+------
+
+* web: ``WebRequest#getStartTime()`` - время начала запроса
+* web: фильтры теперь могут выполнятся после полной обработки запроса
+  (включая render и ошибки). Для этого введен метод фильтра: ``afterHandleRequest``
+
+1.5.20
+------
+
+* fix: jc create-project не копировал .hgignore
+* web: JcServlet теперь имеет свойство getApp(), которое возвращает ссылку на приложение,
+  которое он создал.
+* web: JcServlet теперь регистрируется в контексте сервлета:
+
+    .. code-block:: java
+
+        getServletContext().setAttribute("servlet:" + getServletName(), this);
+
+  что позволяет получить к нему (и к его приложению) доступ из другого сервлета:
+
+    .. code-block:: java
+
+        JcServlet servletApp = (JcServlet) getServletContext().getAttribute("servlet:jandcode-web");
+        App app = servletApp.getApp();
+
+
+1.5.19
+------
+
+* UtCnv.toMap - функция для разделения строк вида 'a:b;c:d'
+* auth: поддержка провайдеров проверки прав
+* fix: js: для grid и sgrid: не обновлялись словарные поля
+* fix: dbm: sqlfilter не ставил флаг prepare, в результате prepare выполнялось постоянно
+* fix: jc: настройка памяти для javac и groovyc вынесена в параметр
+  ut.javac_memoryMaximumSize. Теперь по умолчанию 800m.
+* fix: dbm: validationQuery для ConnectionService. Устанавливаются в rt-атрибутах
+  ConnectionService:
+
+    .. code-block:: xml
+
+        <service name="jandcode.dbm.db.ConnectionService"
+                 class="jandcode.dbm.db.impl.ConnectionServiceImpl"
+                 validationQuery.mysql="select 1"
+                 validationQuery.oracle="select 1 from dual"
+                />
+
+* wax: В качестве компонента для showWait можно использовать наследников от панели.
+  см: ``jandcode/wax/core/js/theme/Base.js#showWait``
+* fix: jc create-project не копировал .hgignore
+* новый шаблон проекта wax-ext для дополнительных модулей wax
+
+1.5.18
+------
+
+* **fix** для предыдущей версии: dao перестал работать
+
+1.5.17
+------
+
+* dbm: глобальные фильтры для вызова dao.
+  Для добавления фильтра необходимо реализовать в
+  наследнике класса ``jandcode.dbm.dao.DaoFilter`` нужные методы
+  ``onBeforeDaoMethod``, ``onAfterDaoMethod``, ``onErrorDaoMethod`` (описаны в
+  исходнике класса) и зарегистрировать фильтр в модели:
+
+    .. code-block:: xml
+
+        <root>
+            <model name="my.model1">
+                <daofilter name="ИМЯ_ФИЛЬТРА"
+                           class="КЛАСС_ФИЛЬТРА"
+                           enabled="TRUE/FALSE"
+                           weight="int(чем меньше, тем раньше вызывается)"
+                           />
+            </model>
+        </root>
+
+1.5.16
+------
+
+* fix: jc: Надоевшая ошибка "Не найден файл res:jandcode/app/module.rt" теперь точно
+  исправлена
+
+1.5.15
+------
+
+* jc: компиляция в командной строке делает классы для 1.6, теперь можно использовать
+  java 7/8 как среду разработки по умолчанию для командной строки
+* fix: web: при замене action в фильтре не использовалась новая action, обработка
+  делегировалась в предыдущую action
+* fix: jc: Надоевшая ошибка "Не найден файл res:jandcode/app/module.rt"
+
+
+1.5.14
+------
+
+* lib: httpclient 4.2.3
+* lib: extjs 4.2.0
+* lib: groovy 2.1.2
+* fix: не показывались ошибки при показе фрейма через Jc.showFrame(класс)
+* wax: надеюсь полная адаптация ui к extjs 4.2.0
+* **Несовместимость** fix: плагин гриды ``jcbufferedrenderer`` уже не нужен,
+  теперь работает и встроенный плагин гриды ````jcbufferedrenderer````. Просто замените
+  ``jcbufferedrenderer``->``bufferedrenderer``
+* fix: wax: table layout. убран мелкий padding в ячейке
+* fix: wax: tooltip был слишком маленьким в chrome
+
+1.5.13
+------
+
+* jc: db-doc: Дополнительный раздел в генерируемой документации
+  "Таблицы не показанные на диаграммах"
+* dao: убрано явное назначение домена, оставлено только назначение по имени
+* dao: явно определенный в конструкторе домен не перекрывается автоматом при создании dao.
+  Однако если домен определен в теге dao, то он переназначается. Описано
+  тут: `jandcode-dbm/dao.html <jandcode-dbm/dao.html>`_
+* в поставку включена новая библиотека ``js 1.7R4`` (Rhino Javascript)
+* wax: фрейм ``Jc.frame.DelRec`` - удаление записи через dao. Более удобная альтернатива
+  для ``Jc.frame.SimpleDelRec``
+* wax: UiBuilder: дополнительные методы: ``actionGrid`` (action, которая знает про гриду
+  (или дерево) к которому прикреплена), ``actionRec`` (action, которая знает про гриду
+  (или дерево) к которому прикреплена и авполняется только если есть выделенная запись).
+  Ссылка на гриду в свойстве action ``grid`` и доступно только в onExec.
+  Запись доступна в свойстве ``rec``, id записи в свойстве ``recId``
+* **Несовместимость** SGrid и STree изменены. Теперь это не "контейнер с гридой", а
+  "грида". Соотвественно для доступа к компоненту "грида", не нужно использовать
+  ``sgrid.grid``, можно просто писать ``sgrid``. В связи с сильными изменениями
+  возможны временные неполадки
+* fix: extjs: ``Ext.resizer.BorderSplitter`` может имет рамки если у панели со
+  ``split=true`` дополнительно поставить``splitterBorder=true``
+* fix: dbm: ``FirstEmptyRecordProxy`` при ``getValue()`` возвращала ``null``
+* fix: dbm: ``WaxLoadSqlFilterDao`` добавлено свойство ``idField``
+* fix: extjs: Исправлено отсутствие верхней рамки у заголовка гриды для
+  гриды без рамки и с тулбарой
+* js: новая функция ``Jc.isDateEmpty`` - возвращает true, если d - пустая дата
+* fix: js: input ``Date`` показывал пустые даты как даты (см. ``Jc.isDateEmpty``)
+* fix: js: grid теперь принимает 0 для setCurRec
+* fix: js: b.panel теперь создает Jc.control.Panel
+* fix: dbm: ``jandcode.dbm.sqlfilter.SqlFilter#getParams`` теперь возвращает ``IVariantMap``
+* dbm: ``ValidateErrors`` добавлены методы ``addErrorFatal``, которые автоматом
+  вызывают ``checkErrors``
+* jc: ``ut.version`` теперь возвращает lastVersion+revno
+* **Несовместимость** jc: ``ut.version`` - убрана поддержка bzr
+* jc: db-project: команда db-drop для удаления тестовой базы
+* js: trigger может опционально иметь кнопку "очистить". Как глобально так и локально
+* fix: js: b.layout не понимал 'border'
+* fix: GfContent имеет метод setTitle
+* fix: jc:string экранирует </script> и имеет аргумент normalizeIndent
+* js: jc:tstFrame для тестирования gf-фреймов
+* fix: SGridDataStore может быть передана клиенту в незагруженном виде
+* **Несовместимость** js: tree useArrows=true by default
+* fix: Jc.ActionGrid не определяла дерево
+* fix: css: jc-treegrid убран за ненадобностью
+
+
+1.5.12
+------
+
+* wax: метод onAfterRenderCell для колонки гриды. Вызывается после onRenderCell.
+  В качестве значения (первого параметра) получает то, что было создано в onRenderCell.
+  Остальные параметры совпадают с onRenderCell. Используется для модификации рендеринга
+  встроенных колонок
+* wax: SGrid принимает атрибут: features (как в grid)
+* wax: SGrid принимает атрибут: gridConfig (атрибуты для grid)
+* wax: параметры по умолчанию Jc.ini.grid для гриды: columnSortable=false,
+  columnMenu=false, trackOver=false. Соответсвенно гриды по умолчанию не имеют
+  меню, несортируемые, курсор мыши не отслеживают
+* fix: gfpanel. Мелочи всякие
+* lib: groovy 2.1.1
+
+
+1.5.11
+------
+
+* wax: Jc.showFrame поддерживает параметр onShowFrame для отложенного отображения фрейма
+* wax: Jc.input.Cbfrm может показывать gf-фрейм
+* wax: Jc.input.Cbfrm теперь корректно работает в режиме эмуляции диалога, когда
+  всплывающие повер него окна не вызывают закрытие popup-фрейма
+* wax: Jc.input.Cb_SGrid и Jc.input.Cb_STree удалены
+* gfpanel - средство показа встроенных gf-фреймов (как содержимое внутренней панели)
+* outTable может печатать объект DataTreeNode
+* Множественные изменения в SGrid. В частности убрано средство создания store внутри гриды.
+  Теперь store нужно всегда передавать
+* Мелкие и не очень мелкие багфиксы и улучшения, которые все равно никто явно незаметит,
+  а жить мешали
+
+
+1.5.10
+------
+
+* wax: в grid и tree теперь по умолчанию отключен trackOver
+* wax: Jc.ActionRec - для action, которые работают с выбранной записью
+* fix: dbm: validator delref не игнорировал каскадные ссылки
+* wax: STreeDataStore для деревьев в STree
+* fix: wax: TreeStore работало не корректно, особенно в паре с STree
+
+
+1.5.9
+-----
+
+* web: WebAction теперь можно регистрировать с произвольным url:
+
+    .. code-block:: xml
+
+        <root>
+            <web>
+                <action name="act1" class="mypak.Act1"/>
+                <action name="act2" url="admin/act2" class="mypak.Act2"/>
+                <action name="act3">
+                    <action name="a1" class="mypak.A1"/>  <!-- url=act3/a1 -->
+                </action>
+            </web>
+        </root>
+
+* web: Tml теперь можно регистрировать с произвольным именем:
+
+    .. code-block:: xml
+
+        <root>
+            <web>
+                <tml name="jc">
+                    <tml name="mytag" class="mypak.MyTag"/> <!-- tag=jc:mytag -->
+                </tml>
+            </web>
+        </root>
+
+* **preview** wax: Новый тип фреймов - ``gf``. Представляет собой gsp-файл, в котором присутствует
+  серверный и клиентский код. Может использовать переменные, созданные в серверном коде,
+  в клиентском коде.
+* REMOVE: ``xf`` фреймы анонсированные в 1.5.6 убраны, как не оправдавшие надежд
+* web: поддержка интерфейсов ``jandcode.web.ITmlTagOwner``, ``jandcode.web.ITmlInclude``
+  для Tml
+* gsp: тег ``<jc:include url="path/to/file.gsp"/>`` как альтернатива вызову метода ``include``
+* dbm: ``jandcode.dbm.data.WrapperDataStore`` - обертка вокруг DataStore
+* dao: метод ``getContextParams`` - контекстные параметры для dao
+* **Несовместимость** удален класс RequestMap. Используйте вместо него getContextParams. Если вы использовали
+  RequestMap только в dao с фильтрами (передавали его в createSqlFilter), то просто
+  замените тип параметра dao на Map
+* ``jandcode.wax.core.utils.gf.SGridDataStore`` для gf-фреймов
+
+
+1.5.8
+-----
+
+* fix: sqlfilter для oracle не учитывал сортировку при пагинации
+* запуск web-приложения из ide без tomcat. Используйте класс
+  ``jandcode.web.RunJettyApp``
+* SqlPrepared теперь можно убрать из вывода лога.
+  Настраивается в ``log4j.logger.jandcode.dbm.db.DbQuery.sqlPrepared=OFF``
+* fix: wax: Langstring возвращал ссылку на значение, а не копию
+
+
+1.5.7
+-----
+
+* fix: dbm: новый метод DbUtils.createDao(Class<A> cls)
+* fix: в шаблон приложения wax-complex добавлено подключение скрипта ``wax-verdb-project-product``
+  для обеспечения команд ``db-upgrade`` и ``db-ver`` в режиме разработки
+
+1.5.6
+-----
+
+* utils: новый метод UtString.indent()
+* fix: web: для ресурсов без даты модификации (виртуальных) не проверялось что дата null
+* wax: новый метод WaxUpdaterDao.newRec() - создание пустой записи для updater
+* wax: WaxJsonService теперь имеет конверторы для данных из строк
+* wax: новые метода для Jc.dbm.Storejs: get/set для чтения/записи значений в текущую запись
+* wax: новый метод для dao ``dict.utils/default`` - resolveDictsFor
+* dbm: новый сервис для модели ``jandcode.dbm.dbpostcreate.DbPostCreateService``.
+  Предназначен для постобработки свежесозданной базы данных.
+* **preview** wax: Новый тип фреймов - ``xf``. Представляет собой xml-файл, в котором присутствует
+  серверный и клиентский код. Может использовать переменные, созданные в серверном коде,
+  в клиентском коде. Примеры в ``jandcode.wax.core.js.xf``
+  и ``jandcode.wax.core_test.tst.core_test.xf``
+
+1.5.5
+-----
+
+* **Несовместимость** fix: Model получала имя только после полной инициализации
+* **Несовместимость** fix: теперь настройки базы по умолчанию берутся из ``db\MODELNAME``
+  (раньше бралось из ``db\DBSOURCENAME``, т.е. фактически всегда ``db\default``)
+
+1.5.4
+-----
+
+* fix: Gsp фрейм не удалял содержимое content-фрейма
+* fix: jc db-doc: на диаграммах не отображалось поле id
+* теперь каталоги с ресурсами можно прикреплять к виртуальному пути. Для этого используется
+  атрибут ``prefix`` в описании ресурса. Если его значение не указано, то прикрепление
+  делается в корень виртуального каталога, если указано, то к указанному:
+
+    .. code-block:: xml
+
+        <root>
+            <web>
+                <resource name="i" path="#{path}/web"/>
+                <resource name="i" path="#{path}/test/jandcode/sandbox/wax"
+                          prefix="tst/sandbox-wax"/>
+                <resource name="i" path="#{path}/test/jandcode/sandbox"
+                          prefix="tst/sandbox-wax/inner1"/>
+            </web>
+        </root>
+
+* fix: если в таблице базы данных есть ссылка на домен, который в базе отсутствует
+  (например MemDict), то нее генерировался reference и в итоге база не создавалась
+* fix: исправлена высота Cb_SGrid и Cb_STree
+* fix: Cbfrm задавал минимальный размер для фрейма, в итоге Langstring был больше ожидаемого
+
+1.5.3
+-----
+
+* lib: groovy 2.1rc1
+* fix: DbUtils игнорировал в качестве базового компонента явно переданную модель
+
+1.5.2
+-----
+
+* js: окна сообщений ``Jc.showYN`` и ``Jc.showMsg`` теперь имеют дизайн обычных диалоговых
+  окон
+* fix: js: ``Jc.showYN`` при вложенном показ окна YN из диалогового, второе окно
+  показывалось под диалоговым
+
+1.5.1
+-----
+
+**ВАЖНО** : В этой версии есть несовместимые изменения
+
+* **Несовместимость** ``Jc.dbm.Store`` теперь не имеет свойства ``vpaging``
+  и соответственно механизм виртуального пагинирования не доступен. Он был введен
+  для отображения больших объемов данных в гриде, но в extjs 4.2 грида может быть
+  буфферизированной и механизм ``vpaging`` не нужен.
+* **Несовместимость** Для всех input убрана поддержка рудиментарного свойства
+  ``inputWidth``, теперь нужно пользоваться только свойством ``width``
+* fix: js: буферизированная грида теперь работает правильно с локальным store (это
+  ошибка в extjs). Для превращения обычной гриды в буферизированную нужно у гриды
+  указать свойство: ``plugins: 'jcbufferedrenderer'``.
+
+
+1.5.0
+-----
+
+* Переход на **extjs 4.2**. На данный момент времени extjs 4.2 не стабильна,
+  возможны глюки, имейте ввиду и пожайлуста предоставляйте отчеты о ошибках.
+* lib: groovy 2.1rc1
+* В проекте по шаблону **wax-complex** больше не нужны каталоги **src** и **test**
+* Удален шаблон проекта **wax-empty** за ненадобностью
+
+Примечания для extjs 4.2
+
+Бывают ситуации, когда диалоговые окна, которые используют внутри гриду/панель
+со свойством ``spancol:2`` (или любой span > 1), отображаются неверно. Такие окна
+могут терять заголовок или расширятся на весь экран замысловатым способом.
+Для решения этой проблемы явно задайте необходимую ширину фрейма.
+

@@ -1,0 +1,113 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>О фреймах &mdash; jandcode-ui</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-ui" href="index.html" />
+    <link rel="prev" title="jandcode-ui" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li class="right" >
+          <a href="index.html" title="jandcode-ui"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-ui</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>О фреймах<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Control (<tt class="docutils literal"><span class="pre">jandcode.ui.UiControl</span></tt>):
+это элемент управления в окне (кнопка, поле ввода, грида и т.д).</p>
+<p>Фрейм (<tt class="docutils literal"><span class="pre">jandcode.ui.UiFrame</span></tt>):
+это содержимое окна.</p>
+<p>Интерьер (<tt class="docutils literal"><span class="pre">jandcode.ui.UiInterior</span></tt>):
+это оформление содержимого окна. Внутри интерьера помещается фрейм. Рассмотрим например
+диалоговое окно. Каждое такое окно имеет кнопки &#8220;Ок&#8221;/&#8221;Отмена&#8221;, разделитель между
+кнопками и содержательную часть окна. Так вот, интерьером в данном случае будет панель,
+на которой имеется пустая панель в середине, разделитель и кнопки. А на панели в середине
+будет расположен непосредственно фрейм.</p>
+<p>Окно (<tt class="docutils literal"><span class="pre">jandcode.ui.UiWindow</span></tt>):
+это физическое окно. На окне показываетсся интерьер, внутри которого находится фрейм.
+Причем &#8220;физическое окно&#8221; (<tt class="docutils literal"><span class="pre">jandcode.ui.IRealWindow</span></tt>) - это что угодно.
+Это может быть вкладкой на клавном окне или реальный объект JFrame или JDialog.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="index.html"
+                        title="предыдущая глава">jandcode-ui</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/frames.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li class="right" >
+          <a href="index.html" title="jandcode-ui"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-ui</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

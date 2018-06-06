@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+
+    <x-module name="wax.complex.main">
+        <depend name="jandcode.lang"/>
+        <depend name="jandcode.auth"/>
+        <depend name="jandcode.wax.core"/>
+        <depend name="jandcode.wax.verdb"/>
+    </x-module>
+
+    <model name="wax.complex.main" parent="sys" x-root="true">
+        <x-include plugin="jandcode.wax.core.model"/>
+        <x-include plugin="jandcode.wax.verdb.model"/>
+        <x-include path="model/model.rt"/>
+    </model>
+
+    <dbm>
+        <registermodel name="default" model="wax.complex.main"/>
+    </dbm>
+
+    <web>
+        <resource name="wax.complex.main" package="wax.complex.main"/>
+    </web>
+
+    <lang>
+        <lang name="en" title="English"/>
+    </lang>
+
+    <app
+            title="WaxComplex"/>
+
+
+</root>

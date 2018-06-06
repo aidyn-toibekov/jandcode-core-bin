@@ -1,0 +1,183 @@
+import jandcode.utils.rt.*
+
+/**
+ * Поддержка генерации документации проекта.
+ * Для генерации используется Sphinx (http://sphinx.pocoo.org).
+ * Он должен быть установлен.
+ *
+ * Стаические файлы храним в каталоге '_static' внутри каталога с документацией.
+ * При его наличии, он автоматом добавляется в конфигурацию.
+ *
+ * events:
+ *
+ * sphinxdocSrc(srcdir)
+ *      Генерируется после того, как каталог с исходниками сформирован.
+ *      Можно генерировать исодники документации в srcdir.
+ *      params:
+ *          srcdir - где лежат исходники
+ */
+
+sphinxdoc = createExt()
+
+/**
+ * Каталоги с исходниками. Все файлы из этих каталогов сливаются в dir_tempsrc
+ */
+sphinxdoc.dirs_src = ["doc"]
+
+/**
+ * Каталог, куда будет генерироваться документация.
+ */
+sphinxdoc.dir_out = wd("temp/doc")
+
+/**
+ * Каталог с исходниками. Сюда сливаются все исходники. Сюда же нужно при необходимости
+ * генерировать файлы.
+ */
+sphinxdoc.dir_tempsrc = wd("temp/doc._src")
+
+/**
+ * Каталог с временными системными файлами sphinx.
+ */
+sphinxdoc.dir_tempsys = wd("temp/doc._sys")
+
+/**
+ * Фрагменты файла conf.py
+ * Все элементы собираются в один файл conf.py
+ * Если элемент списка "строка", то ее содержимое добавляется в файл.
+ * Если элемент списка "closure", то добавляется строка, которую эта closure возвращает
+ */
+sphinxdoc.conf_py = [
+        "import sys, os",
+        "project = u'${project.name}'",
+        "source_suffix = '.rst'",
+        "master_doc = 'index'",
+        "language = 'ru'",
+        "html_theme = 'jandcode'",
+        "html_title = \"%s\" % (project)",
+        "html_static_path = []",
+        "html_show_copyright = False",
+        "html_show_sphinx = False",
+        "html_theme_path = []",
+        "extensions = []",
+        {
+            def themes = repo.findVFile("scripts/sphinxdoc/themes")
+            if (themes == null) {
+                return ""
+            }
+            def s = "";
+            for (f in themes.getRealPathList()) {
+                s += "html_theme_path.append('" + f.replace("\\", "\\\\") + "')\n"
+            }
+            return s
+
+        },
+        {
+            def libs = repo.findVFile("scripts/sphinxdoc/lib")
+            if (libs == null) {
+                return ""
+            }
+            def s = "";
+            for (f in libs.getRealPathList()) {
+                s += "sys.path.append('" + f.replace("\\", "\\\\") + "')\n"
+            }
+            return s
+        },
+        {
+            def static_path = sphinxdoc.dir_tempsrc + "/_static"
+            if (fu.exists(static_path)) {
+                return "html_static_path.append('_static')"
+            }
+            return ''
+        }
+]
+
+/**
+ * Запуск sphinx-builder с указанными параметрами.
+ * например:
+ * sphinxdoc.runbuilder("-d ${outdir_sys} -D version=${project.version} -D release=${project.version} ${outdir_src} ${outdir}")
+ */
+sphinxdoc.runbuilder = {cmdline ->
+    if (File.separator == "/") {
+        // unix
+        ut.runexe(cmd: "python -c \"import sphinx;sphinx.main()\" ${cmdline}")
+    } else {
+        // windows
+        ut.runexe(cmd: "python.exe -c \"import sphinx;sphinx.main()\" ${cmdline}")
+    }
+}
+
+/**
+ * Формирует файл conf.py
+ */
+sphinxdoc.make_conf_py = {
+    def s = "# -*- coding: utf-8 -*-\n"
+    for (a in sphinxdoc.conf_py) {
+        if (a instanceof Closure) {
+            s += a().toString()
+        } else {
+            s += a.toString()
+        }
+        s += "\n"
+    }
+    fu.saveString(s, new File(sphinxdoc.dir_tempsrc + "/conf.py"))
+}
+
+/**
+ * Реализация генерации документации
+ */
+sphinxdoc.doc = {builderName ->
+    if (su.empty(builderName)) {
+        builderName = 'html'
+    }
+    // собираем все исходники
+    ut.cleandir(sphinxdoc.dir_tempsrc)
+    for (sdir in sphinxdoc.dirs_src) {
+        ant.copy(todir: sphinxdoc.dir_tempsrc, preservelastmodified: true) {
+            fileset(dir: sdir) {
+                include(name: "**/*")
+            }
+        }
+    }
+    // генерируем исходники
+    sphinxdoc.gen()
+    // генерим rtdoc
+    def rtdoc_src = fu.join(sphinxdoc.dir_tempsrc, "rtdoc/rtdoc.rt")
+    if (fu.exists(rtdoc_src)) {
+        sphinxdoc.gen_rtdoc(rtdoc_src, fu.join(sphinxdoc.dir_tempsrc, "rtdoc.rst"))
+    }
+    // уведомляем, что исходники готовы
+    project.fireEvent("sphinxdocSrc", [srcdir: sphinxdoc.dir_tempsrc])
+    // формируем conf.py
+    sphinxdoc.make_conf_py()
+    // генерируем
+    sphinxdoc.runbuilder("-d ${sphinxdoc.dir_tempsys} -D version=${project.version} -D release=${project.version} -b ${builderName} ${sphinxdoc.dir_tempsrc} ${sphinxdoc.dir_out}")
+}
+
+/**
+ * Код генерации исходников
+ */
+sphinxdoc.gen = {
+}
+
+/**
+ * Генерация rtdoc
+ */
+sphinxdoc.gen_rtdoc = {src_rt, out_rst ->
+    def rtdoc = new RtRoot()
+    rtdoc.load().fromFileObject(src_rt)
+    ut.generate(repo.getFile("scripts/sphinxdoc/rtdoc-to-sphinx.gsp"), fu.path(out_rst),
+            [rtdoc: rtdoc, outfile: fu.filename(out_rst)])
+}
+
+////// команды проекта
+
+doc = cm('Генерация документации',
+        'c': [value: false, help: "Очистить все временные каталоги перед генерацией документации"],
+        'b': [value: 'html', help: 'Какой builder использовать. По умолчанию - html']
+) {
+    if (args.c) {
+        ut.cleandir(sphinxdoc.dir_out)
+        ut.cleandir(sphinxdoc.dir_tempsys)
+    }
+    sphinxdoc.doc(args.b)
+}

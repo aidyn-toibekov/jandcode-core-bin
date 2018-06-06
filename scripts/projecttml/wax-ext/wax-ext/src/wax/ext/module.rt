@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+
+    <x-module name="wax.ext">
+        <depend name="jandcode.wax.core"/>
+    </x-module>
+
+    <web>
+        <resource name="wax.ext" package="wax.ext"/>
+    </web>
+
+</root>

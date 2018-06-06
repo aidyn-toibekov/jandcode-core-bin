@@ -1,0 +1,159 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GSP &mdash; jandcode-groovy</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-groovy" href="index.html" />
+    <link rel="prev" title="GroovyService" href="service.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li class="right" >
+          <a href="service.html" title="GroovyService"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-groovy</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="gsp">
+<h1>GSP<a class="headerlink" href="#gsp" title="Ссылка на этот заголовок">¶</a></h1>
+<p>В качестве шаблонов для генерации текста используется формат <tt class="docutils literal"><span class="pre">gsp</span></tt>.
+Синтаксис совпадает с оригинальным <tt class="docutils literal"><span class="pre">gsp</span></tt> (Groovy Server Pages) из проекта <a class="reference external" href="http://grails.org">http://grails.org</a>
+для обеспечения нормального редактирования в IDE, которые поддерживают <tt class="docutils literal"><span class="pre">gsp</span></tt>.</p>
+<p>Особенности сгенерированного по шаблону класса:</p>
+<blockquote>
+<div><ul class="simple">
+<li>каждая строка внутри метода совпадает со строкой в шаблоне, что позволяет однозначно
+идентифицировать место возникновения ошибки в шаблоне (в отличии от оригинального
+gsp, где нет соответсвия между сгенерированным классом и оригинальным шаблоном)</li>
+<li>базовый класс должен реализовывать интерфейс <tt class="docutils literal"><span class="pre">jandcode.groovy.IGspTemplate</span></tt></li>
+</ul>
+</div></blockquote>
+<div class="section" id="id1">
+<h2>Синтаксис<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Парзер <tt class="docutils literal"><span class="pre">gsp</span></tt> просто преобразует текст шаблона в текст на <tt class="docutils literal"><span class="pre">groovy</span></tt> по следующим правилам:</p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">ANYTEXT</span></tt> преобразуется в <tt class="docutils literal"><span class="pre">out('ANYTEXT')</span></tt> <em>(вывести фрагмент текста)</em></li>
+<li><tt class="docutils literal"><span class="pre">${ANYTEXT}</span></tt> преобразуется в <tt class="docutils literal"><span class="pre">out(ANYTEXT)</span></tt> <em>(вывести значение выражения)</em></li>
+<li><tt class="docutils literal"><span class="pre">&lt;%ANYTEXT%&gt;</span></tt> преобразуется в <tt class="docutils literal"><span class="pre">ANYTEXT</span></tt> <em>(вставить фрагмент groovy-кода)</em></li>
+<li><tt class="docutils literal"><span class="pre">&lt;%=ANYTEXT%&gt;</span></tt> преобразуется в <tt class="docutils literal"><span class="pre">out(ANYTEXT)</span></tt> <em>(вывести значение выражения)</em></li>
+<li><tt class="docutils literal"><span class="pre">&lt;%--ANYTEXT--%&gt;</span></tt> преобразуется в <tt class="docutils literal"><span class="pre">/*ANYTEXT*/</span></tt> <em>(коментарий)</em></li>
+<li><tt class="docutils literal"><span class="pre">%{--ANYTEXT--}%</span></tt> преобразуется в <tt class="docutils literal"><span class="pre">/*ANYTEXT*/</span></tt> <em>(коментарий)</em></li>
+<li><tt class="docutils literal"><span class="pre">&lt;xx:yy/&gt;</span></tt>  преобразуется в <tt class="docutils literal"><span class="pre">outTag('xx/yy')</span></tt> <em>(вызов функции outTag)</em></li>
+<li><tt class="docutils literal"><span class="pre">&lt;xx:yy</span> <span class="pre">atr=&quot;value&quot;</span> <span class="pre">atr2=&quot;value2&quot;/&gt;</span></tt>  преобразуется в <tt class="docutils literal"><span class="pre">outTag('xx/yy',atr:value,atr2:value)</span></tt> <em>(вызов функции outTag)</em></li>
+<li><tt class="docutils literal"><span class="pre">&lt;xx:yy</span> <span class="pre">atr=&quot;value&quot;</span> <span class="pre">atr2=&quot;value2&quot;&gt;</span> <span class="pre">body</span> <span class="pre">&lt;/xx:yy&gt;</span></tt>  преобразуется в <tt class="docutils literal"><span class="pre">outTag('xx/yy',atr:value,atr2:value)</span> <span class="pre">{</span> <span class="pre">body</span> <span class="pre">}</span></tt> <em>(вызов функции outTag)</em></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id2">
+<h2>Локальные переменные в шаблоне<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Шаблон преобразуется в текст метода groovy. Соотвественно любое определение переменной
+определяет локальную переменную метода:</p>
+<div class="highlight-jsp"><div class="highlight"><pre><span class="k">&lt;%</span>
+    <span class="c1">// локальные переменные метода шаблона</span>
+    <span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+    <span class="n">def</span> <span class="n">a</span> <span class="o">=</span> <span class="o">[]</span>
+<span class="k">%&gt;</span>
+</pre></div>
+</div>
+<p>Для определения функций внутри шаблона изпользуются <tt class="docutils literal"><span class="pre">groovy</span> <span class="pre">closure</span></tt> (т.к. метод внутри метода
+объявить нельзя):</p>
+<div class="highlight-jsp"><div class="highlight"><pre><span class="k">&lt;%</span>
+    <span class="n">def</span> <span class="n">pw2</span> <span class="o">=</span> <span class="o">{</span><span class="n">a</span><span class="o">-&gt;</span>
+        <span class="k">return</span> <span class="n">a</span><span class="o">*</span><span class="n">a</span>
+    <span class="o">}</span>
+<span class="k">%&gt;</span>
+5^2 = ${pw2(5)}
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Содержание</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">GSP</a><ul>
+<li><a class="reference internal" href="#id1">Синтаксис</a></li>
+<li><a class="reference internal" href="#id2">Локальные переменные в шаблоне</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="service.html"
+                        title="предыдущая глава">GroovyService</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/gsp.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li class="right" >
+          <a href="service.html" title="GroovyService"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-groovy</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

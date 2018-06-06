@@ -1,0 +1,189 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Словари &mdash; jandcode-dbm</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-dbm" href="index.html" />
+    <link rel="next" title="Howto: validate" href="validate.html" />
+    <link rel="prev" title="Dao" href="dao.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li class="right" >
+          <a href="validate.html" title="Howto: validate"
+             accesskey="N">следующий</a> |</li>
+        <li class="right" >
+          <a href="dao.html" title="Dao"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-dbm</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Словари<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Словарь (<tt class="docutils literal"><span class="pre">jandcode.dbm.dict.Dict</span></tt>) - это объект, который может преобразовывать
+некоторое атомарное значение в текст.</p>
+<div class="section" id="id2">
+<h2>Объявление словаря<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<dl class="docutils">
+<dt>Что бы объявить в приложении словарь, нужно:</dt>
+<dd><ol class="first last arabic simple">
+<li>Объявить домен, структура которого будет является структурой записи словаря, а имя
+домена - именем словаря. У домена обязательно должно быть поле <tt class="docutils literal"><span class="pre">id</span></tt>.
+Тип поля <tt class="docutils literal"><span class="pre">id</span></tt> в принципе не важен, но обычно используется <tt class="docutils literal"><span class="pre">long</span></tt>.</li>
+<li>Создать в домене дочерний узел <tt class="docutils literal"><span class="pre">dict</span></tt> - это метка, по которой будут выявляться
+словари. Атрибуты этого узла используются для инициализации свойств словаря.
+Имейте в виду, что это метка не наследуется (если унаследовать словарь от словаря,
+то он не будет словарем, пока ему не поставить метку <tt class="docutils literal"><span class="pre">dict</span></tt>, хотя бы и без
+атрибутов, которые все равно унаследуются)</li>
+<li>Объявить в домене dao с именем <tt class="docutils literal"><span class="pre">dict</span></tt>, который должен реализовывать интерфейс
+<tt class="docutils literal"><span class="pre">jandcode.dbm.dict.ILoadDict</span></tt> - он будет использоваться для загрузки словаря.</li>
+</ol>
+</dd>
+</dl>
+<p>Пример простого словаря из базы данных:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;domain</span> <span class="na">name=</span><span class="s">&quot;MyEasyDict1&quot;</span> <span class="na">parent=</span><span class="s">&quot;id&quot;</span> <span class="na">tag.db=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;dict</span> <span class="na">defaultField=</span><span class="s">&quot;name&quot;</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span> <span class="na">parent=</span><span class="s">&quot;String&quot;</span> <span class="na">size=</span><span class="s">&quot;60&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;dao</span> <span class="na">name=</span><span class="s">&quot;dict&quot;</span> <span class="na">class=</span><span class="s">&quot;jandcode.dbm.dict.SimpleLoadDictDao&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/domain&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="resolve">
+<h2>resolve словари<a class="headerlink" href="#resolve" title="Ссылка на этот заголовок">¶</a></h2>
+<p>resolve-словарь загружается не полностью, а только для переданных ему id-значений</p>
+</div>
+<div class="section" id="id3">
+<h2>Рализация загрузки словаря<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Как уже было сказано, для загрузки словаря используется dao с именем <tt class="docutils literal"><span class="pre">dict</span></tt>,
+который должен реализовывать интерфейс  <tt class="docutils literal"><span class="pre">jandcode.dbm.dict.ILoadDict</span></tt>.</p>
+<dl class="docutils">
+<dt>Переданному на загрузку словарю необходимо заполнить данные</dt>
+<dd><tt class="docutils literal"><span class="pre">jandcode.dbm.dict.Dict#getData()</span></tt>.</dd>
+</dl>
+<p>Если словарь resolve(<tt class="docutils literal"><span class="pre">resolve=true</span></tt>), то набор загружаемых id доступен в свойстве словаря
+<tt class="docutils literal"><span class="pre">jandcode.dbm.dict.Dict#getResolveIds()</span></tt>.  Для обычного словаря (<tt class="docutils literal"><span class="pre">resolve=false</span></tt>)
+Это свойство не учитывается и нужно грузить все, что доступно.</p>
+<p>Пример реализации загрузки обычного словаря:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SimpleLoadDictDao</span> <span class="kd">extends</span> <span class="n">CustomDao</span> <span class="kd">implements</span> <span class="n">ILoadDict</span> <span class="o">{</span>
+    <span class="nd">@DaoMethod</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">loadDict</span><span class="o">(</span><span class="n">Dict</span> <span class="n">dict</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">ut</span><span class="o">.</span><span class="na">loadSql</span><span class="o">(</span><span class="n">dict</span><span class="o">.</span><span class="na">getData</span><span class="o">(),</span> <span class="s">&quot;select * MyEasyDict1&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Пример реализации загрузки resolve-словаря:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SimpleLoadDictResolveDao</span> <span class="kd">extends</span> <span class="n">Dao</span> <span class="kd">implements</span> <span class="n">ILoadDict</span> <span class="o">{</span>
+    <span class="nd">@DaoMethod</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">loadDict</span><span class="o">(</span><span class="n">Dict</span> <span class="n">dict</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">IDataRecord</span> <span class="n">r</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Object</span> <span class="n">o</span> <span class="o">:</span> <span class="n">dict</span><span class="o">.</span><span class="na">getResolveIds</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">dict</span><span class="o">.</span><span class="na">getData</span><span class="o">().</span><span class="na">add</span><span class="o">();</span>
+            <span class="n">r</span><span class="o">.</span><span class="na">setValue</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">,</span> <span class="n">o</span><span class="o">);</span>
+            <span class="n">r</span><span class="o">.</span><span class="na">setValue</span><span class="o">(</span><span class="s">&quot;text&quot;</span><span class="o">,</span> <span class="s">&quot;V:&quot;</span> <span class="o">+</span> <span class="n">o</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Содержание</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Словари</a><ul>
+<li><a class="reference internal" href="#id2">Объявление словаря</a></li>
+<li><a class="reference internal" href="#resolve">resolve словари</a></li>
+<li><a class="reference internal" href="#id3">Рализация загрузки словаря</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="dao.html"
+                        title="предыдущая глава">Dao</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="validate.html"
+                        title="следующая глава">Howto: validate</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/dict.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li class="right" >
+          <a href="validate.html" title="Howto: validate"
+             >следующий</a> |</li>
+        <li class="right" >
+          <a href="dao.html" title="Dao"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-dbm</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

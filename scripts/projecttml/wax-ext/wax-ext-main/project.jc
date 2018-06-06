@@ -1,0 +1,12 @@
+//
+load '..'
+//
+project.name = "wax-ext-main"
+project.package_root = "wax.ext.main"
+//
+include "wax-module-project"
+include "localize-project"
+//
+libs = libs + ["jandcode-wax-core", "jandcode-wax-verdb", "wax-ext"]
+libs_dev = libs_dev + []
+//

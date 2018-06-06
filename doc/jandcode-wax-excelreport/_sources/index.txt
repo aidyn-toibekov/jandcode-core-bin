@@ -1,0 +1,6 @@
+﻿
+jandcode-wax-excelreport
+************************
+
+Модуль для формирования excel-отчетов для jandcode-wax.
+

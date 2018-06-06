@@ -1,0 +1,83 @@
+Словари
+*******
+
+Словарь (``jandcode.dbm.dict.Dict``) - это объект, который может преобразовывать
+некоторое атомарное значение в текст.
+
+Объявление словаря
+==================
+
+Что бы объявить в приложении словарь, нужно:
+    1) Объявить домен, структура которого будет является структурой записи словаря, а имя
+       домена - именем словаря. У домена обязательно должно быть поле ``id``.
+       Тип поля ``id`` в принципе не важен, но обычно используется ``long``.
+    2) Создать в домене дочерний узел ``dict`` - это метка, по которой будут выявляться
+       словари. Атрибуты этого узла используются для инициализации свойств словаря.
+       Имейте в виду, что это метка не наследуется (если унаследовать словарь от словаря,
+       то он не будет словарем, пока ему не поставить метку ``dict``, хотя бы и без
+       атрибутов, которые все равно унаследуются)
+    3) Объявить в домене dao с именем ``dict``, который должен реализовывать интерфейс
+       ``jandcode.dbm.dict.ILoadDict`` - он будет использоваться для загрузки словаря.
+
+Пример простого словаря из базы данных:
+
+.. code-block:: xml
+
+    <domain name="MyEasyDict1" parent="id" tag.db="true">
+        <dict defaultField="name"/>
+
+        <field name="name" parent="String" size="60"/>
+        <dao name="dict" class="jandcode.dbm.dict.SimpleLoadDictDao"/>
+    </domain>
+
+
+resolve словари
+===============
+
+resolve-словарь загружается не полностью, а только для переданных ему id-значений
+
+Рализация загрузки словаря
+==========================
+
+Как уже было сказано, для загрузки словаря используется dao с именем ``dict``,
+который должен реализовывать интерфейс  ``jandcode.dbm.dict.ILoadDict``.
+
+Переданному на загрузку словарю необходимо заполнить данные
+ ``jandcode.dbm.dict.Dict#getData()``.
+
+Если словарь resolve(``resolve=true``), то набор загружаемых id доступен в свойстве словаря
+``jandcode.dbm.dict.Dict#getResolveIds()``.  Для обычного словаря (``resolve=false``)
+Это свойство не учитывается и нужно грузить все, что доступно.
+
+Пример реализации загрузки обычного словаря:
+
+.. code-block:: java
+
+    public class SimpleLoadDictDao extends CustomDao implements ILoadDict {
+        @DaoMethod
+        public void loadDict(Dict dict) throws Exception {
+            ut.loadSql(dict.getData(), "select * MyEasyDict1");
+        }
+
+    }
+
+Пример реализации загрузки resolve-словаря:
+
+.. code-block:: java
+
+    public class SimpleLoadDictResolveDao extends Dao implements ILoadDict {
+        @DaoMethod
+        public void loadDict(Dict dict) throws Exception {
+            IDataRecord r;
+            for (Object o : dict.getResolveIds()) {
+                r = dict.getData().add();
+                r.setValue("id", o);
+                r.setValue("text", "V:" + o);
+            }
+        }
+    }
+
+
+
+
+

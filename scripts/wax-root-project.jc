@@ -1,0 +1,126 @@
+/*
+   проект wax-root
+
+   Для многомодульного wax-приложения
+
+   В проекте имена модулей прописываются в массиве 'modules', например:
+  
+   modules = ['module1', 'module2']
+  
+
+*/
+
+//
+include "wax-project"
+
+// сам проект не имеет исходников, только модули
+// однако является java-проектом. генерится пустая jar (только с версией)
+dirs_src = []
+dirs_src_test = []
+
+/**
+ * Модули проекта
+ */
+project.modules = []
+
+project.afterLoad = {
+    project.modules = project.modules.collect {
+        libs.add(it)
+        repo.getLib(project.name).getDepends().add(it)
+        load(project.wd(it), [afterLoad: {p ->
+            p.version = project.version
+        }])
+    }
+}
+
+//
+__clean_sv = clean
+clean = cm("Очистка от временных файлов") {
+    for (m in modules) {
+        m.clean()
+    }
+    __clean_sv()
+}
+
+//
+compile_all = cm("Компиляция всех модулей") {
+    for (m in modules) {
+        m.compile()
+    }
+    compile()
+}
+
+test = cm("Тестирование всех модулей") {
+    def outdir = wd("temp/testreport-all.html")
+    ut.cleandir(outdir)
+    repo.addClasspath("ant-junit")
+    //
+    for (m in modules) {
+        m.test()
+    }
+    //
+    log.info "Report test"
+    ant.junitreport(todir: outdir) {
+        for (m in modules) {
+            if (m.vars.PROJECT_JAVA) {
+                fileset(dir: m.dir_testreport_xml)
+            }
+        }
+        report(format: "frames", todir: outdir)
+    }
+    log "Test results in: ${outdir}"
+}
+
+//
+gen_idea = cm("Генерация файлов idea",
+        r: [value: false, help: "Генерировать также все зависимые модули"],
+) {
+    include "idea"
+    include "wax-idea"
+    idea.gen_module(project, libs + libs_dev)
+    idea.gen_project(project, libs + libs_dev + [project.name])
+
+    for (m in modules) {
+        m.gen_idea()
+    }
+
+    if (args.r) {
+        def lst = repo.getLibs(libs + libs_dev)
+        for (lib in lst) {
+            if (lib.project != null && lib.project.vars.containsKey("gen_idea")) {
+                lib.project.gen_idea()
+            }
+        }
+    }
+
+}
+
+create_module = cm("Создание нового модуля",
+        o: [value: null, help: "Имя модуля"],
+) {
+    include "projecttml"
+    //
+    def tdir = "scripts/projecttml"
+
+    //
+    def p = args
+    //
+
+    def tml = 'wax-complex-module'
+
+    def srcdir = wd(tml)
+    if (!fu.exists(srcdir)) {
+        srcdir = repo.findFile(tml)
+        if (srcdir == null) {
+            srcdir = repo.findFile(tdir + "/" + tml)
+            if (srcdir == null) error("Шаблон не найден")
+        }
+    }
+
+    //
+    def outdir = p.getValueString("o", null)
+    def params = [r: project.name]
+    params.putAll(args)
+    //
+    projecttml.generate(srcdir: srcdir, outdir: outdir, params: params)
+}

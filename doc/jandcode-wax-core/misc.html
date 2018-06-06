@@ -1,0 +1,135 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Разное &mdash; jandcode-wax-core</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-wax-core" href="index.html" />
+    <link rel="next" title="Dao в javascript" href="js-dao.html" />
+    <link rel="prev" title="Поддержка тестирования" href="tst.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li class="right" >
+          <a href="js-dao.html" title="Dao в javascript"
+             accesskey="N">следующий</a> |</li>
+        <li class="right" >
+          <a href="tst.html" title="Поддержка тестирования"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-wax-core</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Разное<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Всякие заметки, не вошедшие в другие разделы.</p>
+<div class="section" id="id2">
+<h2>Настройка главной страницы<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Для настройки главной страницы можно сделать иньекцию файлу <tt class="docutils literal"><span class="pre">/js/app-ini.js</span></tt>, содержимое
+файла попадет в основной заголовок <tt class="docutils literal"><span class="pre">/page/header.gsp</span></tt> после стандартной инициализации:</p>
+<div class="highlight-jsp"><div class="highlight"><pre><span class="k">&lt;%-</span><span class="o">-</span> <span class="nl">file:</span> <span class="o">/</span><span class="n">js</span><span class="o">/</span><span class="n">app</span><span class="o">-</span><span class="n">ini</span><span class="o">-</span><span class="n">inject</span><span class="o">.</span><span class="na">js</span><span class="o">.</span><span class="na">gsp</span> <span class="o">--</span><span class="k">%&gt;</span>
+<span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+    Jc.ini.myini = 1;
+    <span class="k">&lt;%</span>
+        <span class="n">def</span> <span class="n">rt</span> <span class="o">=</span> <span class="n">getApp</span><span class="o">().</span><span class="na">getRt</span><span class="o">()</span>
+    <span class="k">%&gt;</span>
+    Jc.ini.myini2 = &#39;${rt.getValueString(&quot;app/myini:myini2&quot;)}&#39;;
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+</div>
+<p>Так же можно скопировать в проект файл <tt class="docutils literal"><span class="pre">/page/main.gsp</span></tt> и изменить его по своему желанию.
+Однако этот способ допустим только в приложениях (не в модулях!).</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Содержание</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Разное</a><ul>
+<li><a class="reference internal" href="#id2">Настройка главной страницы</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="tst.html"
+                        title="предыдущая глава">Поддержка тестирования</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="js-dao.html"
+                        title="следующая глава">Dao в javascript</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/misc.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li class="right" >
+          <a href="js-dao.html" title="Dao в javascript"
+             >следующий</a> |</li>
+        <li class="right" >
+          <a href="tst.html" title="Поддержка тестирования"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-wax-core</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

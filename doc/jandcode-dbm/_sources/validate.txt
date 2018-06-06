@@ -1,0 +1,57 @@
+***************
+Howto: validate
+***************
+
+.. highlight:: xml
+
+Описание валидаторов в rt
+=========================
+
+В rt валидаторы описываются для доменов и полей.
+
+::
+
+    <domain name="d1" parent="id">
+        <field name="f1" parent="string">
+            <validator name="unique"/>
+            <validator name="myvalidator1" param="1"/>
+        </field>
+
+        <validator name="myvalidator2" param="2"/>
+    </domain>
+
+Валидатор для поля и домена описывается в дочернем узле ``<validator>``.
+
+Имя узла - это имя валидатора, зарегистрированного на уровне модели,
+если явно не указан класс валидатора:
+
+::
+
+    <!-- валидатор myvalidator2 из модели -->
+    <validator name="myvalidator2" param="2"/>
+
+    <!-- валидатор myvalidator2 из модели -->
+    <validator name="somename1" parent="myvalidator2" param="2"/>
+
+    <!-- указанного класса -->
+    <validator name="somename1" class="com.pak.MyVvalidator2" param="2"/>
+
+
+Режим валидатора
+----------------
+
+Режим валидатора указывается в атрибуте ``mode``. Если режим не указан, валидатор
+действителен во всех режимах::
+
+    <validator name="v1" mode="ins"/>
+    <validator name="v2" mode="ins,upd"/>
+
+Запрещение валидатора
+---------------------
+
+В потомках можно запрететить некоторые валидаторы предков. Для этого нужно установить
+``enabled="false"``::
+
+    <validator name="v1" enabled="false"/>
+
+

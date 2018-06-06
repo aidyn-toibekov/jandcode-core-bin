@@ -1,0 +1,176 @@
+/**
+ * Генерация проектов по шаблону.
+ * В качестве шаблона используется некий законченный проект.
+ * Для него создается файл "-projecttml.jc" в каталоге проекта,
+ * в котором описываются параметры генерации.
+ * Все текстовые файлы должны быть в кодировке utf-8
+ *
+ * Формат -projecttml.jc
+ *
+ * Когда загружается из исходного, в нем ищутся переменные:
+ * replaces = {p,res ->} - closure, котороая формирует список замен. Параметры:
+ *              p - VariantMap командной строки
+ *              res - map замен, который нужно заполнить
+ * textfiles = [] - список расширений текстовых файлов
+ * excludes = [] - список масок игнорируемых файлов
+ * params = [:] - map с параметрами командной строки в виде key:help
+ * Дополнительно ему прописывается outdir - каталог генерации
+ *
+ * Когда загружается из сгенерированного:
+ * postcreate = {} - выполняется эта closure
+ *
+ * После выполнения в сгенерированном каталоге этот файл удаляется!
+ */
+
+projecttml = createExt()
+
+/**
+ * Расширения текстовых файлов, в которых будет производится замена текста
+ */
+projecttml.textfiles = [
+        "java", "txt", "xml", "properties", "groovy", "xconf",
+        "gsp", "html", "htm", "css", "jsp", "jc", "xc", "js", "pathprop", "rt"]
+
+/**
+ * Исключаемые из шаблона файлы
+ */
+projecttml.excludes = [
+        "**/temp", "**/temp/**/*", "**/out", "**/out/**/*", "**/.bzr", "**/.bzr/**/*",
+        "**/.hg", "**/.hg/**/*", "**/_product", "**/_product/**/*",
+        "**/*.iws", "**/*.iml", "**/*.ipr", "support.jc", "**/*.log"
+]
+
+/**
+ * Этот файл проекта, загружается из исходного каталога и из сгенерированного.
+ */
+projecttml.projecttml_script = "-projecttml.jc"
+
+/**
+ * Генерация шаблона по проекту
+ *
+ * @param srcdir
+ *    Каталог с проектом-шаблоном
+ *
+ * @param outdir
+ *    В какой каталог генерировать проект.
+ *
+ * @params params
+ *    Параметры генерации в виде key:value. Они описаны в -projecttml.jc
+ *
+ */
+projecttml.generate = {Map pp ->
+    def p = ut.asVariantMap(pp)
+    //
+    def outdir = p.getValueString("outdir", null)
+    if (outdir == null) error("Каталог для генерации не задан")
+    outdir = fu.abs(outdir)
+    def srcdir = p.getValueString("srcdir", null)
+    if (srcdir == null) error("Исходный каталог не задан")
+
+    // по умолчанию
+    def replaces = [:]
+    def excludes = []
+    excludes.addAll(projecttml.excludes)
+    def textfiles = []
+    textfiles.addAll(projecttml.textfiles)
+
+    // из -projecttml.jc
+    def pts = fu.join(srcdir, projecttml.projecttml_script)
+    if (!fu.exists(pts)) error("Не найден файл: ${pts}")
+    def pts_project = load(pts)
+    pts_project.outdir = outdir
+
+    if ("replaces" in pts_project.vars) {
+        def p_p = ut.asVariantMap([:])
+        p_p.putAll(p.get("params", [:]))
+        pts_project.replaces(p_p, replaces)
+    }
+    if ("excludes" in pts_project.vars) {
+        excludes.addAll(pts_project.vars.excludes)
+    }
+    if ("textfiles" in pts_project.vars) {
+        textfiles.addAll(pts_project.vars.textfiles)
+    }
+
+    // замена текста в строке
+    def repl = {s ->
+        for (a in replaces) {
+            s = s.replace(a.key, a.value)
+        }
+        return s
+    }
+
+    //
+    srcdir = project.wd(srcdir).replace("\\", "/") + "/"
+    outdir = project.wd(outdir).replace("\\", "/") + "/"
+    //
+    log "Исходный каталог: ${srcdir}"
+    log "Выходной каталог: ${outdir}"
+    if (fu.exists(outdir)) error("Каталог ${outdir} уже существует")
+    //
+    ut.cleandir(outdir)
+
+    // пустые каталоги
+    def scannerED = ant.dirset(dir: srcdir) {
+        include(name: "**/*")
+        for (ex in projecttml.excludes) {
+            exclude(name: ex)
+        }
+        for (ex in excludes) {
+            exclude(name: ex)
+        }
+    }
+    for (ff in scannerED) {
+        def fd = new File(ff.toString())
+        if (fd.list().length != 0) continue
+        //
+        def f = ff.toString().replace("\\", "/")
+        def sn = su.removePrefix(f, srcdir)
+        sn = repl(sn)
+        def outf = outdir + sn
+        ant.mkdir(dir: outf)
+    }
+
+    // файлы
+    def scanner = ant.fileset(dir: srcdir, defaultexcludes: false) {
+        include(name: "**/*")
+        for (ex in projecttml.excludes) {
+            exclude(name: ex)
+        }
+        for (ex in excludes) {
+            exclude(name: ex)
+        }
+    }
+    for (ff in scanner) {
+        def f = ff.toString().replace("\\", "/")
+        def sn = su.removePrefix(f, srcdir)
+        sn = repl(sn)
+        def outf = outdir + sn
+        //
+        if (textfiles.contains(fu.ext(f))) {
+            log.debug "write with replace: ${sn}"
+            def s = fu.loadString(f)
+            s = repl(s)
+            ut.cleanfile(outf)
+            fu.saveString(s, new File(outf))
+        } else {
+            ant.copy(file: f, tofile: outf)
+        }
+
+    }
+
+    // post-create
+    pts = fu.join(outdir, projecttml.projecttml_script)
+    if (fu.exists(pts)) {
+        pts_project = load(pts)
+        if ("postcreate" in pts_project.vars) {
+            log "Exec post create"
+            pts_project.postcreate()
+        }
+        ant.delete(file: pts)
+    }
+
+    //
+    log "Проект сгенерирован: ${outdir}"
+
+}

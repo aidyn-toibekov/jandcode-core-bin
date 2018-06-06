@@ -1,0 +1,127 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GroovyService &mdash; jandcode-groovy</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-groovy" href="index.html" />
+    <link rel="next" title="GSP" href="gsp.html" />
+    <link rel="prev" title="jandcode-groovy" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li class="right" >
+          <a href="gsp.html" title="GSP"
+             accesskey="N">следующий</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="jandcode-groovy"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-groovy</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="groovyservice">
+<h1>GroovyService<a class="headerlink" href="#groovyservice" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Для получения класса из текста скрипта используется метод <tt class="docutils literal"><span class="pre">getClazz</span></tt>, например:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">GroovyClazz</span> <span class="n">c</span> <span class="o">=</span> <span class="n">getApp</span><span class="o">().</span><span class="na">service</span><span class="o">(</span><span class="n">GroovyService</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">getClazz</span><span class="o">(</span><span class="n">MyBaseClass</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">&quot;void onRun&quot;</span><span class="o">,</span>
+        <span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="s">&quot;myscript.groovy&quot;</span><span class="o">),</span> <span class="kc">false</span><span class="o">);</span>
+</pre></div>
+</div>
+<p>Принцип простой: создается текст определения класса, который является потомком базового
+класса, который передан первым параметром (в данном случае <tt class="docutils literal"><span class="pre">MyBaseClass</span></tt>). Затем для
+класса создается метод, сигнатура которого переданна во втором параметре
+(в данном случае <tt class="docutils literal"><span class="pre">void</span> <span class="pre">onRun</span></tt>). Текст, загруженный из указанного третьм параметром файла,
+становится телом метода <tt class="docutils literal"><span class="pre">onRun</span></tt>. Последним параметром указывается, что текст скрипта
+не шаблон. Если указать <tt class="docutils literal"><span class="pre">true</span></tt>, текст скрипта будет рассматриваться как шаблон <a class="reference internal" href="gsp.html"><em>GSP</em></a>.</p>
+<p>Также можно загружать текст скрипта из строковой переменной:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">GroovyClazz</span> <span class="n">c</span> <span class="o">=</span> <span class="n">getApp</span><span class="o">().</span><span class="na">service</span><span class="o">(</span><span class="n">GroovyService</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">getClazz</span><span class="o">(</span><span class="n">MyBaseClass</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">&quot;void onRun&quot;</span><span class="o">,</span>
+        <span class="s">&quot;print(&#39;hello!&#39;)&quot;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+</pre></div>
+</div>
+<p>Полученный экземпляр <tt class="docutils literal"><span class="pre">GroovyClazz</span></tt> содержит методы для получения скомпилированного
+java-класса (<tt class="docutils literal"><span class="pre">getClazz</span></tt>), получения исходников скрипта и др.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="index.html"
+                        title="предыдущая глава">jandcode-groovy</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="gsp.html"
+                        title="следующая глава">GSP</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/service.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li class="right" >
+          <a href="gsp.html" title="GSP"
+             >следующий</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="jandcode-groovy"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-groovy</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

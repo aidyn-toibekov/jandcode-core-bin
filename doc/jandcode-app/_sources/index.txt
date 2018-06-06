@@ -1,0 +1,17 @@
+
+jandcode-app
+************
+
+Модуль поддержки приложения, модульности и конфигурации.
+
+.. toctree::
+   :maxdepth: 2
+
+   load
+   config
+   objectfactory
+   comprt
+   service
+   lang
+   rtdoc
+

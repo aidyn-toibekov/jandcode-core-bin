@@ -1,0 +1,255 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Локализация приложений &mdash; jandcode-app</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-app" href="index.html" />
+    <link rel="next" title="Rt конфигурация" href="rtdoc.html" />
+    <link rel="prev" title="Сервисы приложения" href="service.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li class="right" >
+          <a href="rtdoc.html" title="Rt конфигурация"
+             accesskey="N">следующий</a> |</li>
+        <li class="right" >
+          <a href="service.html" title="Сервисы приложения"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-app</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Локализация приложений<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Jandcode поддерживает локализацию приложений, основанную на переводе строковых констант.
+Идея в том, что все строковые ресурсы проекта, которые в будующем потребуется перевести,
+пишутся в проекте на одном языке (в текущей реализации - на русском). В исходных
+текстах такие строки оборачиваются в вызов метода <tt class="docutils literal"><span class="pre">UtLang.t</span></tt> (для java, groovy, gsp, javascript).</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="c1">// обычная строка</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">(</span><span class="s">&quot;Привет!&quot;</span><span class="o">);</span>
+<span class="c1">// переводимая строка</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">(</span><span class="n">UtLang</span><span class="o">.</span><span class="na">t</span><span class="o">(</span><span class="s">&quot;Привет!&quot;</span><span class="o">));</span>
+</pre></div>
+</div>
+<p>С помощью средств, предоставляемых утилитой <tt class="docutils literal"><span class="pre">jc</span></tt>, переводимые строки можно извлечь
+в специальные файлы, перевести и таким образом обеспечить поддержку нового языка.
+Строки, для которых не был предоставлен перевод, будут представлены оригинальным
+текстом на языке по умолчанию (в текущей реализации - на русском).</p>
+<div class="section" id="project-jc">
+<h2>Настройка project.jc<a class="headerlink" href="#project-jc" title="Ссылка на этот заголовок">¶</a></h2>
+<p>В project.jc нужно подключить модуль поддержки локализации:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">include</span> <span class="s">&quot;localize-project&quot;</span>
+</pre></div>
+</div>
+<p>После подключения будут доступны новые команды:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">lang</span><span class="o">-</span><span class="n">check</span>
+<span class="n">lang</span><span class="o">-</span><span class="n">grab</span>
+<span class="n">lang</span><span class="o">-</span><span class="n">update</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>Выявление строк для перевода<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Запускаем:</p>
+<div class="highlight-python"><pre>jc lang-check</pre>
+</div>
+<p>Эта команда анализирует исходные тексты и выявляет строки, которые никак не помечены
+для локализации в исходниках. Все строки собираются в файл <tt class="docutils literal"><span class="pre">temp\lang-check.txt</span></tt>.
+Для каждой строки указывается сама строка и место в файле, в котором она обнаружена.</p>
+<p>Каждую константу, требующую перевода, необходимо обернуть в вызов функции <tt class="docutils literal"><span class="pre">UtLang.t</span></tt>.
+Например было:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;Привет&quot;</span><span class="o">;</span>  <span class="c1">// java</span>
+<span class="n">var</span> <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;Привет&quot;</span><span class="o">;</span>     <span class="c1">// javascript</span>
+</pre></div>
+</div>
+<p>Должно стать:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="n">UtLang</span><span class="o">.</span><span class="na">t</span><span class="o">(</span><span class="s">&quot;Привет&quot;</span><span class="o">);</span> <span class="c1">//java</span>
+<span class="n">var</span> <span class="n">s</span> <span class="o">=</span> <span class="n">UtLang</span><span class="o">.</span><span class="na">t</span><span class="o">(</span><span class="s">&quot;Привет&quot;</span><span class="o">);</span>        <span class="c1">//javascript</span>
+</pre></div>
+</div>
+<p>Если строка описана как константа, то переводит ее нужно в месте использования!</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+            <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">AA</span> <span class="o">=</span> <span class="s">&quot;Привет&quot;</span><span class="o">;</span> <span class="c1">//NLS</span>
+            <span class="kt">void</span> <span class="nf">getAA</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="n">UtLang</span><span class="o">.</span><span class="na">t</span><span class="o">(</span><span class="n">AA</span><span class="o">);</span>
+            <span class="o">}</span>
+    <span class="o">}</span>
+</pre></div>
+</div>
+<p>Константы, требующие перевода, но не заключенные в вызов <tt class="docutils literal"><span class="pre">UtLang.t</span></tt>, можно
+пометить коментарием <tt class="docutils literal"><span class="pre">//NLS</span></tt>. Коментарий должен быть указан либо на той же
+строке, что и константа, либо перед ней:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="c1">//NLS</span>
+<span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;Привет&quot;</span><span class="o">;</span>
+
+<span class="n">String</span> <span class="n">s2</span> <span class="o">=</span> <span class="s">&quot;Привет&quot;</span><span class="o">;</span> <span class="c1">//NLS</span>
+</pre></div>
+</div>
+<p>Константы, не требующие перевода, нужно пометить коментарием <tt class="docutils literal"><span class="pre">//NON-NLS</span></tt>.
+Коментарий должен быть указан либо на той же строке, что и константа, либо перед ней:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="c1">//NON-NLS</span>
+<span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;Привет&quot;</span><span class="o">;</span>
+
+<span class="n">String</span> <span class="n">s2</span> <span class="o">=</span> <span class="s">&quot;Привет&quot;</span><span class="o">;</span> <span class="c1">//NON-NLS</span>
+</pre></div>
+</div>
+<p>Констаны, собранные через &#8220;+&#8221; нужно объеденить и использовать формат строки из
+метода <tt class="docutils literal"><span class="pre">MessageFormat.format</span></tt>:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="c1">// было</span>
+<span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;Обработатано &quot;</span> <span class="o">+</span> <span class="n">n</span> <span class="o">+</span> <span class="s">&quot; файлов&quot;</span><span class="o">;</span>
+
+<span class="c1">// нужно</span>
+<span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="n">UtLang</span><span class="o">.</span><span class="na">t</span><span class="o">(</span><span class="s">&quot;Обработано {0} файлов&quot;</span><span class="o">,</span> <span class="n">n</span><span class="o">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>Сбор строк для перевода<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<p>После того, как все нужные строки помечены в исходниках, можно собрать их.
+Для этого предназначена команда:</p>
+<div class="highlight-python"><pre>jc lang-grab</pre>
+</div>
+<p>Команда пересоздает файл <tt class="docutils literal"><span class="pre">lang-data.xml</span></tt> в корневом пакете модуля. Файл выглядет так:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;i&gt;</span>
+        <span class="nt">&lt;s&gt;</span>Добавить<span class="nt">&lt;/s&gt;</span>
+    <span class="nt">&lt;/i&gt;</span>
+    <span class="nt">&lt;i&gt;</span>
+        <span class="nt">&lt;s&gt;</span>Закрыть<span class="nt">&lt;/s&gt;</span>
+    <span class="nt">&lt;/i&gt;</span>
+    <span class="nt">&lt;i&gt;</span>
+        <span class="nt">&lt;s&gt;</span>Назад<span class="nt">&lt;/s&gt;</span>
+    <span class="nt">&lt;/i&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>Обновление файла перевода<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h2>
+<p>После того, как все нужные строки собраны, можно формировать файлы для перевода.
+Для этого скопируйте файл <tt class="docutils literal"><span class="pre">lang-data.xml</span></tt> в тот же каталог с именем <tt class="docutils literal"><span class="pre">lang-data-XX.xml</span></tt>,
+где вместо <tt class="docutils literal"><span class="pre">XX</span></tt> поставьте код языка, для которого этот файл (например <tt class="docutils literal"><span class="pre">lang-data-en.xml</span></tt>).
+После этого выполните команду:</p>
+<div class="highlight-python"><pre>jc lang-update</pre>
+</div>
+<p>Получим такой файл:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;i</span> <span class="na">translated=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;s&gt;</span>Добавить<span class="nt">&lt;/s&gt;</span>
+        <span class="nt">&lt;t&gt;&lt;/t&gt;</span>
+    <span class="nt">&lt;/i&gt;</span>
+    <span class="nt">&lt;i</span> <span class="na">translated=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;s&gt;</span>Закрыть<span class="nt">&lt;/s&gt;</span>
+        <span class="nt">&lt;t&gt;&lt;/t&gt;</span>
+    <span class="nt">&lt;/i&gt;</span>
+    <span class="nt">&lt;i</span> <span class="na">translated=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;s&gt;</span>Назад<span class="nt">&lt;/s&gt;</span>
+        <span class="nt">&lt;t&gt;&lt;/t&gt;</span>
+    <span class="nt">&lt;/i&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+<p>Редактируем файл <tt class="docutils literal"><span class="pre">lang-data-en.xml</span></tt>, в теги <tt class="docutils literal"><span class="pre">t</span></tt> записываем перевод. Снова запускаем
+<tt class="docutils literal"><span class="pre">jc</span> <span class="pre">lang-update</span></tt> (для убирания пометок о непереведенны строках).</p>
+<p>Если в файле <tt class="docutils literal"><span class="pre">lang-data.xml</span></tt> появятся новые строки, то после выполнения <tt class="docutils literal"><span class="pre">jc</span> <span class="pre">lang-update</span></tt>,
+эти новые строки попадут во все файлы перевода.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Содержание</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Локализация приложений</a><ul>
+<li><a class="reference internal" href="#project-jc">Настройка project.jc</a></li>
+<li><a class="reference internal" href="#id2">Выявление строк для перевода</a></li>
+<li><a class="reference internal" href="#id3">Сбор строк для перевода</a></li>
+<li><a class="reference internal" href="#id4">Обновление файла перевода</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="service.html"
+                        title="предыдущая глава">Сервисы приложения</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="rtdoc.html"
+                        title="следующая глава">Rt конфигурация</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/lang.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li class="right" >
+          <a href="rtdoc.html" title="Rt конфигурация"
+             >следующий</a> |</li>
+        <li class="right" >
+          <a href="service.html" title="Сервисы приложения"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-app</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

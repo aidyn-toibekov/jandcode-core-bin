@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+
+    <!--
+        настройки базы данных для разработчика
+    -->
+
+    <db name="default"
+        database="#{path}/temp/DERBY_DATABASE_DEV"
+            />
+
+</root>

@@ -1,0 +1,33 @@
+Jandcode Core
+=============
+
+Version |version|
+
+Документация по **Jandcode Core**.
+
+:doc:`Что нового <whatnew>`
+
+Содержание
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   intro
+
+Модули
+------
+
+* `jandcode-app <jandcode-app/index.html>`_
+* `jandcode-dbm <jandcode-dbm/index.html>`_
+* `jandcode-groovy <jandcode-groovy/index.html>`_
+* `jandcode-jc <jandcode-jc/index.html>`_
+* `jandcode-ui <jandcode-ui/index.html>`_
+* `jandcode-utils <jandcode-utils/index.html>`_
+* `jandcode-wax-auth <jandcode-wax-auth/index.html>`_
+* `jandcode-wax-core <jandcode-wax-core/index.html>`_
+* `jandcode-wax-excelreport <jandcode-wax-excelreport/index.html>`_
+* `jandcode-wax-verdb <jandcode-wax-verdb/index.html>`_
+* `jandcode-web <jandcode-web/index.html>`_
+* `jandcode-jboss-fixvfs <jandcode-jboss-fixvfs/index.html>`_
+

@@ -1,0 +1,146 @@
+
+Фильтр запросов SqlFilter
+=========================
+
+Часто приходится писать sql, который собирается по некоторым параметрам и поддерживает
+пагинацию. Возьмем к примеру таблицу "Абоненты". Данных в ней много, нужно ее фильтровать
+при показе, показывать по странично, и еще (ко всему прочему) в заголовке окна
+показывать, какой фильтр был использован. Для решения этой задачи и предназначен
+SqlFilter.
+
+Для детального описания см:
+``jandcode.dbm.sqlfilter.SqlFilter``,
+``jandcode.dbm.sqlfilter.SqlFilterItem``,
+``jandcode.dbm.sqlfilter.ISqlFilterBuilder``
+
+Примеры реализации элементов фильтра см:
+``jandcode.dbm.sqlfilter.SqlFilter_contains``,
+``jandcode.dbm.sqlfilter.SqlFilter_equal``,
+``jandcode.dbm.sqlfilter.SqlFilter_year``
+
+Как пользоваться:
+
+.. code-block:: java
+
+    // текст на groovy
+    @DaoMethod
+    DataStore loadFiltered(Map params) {
+        // создаем фильтр
+        SqlFilter f = ut.createSqlFilter("Abonent.filter", params)
+        // задаем базовый sql
+        f.sql = "select * from Abonent where 0=0 order by id"
+        // требуем пагинации
+        f.paginate(true)
+        // добавляем фильтры
+        f.filter(field: "name", type: "contains")
+        f.filter(field: "tel", type: "equal")
+        // загружаем
+        def res = ut.createStore("Abonent")
+        f.load(res)
+        // все
+        return res
+    }
+
+Метод ``ut.createSqlFilter("Abonent.filter", params)`` создает фильтр и указывает
+базовый домен и параметры.
+
+Метод ``f.filter`` создает элемент фильтра (описан ниже).
+
+
+Элемент фильтра
+---------------
+
+Элемент фильтра - это средство предоставления кусочка where в sql, который основан на
+параметра, полученных от пользователя.
+Элемент фильтра наследуется от класса ``jandcode.dbm.sqlfilter.SqlFilterItem``
+и ему реализуется метод ``onBuild``.
+Регистрация элементов фильтра делается в модели в теге ``<sqlfilter/>``. Пример:
+
+.. code-block:: xml
+
+    <root>
+        <model name="sys">
+            <sqlfilter name="equal"
+                       class="jandcode.dbm.sqlfilter.SqlFilter_equal"/>
+        </model>
+    </root>
+
+В атрибуте ``class`` указывается класс реализатор. В случае, когда элемент фильтра для
+конкретного типа СУБД отличается, можно сделать реализацию для конкретной СУБД и
+указать ее в атрибуте ``class.DBTYPE``. Например:
+
+.. code-block:: xml
+
+    <root>
+        <model name="sys">
+            <sqlfilter name="equal"
+                       class="jandcode.dbm.sqlfilter.SqlFilter_equal"
+                       class.oracle="jandcode.dbm.sqlfilter.SqlFilter_equal_oracle"
+                       class.mysql="jandcode.dbm.sqlfilter.SqlFilter_equal_mysql"
+                       />
+        </model>
+    </root>
+
+
+Базовый sql
+-----------
+
+Базовый sql должен содержать явно выделяемые части.
+
+select
+~~~~~~
+
+Часть текста sql между ``select`` и ``from``. Для сложных sql,
+где и ``select`` и ``from`` может встречаться много раз, слова помечаются коментарием
+``/**/``, который ставится до слова::
+
+    select * from aaa where 0=0 order by id
+
+    /**/select * /**/from aaa where 0=0 and (b in select a from c) order by id
+
+Используется для подмены списка полей. Например запрос общего количества записей
+заменяет поля в select на ``count(*)``, а пагинированный запрос oracle требует еще
+одно дополнительное поле в списке select.
+
+
+where
+~~~~~
+
+Место вставки условия фильтрации. Автоматически выявляется по наличию слова ``where``
+в тексте запроса, после которого и вставляется условие фильтрации.
+Если в тексте sql несколько where, то нужный помечается коментарием ``/**/`` до where.
+В этом методе пустое условие фильтрации игнорируется, а существующее дополняется в **конце**
+оператором ``and``.
+
+Если в тексте sql имеется несколько where, в которых нужно разместить условия
+фильтрации, то место вставки помечается коментарием ``/*where:name*/``, где ``name`` -
+имя where, которое указывается в элементе фильтра в свойстве ``whereName``.
+Коментарий ``/*where*/`` рассматривается как место вставки условия фильтрации
+по умолчанию.
+В этом методе пустое условие фильтрации игнорируется, а существующее дополняется в **начале**
+оператором ``and``::
+
+    select * from aaa where 0=0 order by id
+
+    select * from aaa /**/where 0=0 order by id
+
+    select * from aaa where 0=0 /*where*/ order by id
+
+    select * from aaa where 0=0 /*where:default*/ order by id
+
+    select * from aaa /**/where 0=0 and (b in select a from c where c=1 /*where:w1*/) order by id
+
+order by
+~~~~~~~~
+
+Место вставки сортировки. Автоматически выявляется по фразе ``order by``. Если
+в тексте sql несколько операторов order by, то нужный помечается коментарием ``/**/``.
+Текст order by рассматривается до конца текста sql либо до коментария ``/*end*/``::
+
+    select * from aaa where 0=0 order by id
+
+    select * from aaa where 0=0 and
+    (b in select a from c where c=1 order by a)
+    /**/order by tab/*end*/ group by id
+
+Используется для подмены сортировки или ее исключения.

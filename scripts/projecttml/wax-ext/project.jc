@@ -1,0 +1,49 @@
+//
+project.name = "wax-ext-workspace"
+project.package_root = "wax.ext.workspace"
+//
+include "wax-root-project"
+//
+modules = [
+        'wax-ext',
+        'wax-ext-main',
+]
+
+//
+libs = libs + []
+libs_dev = libs_dev + []
+//
+
+//
+product = cm("Сборка продукта") {
+    clean()
+    compile()
+
+    //
+    def distr = wax_distr_rootdir
+    def product = wd("_product")
+    //
+    ut.cleandir(distr)
+    ut.cleandir(product)
+
+    //
+    ant.echo(message: version, file: distr + "/VERSION")
+
+    //
+    for (m in modules) {
+        if (m.name.indexOf('-main') != -1) {
+            continue
+        }
+        m.zipsrc()
+        def m1 = repo.getLib(m.name)
+        ut.copylibs([m1], distr, true)
+    }
+
+    //
+    ant.zip(destfile: product + "/${project.name.replace('-workspace', '')}-${version}.zip") {
+        zipfileset(dir: distr, prefix: '') {
+            include(name: "**/*")
+        }
+    }
+
+}

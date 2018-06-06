@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+
+    <!-- приложение -->
+    <x-include module="jandcode.demos.web.empty"/>
+
+    <!-- ===================================================================== -->
+
+    <app appdir="#{path}" debug="true">
+    </app>
+
+    <web>
+        <resource name="i" path="#{path}/web"/>
+    </web>
+
+    <!-- ===================================================================== -->
+
+    <!-- перекрытие для разработчика -->
+    <x-include path="_app.rt" required="false"/>
+
+</root>

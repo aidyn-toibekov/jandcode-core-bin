@@ -1,0 +1,252 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Сервисы приложения &mdash; jandcode-app</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="jandcode-app" href="index.html" />
+    <link rel="next" title="Локализация приложений" href="lang.html" />
+    <link rel="prev" title="jandcode.app.CompRt" href="comprt.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             accesskey="I">словарь</a></li>
+        <li class="right" >
+          <a href="lang.html" title="Локализация приложений"
+             accesskey="N">следующий</a> |</li>
+        <li class="right" >
+          <a href="comprt.html" title="jandcode.app.CompRt"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-app</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="app-service">
+<span id="id1"></span><h1>Сервисы приложения<a class="headerlink" href="#app-service" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Сервисом является глобальный экземпляр класса, который реализует определенный интерфейс.
+Сервисы в приложении доступны через интерфейс, который они реализуют. В качестве
+интерфейса могут быть использованы обычные интерфейсы (interface), абстрактные классы,
+обычные классы.</p>
+<p>Сервисы создаются в процессе загрузки приложения и существуют все время жизни приложения.</p>
+<p>Сервисы в приложении описываются как дочерние узлы узла <tt class="docutils literal"><span class="pre">service</span></tt>. Имя узла -
+это имя класса-интерфейса сервиса. Значение атрибута <tt class="docutils literal"><span class="pre">class</span></tt> - это класс реализатор
+сервиса:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;service</span> <span class="na">name=</span><span class="s">&quot;jandcode.app.ErrorService&quot;</span>
+             <span class="na">class=</span><span class="s">&quot;jandcode.app.impl.ErrorServiceImpl&quot;</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;service</span> <span class="na">name=</span><span class="s">&quot;jandcode.app.ReloadService&quot;</span>
+             <span class="na">class=</span><span class="s">&quot;jandcode.app.impl.ReloadServiceImpl&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+<p>Доступ к сервисам осуществляется через метод <tt class="docutils literal"><span class="pre">App.service(interfaceClass)</span></tt>, где
+в качестве параметра передается интерфейсный класс сервиса:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">ErrorFormatter</span> <span class="n">fmt</span> <span class="o">=</span> <span class="n">getApp</span><span class="o">().</span><span class="na">service</span><span class="o">(</span><span class="n">ErrorService</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">getErrorFormatter</span><span class="o">();</span>
+</pre></div>
+</div>
+<div class="section" id="id2">
+<h2>Активация сервисов<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Если сервис реализует интерфейсы <tt class="docutils literal"><span class="pre">jandcode.app.IActivate</span></tt>, <tt class="docutils literal"><span class="pre">jandcode.app.IAfterActivate</span></tt>,
+или <tt class="docutils literal"><span class="pre">jandcode.app.IBeforeActivate</span></tt>
+то он активируется в процессе <a class="reference internal" href="load.html#app-load-activate"><em>активации приложения</em></a>.</p>
+</div>
+<div class="section" id="id3">
+<h2>Пример 1<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Создадим некий простой сервис:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">package</span> <span class="n">myapp</span><span class="o">;</span>
+
+<span class="c1">// абстрактный интерфейс сервиса</span>
+<span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">TimerService</span> <span class="kd">implements</span> <span class="n">IActivate</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">abstract</span> <span class="kt">void</span> <span class="nf">startTimer</span><span class="o">();</span>
+    <span class="kd">public</span> <span class="kd">abstract</span> <span class="kt">long</span> <span class="nf">stopTimer</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="c1">// реализация сервиса</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TimerServiceImpl</span> <span class="kd">extends</span> <span class="n">TimerService</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">long</span> <span class="n">saveTimer</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">startTimer</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">saveTimer</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">stopTimer</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">saveTimer</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">activate</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">startTimer</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Далее сервис нужно описать в конфигурации (rt-файле):</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;service</span> <span class="na">name=</span><span class="s">&quot;myapp.TimerService&quot;</span> <span class="na">class=</span><span class="s">&quot;myapp.TimerServiceImpl&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+<p>что эквивалентно:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;service&gt;</span>
+        <span class="nt">&lt;myapp.TimerService</span> <span class="na">class=</span><span class="s">&quot;myapp.TimerServiceImpl&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/service&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+<p>Используем сервис:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="n">getApp</span><span class="o">().</span><span class="na">service</span><span class="o">(</span><span class="n">TimerService</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">startTimer</span><span class="o">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>Пример 2. Без абстрактного интерфейса<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Создадим простой сервис без абстрактного интерфейса. Фактически просто глобальный
+экземпляр объекта:</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">package</span> <span class="n">myapp</span><span class="o">;</span>
+
+<span class="c1">// интерфейс и реализация сервиса</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TimerService</span> <span class="kd">implements</span> <span class="n">IActivate</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">long</span> <span class="n">saveTimer</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">startTimer</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">saveTimer</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">stopTimer</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">saveTimer</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">activate</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">startTimer</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Далее сервис нужно описать в конфигурации (rt-файле). В качестве имени и атрибута
+<tt class="docutils literal"><span class="pre">class</span></tt> указываем один и тот же класс:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;service</span> <span class="na">name=</span><span class="s">&quot;myapp.TimerService&quot;</span> <span class="na">class=</span><span class="s">&quot;myapp.TimerService&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>Пример 3. Замена реализации сервиса<a class="headerlink" href="#id5" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Создадим альтернативную реализацию сервиса, описанного в предыдущем примере.</p>
+<div class="highlight-java"><div class="highlight"><pre><span class="kn">package</span> <span class="n">myapp2</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">myapp.*</span><span class="o">;</span>
+<span class="c1">// интерфейс и реализация сервиса</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TimerServiceWithLog</span> <span class="kd">extends</span> <span class="n">TimerService</span> <span class="o">{</span>
+    <span class="kd">protected</span> <span class="kd">static</span> <span class="n">Log</span> <span class="n">log</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="o">.</span><span class="na">getLog</span><span class="o">(</span><span class="n">TimerServiceWithLog</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">stopTimer</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">a</span> <span class="o">=</span> <span class="kd">super</span><span class="o">.</span><span class="na">stopTimer</span><span class="o">();</span>
+        <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">&quot;timer stopped with: &quot;</span><span class="o">+</span><span class="n">a</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">a</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Далее сервис нужно описать в конфигурации (rt-файле). Заменяем существующему сервису
+атрибут <tt class="docutils literal"><span class="pre">class</span></tt>:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;service</span> <span class="na">name=</span><span class="s">&quot;myapp.TimerService&quot;</span> <span class="na">class=</span><span class="s">&quot;myapp2.TimerServiceWithLog&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/root&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Содержание</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Сервисы приложения</a><ul>
+<li><a class="reference internal" href="#id2">Активация сервисов</a></li>
+<li><a class="reference internal" href="#id3">Пример 1</a></li>
+<li><a class="reference internal" href="#id4">Пример 2. Без абстрактного интерфейса</a></li>
+<li><a class="reference internal" href="#id5">Пример 3. Замена реализации сервиса</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="comprt.html"
+                        title="предыдущая глава">jandcode.app.CompRt</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="lang.html"
+                        title="следующая глава">Локализация приложений</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/service.txt"
+           rel="nofollow">Показать исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Словарь-указатель"
+             >словарь</a></li>
+        <li class="right" >
+          <a href="lang.html" title="Локализация приложений"
+             >следующий</a> |</li>
+        <li class="right" >
+          <a href="comprt.html" title="jandcode.app.CompRt"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">jandcode-app</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+</html>

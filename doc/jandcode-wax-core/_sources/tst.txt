@@ -1,0 +1,141 @@
+
+Поддержка тестирования
+**********************
+
+web тесты
+=========
+
+При написании приложения часто приходится проверять различные аспекты приложения
+непосредственно в браузере. Для того, что бы не замусоривать код приложения тестовым кодом,
+он вынесен отдельно.
+
+Для поддержки web-тестов необходимо подключить модуль ``jandcode.wax.tst`` после
+модуля приложения:
+
+.. code-block:: xml
+
+    <!-- file: app.rt -->
+    <root>
+        <app appdir="#{path}" debug="true"/>
+        <x-include module="jandcode.demos.wax.demo1"/>
+        <x-include module="jandcode.wax.tst"/>  <!-- модуль web-тестов -->
+        <web>
+            <resource name="i" path="#{path}/web"/>
+        </web>
+    </root>
+
+Затем в каталоге ``web`` нужно создать подкаталог ``tst``. В этом каталоге
+будем писать тесты.
+
+Каждый тест представляет собой обычный ``gsp`` файл. Для запуска тестов нужно ввести
+uri ``tst`` (например ``http://localhost:8080/myapp/tst``). Вы должны увидеть стартовую
+страницу с файлами ``gsp``, расположенными в ``web/tst``. Щелкните по нужному тесту и
+откроется страница с его результатами.
+
+По адресу ``http://localhost:8080/myapp/tst/system/devtools`` находится приложение
+с инструментами для разработчика.
+
+Стандартные шаблоны тестов
+--------------------------
+
+Простой gsp
+~~~~~~~~~~~
+
+Просто gsp-файл. Содержимое любое. Например:
+
+.. code-block:: jsp
+
+    <html>
+        <head>
+          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        </head>
+        <body>
+            Привет тест из ${request.pathInfo} от ${new DateTime()}
+        </body>
+    </html>
+
+Пустая страница
+~~~~~~~~~~~~~~~
+
+Загружена вся инфраструктура (все js+css). body пустой:
+
+.. code-block:: jsp
+
+    <jc:page tml="tst">
+      <script type="text/javascript">
+        Ext.onReady(function() {
+          Jc.showMsg("Hello!");
+        });
+      </script>
+    </jc:page>
+
+Возможно указывать текст для head-области html файла:
+
+.. code-block:: jsp
+
+    <jc:page tml="tst">
+        <jc:block arg="header">
+            <style type="text/css">
+              body {
+                background: #004500;
+              }
+            </style>
+        </jc:block>
+
+        <script type="text/javascript">
+        Ext.onReady(function() {
+          Jc.showMsg("Hello!");
+        });
+      </script>
+    </jc:page>
+
+
+В контексте приложения
+~~~~~~~~~~~~~~~~~~~~~~
+
+Загружено все приложение полностью. Стартовый скрипт приложения не выполнен:
+
+.. code-block:: jsp
+
+    <jc:page tml="app">
+      <script type="text/javascript">
+        Ext.onReady(function() {
+          Jc.showMsg("Hello!");
+        });
+      </script>
+    </jc:page>
+
+
+Выполнение unittest
+~~~~~~~~~~~~~~~~~~~
+
+Загружена вся инфраструктура (все js+css). В body зарегервировано место для вывода
+резальтатов unittest:
+
+.. code-block:: jsp
+
+    <jc:page tml="unittest">
+      <script type="text/javascript">
+        Ext.onReady(function() {
+          new Test.Unit.Runner({
+            //////////////////////////////////////////////////////////////////////
+            setup: function() {
+            },
+
+            teardown: function() {
+            },
+
+            test1: function() {
+              this.assertEqual(10, 10);
+            }
+            //////////////////////////////////////////////////////////////////////
+          }).runTests();
+        });
+      </script>
+    </jc:page>
+
+
+
+
+
+

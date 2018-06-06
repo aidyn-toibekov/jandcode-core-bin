@@ -1,0 +1,15 @@
+
+jandcode-dbm
+************
+
+Модуль поддержки доменных объектов и баз данных
+
+.. toctree::
+   :maxdepth: 2
+
+   model
+   dao
+   dict
+   validate
+   sqlfilter
+   rtdoc

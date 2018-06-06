@@ -1,0 +1,1 @@
+Search.setIndex({objects:{},terms:{"\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f":0,excel:0,"\u043c\u043e\u0434\u0443\u043b\u044c":0,"\u043e\u0442\u0447\u0435\u0442\u043e\u0432":0,wax:0,"\u0434\u043b\u044f":0,jandcod:0,excelreport:0},objtypes:{},titles:["jandcode-wax-excelreport"],objnames:{},filenames:["index"]})

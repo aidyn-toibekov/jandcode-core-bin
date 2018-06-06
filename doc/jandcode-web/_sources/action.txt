@@ -1,0 +1,23 @@
+
+WebAction
+=========
+
+Класс ``jandcode.web.WebAction`` отвечает за обработку url.
+
+Явная настройка в rt
+--------------------
+
+Пример настройки в rt:
+
+.. code-block:: xml
+
+    <root>
+        <web>
+            <action name="act1" class="mypak.Act1"/>
+            <action name="act2" url="admin/act2" class="mypak.Act2"/>
+            <action name="act3">
+                <action name="a1" class="mypak.A1"/>  <!-- url=act3/a1 -->
+            </action>
+        </web>
+    </root>
+
